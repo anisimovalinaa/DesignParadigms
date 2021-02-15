@@ -1,2 +1,2 @@
-puts 'Hello word!'
+puts 'Hello, word!'
 #комментарий
