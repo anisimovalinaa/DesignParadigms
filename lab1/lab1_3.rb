@@ -25,8 +25,13 @@ l = gets.chomp.downcase
 # 	puts 'Подлиза'
 # end
 
-unless l != 'ruby'
-	puts 'Подлиза'
-else
-	puts 'А скоро будет ruby'
-end
+# unless l != 'ruby'
+# 	puts 'Подлиза'
+# else
+# 	puts 'А скоро будет ruby'
+# end
+
+# puts 'Подлиза' unless l != 'ruby'
+
+x = unless l != 'ruby' then puts 'Подлиза' 
+	else puts 'А скоро будет ruby' end
