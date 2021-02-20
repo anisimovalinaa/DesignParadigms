@@ -35,3 +35,4 @@ l = gets.chomp.downcase
 
 x = unless l != 'ruby' then puts 'Подлиза' 
 	else puts 'А скоро будет ruby' end
+
