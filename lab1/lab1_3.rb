@@ -17,4 +17,6 @@ l = gets.chomp.downcase
 # 	puts 'Я такого не знаю'
 # end
 	
-puts 'Подлиза' if l == 'ruby'
+# puts 'Подлиза' if l == 'ruby'
+
+x = if l == 'ruby' then puts 'Подлиза' else puts 'Не знаю такого' end
