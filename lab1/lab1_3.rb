@@ -4,7 +4,7 @@ l = gets.chomp.downcase
 # if l == 'ruby' 
 # 	puts 'Подлиза'
 # else 
-# 	puts 'Я такого не знаю'
+# 	puts 'А скоро будет ruby'
 # end
 		
 # if l == 'ruby'
@@ -19,4 +19,8 @@ l = gets.chomp.downcase
 	
 # puts 'Подлиза' if l == 'ruby'
 
-x = if l == 'ruby' then puts 'Подлиза' else puts 'Не знаю такого' end
+# x = if l == 'ruby' then puts 'Подлиза' else puts 'А скоро будет ruby' end
+
+unless l != 'ruby'
+	puts 'Подлиза'
+end
