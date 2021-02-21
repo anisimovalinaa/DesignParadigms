@@ -5,6 +5,7 @@ def sum_digits x
 		s += y
 		x /= 10
 	end
+	s
 end
 
 def max_digit x
@@ -69,5 +70,20 @@ def method2 x
 	k
 end
 
-x = ARGV[0].to_i
-puts method2 x
+def method3 x
+	sum_digits_x = sum_digits x
+	mult = 1
+	for i in 1..x
+		if x%i == 0 and (sum_digits i) < sum_digits_x
+			mult *= i
+		end
+	end
+	mult
+end
+
+if ARGV[1].class != NilClass
+	m = ARGV[1] + ' ' + ARGV[0]
+	puts eval m
+else
+	puts 'Hello Word'
+end
