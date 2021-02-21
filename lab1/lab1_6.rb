@@ -33,6 +33,6 @@ max = max_digit ARGV[0].to_i
 min = min_digit ARGV[0].to_i
 mult  = mult_digits ARGV[0].to_i
 
-print 'Максимальная цифра: ' + max.to_s + "\n"
-print 'Минимальная цифра: ' + min.to_s + "\n"
-print 'Произведение цифр: ' + mult.to_s + "\n"
+puts "Максимальная цифра: #{max}"
+puts "Минимальная цифра: #{min}"
+puts "Произведение цифр: #{mult}"
