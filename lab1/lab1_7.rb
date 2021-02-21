@@ -58,6 +58,16 @@ def sum_pr_del x
 	s
 end
 
+def method2 x
+	k = 0
+	while x != 0 
+		if x%10 > 3 and (x%10)%2 != 0
+			k += 1
+		end
+		x /= 10
+	end
+	k
+end
 
 x = ARGV[0].to_i
-puts sum_pr_del x
+puts method2 x
