@@ -50,6 +50,15 @@ def task11
 	mult
 end
 
+def del_first l
+	new_l = []
+	for i in 1..l.size
+		new_l.push(l[i])
+	end
+	new_l.pop
+	new_l
+end
+
 def task31(n, coins)
 	if n < 0
 	    return 0
@@ -57,13 +66,11 @@ def task31(n, coins)
     if n == 0 or coins.size == 1
         return 1
     end
-    return task31(n - coins[0], coins) + task31(n, coins.delete_at(0))
+    # new_l = coins.delete_at(0)
+    new_l = del_first coins
+    task31(n - coins[0], coins) + task31(n, new_l)
 end
 
-# puts task31(5, [5, 2, 1])
-coins = [5, 2, 1]
-# puts coins
-coins = coins.delete_at(1)
-puts coins
+puts task31(200, [200, 100, 50, 20, 10, 5, 2, 1])
 
 # puts task11
