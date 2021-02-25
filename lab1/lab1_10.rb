@@ -50,4 +50,20 @@ def task11
 	mult
 end
 
-puts task11
+def task31(n, coins)
+	if n < 0
+	    return 0
+	end
+    if n == 0 or coins.size == 1
+        return 1
+    end
+    return task31(n - coins[0], coins) + task31(n, coins.delete_at(0))
+end
+
+# puts task31(5, [5, 2, 1])
+coins = [5, 2, 1]
+# puts coins
+coins = coins.delete_at(1)
+puts coins
+
+# puts task11
