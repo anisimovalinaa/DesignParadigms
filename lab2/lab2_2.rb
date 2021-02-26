@@ -15,7 +15,7 @@ def mult l
 end
 
 l = gets.split().map { |e| e.to_i }
-puts minimum l
-puts maximum l
-puts summa l
-puts mult l
+puts "Минимум: #{minimum l}"
+puts "Максимум: #{maximum l}"
+puts "Сумма: #{summa l}"
+puts "Произведение: #{mult l}"
