@@ -10,13 +10,16 @@ end
 
 def task13 l
 	ind = l.index(l.min)
-	l + l[..ind-1]
-	# l - l[..ind-1]
+	l += l[..ind-1]
+	for i in 0..ind-1
+		l.delete_at(0)
+	end
+	l
 end
 
 l = gets.split().map { |e| e.to_i }
 
-puts "#{task1 l}"
+puts "#{task13 l}"
 
 # puts "Ответ: #{eval 'task13 l'}"
 
