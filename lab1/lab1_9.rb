@@ -42,7 +42,7 @@ def mult_digits x
 end
 
 def sum_pr_del x
-	list_primes = Prime.take_while { |a| a < x}
+	list_primes = Prime.take_while { |a| a <= x}
 	s = 0
 	for i in 2..x
 		if i in list_primes and x%i == 0
