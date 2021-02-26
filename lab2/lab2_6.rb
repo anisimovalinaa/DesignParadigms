@@ -1,3 +1,5 @@
+require 'prime'
+
 def task1 l
 	ind = 0
 	for i in 0..l.size-1
@@ -31,6 +33,15 @@ def task37 l
 	return ind, ind.size
 end
 
+def task49 l
+	list_pr_del = []
+	l.each do |el|
+		v = Prime.take_while { |a| a <= el}
+		v.each { |i| list_pr_del += [i] if el%i == 0}
+	end
+	list_pr_del.uniq().sort()
+end
+
 l = gets.split().map { |e| e.to_i }
 
-puts "#{task37 l}"
+puts "#{task49 l}"
