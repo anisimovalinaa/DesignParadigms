@@ -1,6 +1,6 @@
 def task1 l
 	ind = 0
-	for i in 0..l.size
+	for i in 0..l.size-1
 		if l[i] == l.max
 			ind = i
 		end
@@ -21,9 +21,16 @@ def task25(l, a, b)
 	l[a..b].max
 end
 
+def task37 l
+	ind = []
+	for i in 1..l.size-1
+		if l[i] < l[i-1]
+			ind += [i]
+		end
+	end
+	return ind, ind.size
+end
+
 l = gets.split().map { |e| e.to_i }
 
-puts "#{task25(l, 2, 4)}"
-
-# puts "Ответ: #{eval 'task13 l'}"
-
+puts "#{task37 l}"
