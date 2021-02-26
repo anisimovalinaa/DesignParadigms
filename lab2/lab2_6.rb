@@ -17,9 +17,13 @@ def task13 l
 	l
 end
 
+def task25(l, a, b)
+	l[a..b].max
+end
+
 l = gets.split().map { |e| e.to_i }
 
-puts "#{task13 l}"
+puts "#{task25(l, 2, 4)}"
 
 # puts "Ответ: #{eval 'task13 l'}"
 
