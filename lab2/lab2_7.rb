@@ -11,9 +11,9 @@ def task13 l
 	l[ind..]
 end
 
-# def task25(l, a, b)
-# 	l[a..b].max
-# end
+def task25(l, a, b)
+	l[a..b].max
+end
 
 # def task37 l
 # 	ind = []
