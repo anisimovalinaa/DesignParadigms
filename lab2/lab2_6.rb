@@ -73,8 +73,9 @@ while ans != '0'
 		puts "Список: #{l}"
 		puts "Решение: #{task25(l, a, b)}"
 	when '37'
+		list_ind, count = task37 l
 		puts "Список: #{l}"
-		puts "Решение: #{task37 l}"
+		puts "Решение: #{list_ind} - индексы, #{count} - количество элементов"
 	when '49'
 		puts "Список: #{l}"
 		puts "Решение: #{task49 l}"
