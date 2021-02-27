@@ -15,15 +15,11 @@ def task25(l, a, b)
 	l[a..b].max
 end
 
-# def task37 l
-# 	ind = []
-# 	for i in 1..l.size-1
-# 		if l[i] < l[i-1]
-# 			ind += [i]
-# 		end
-# 	end
-# 	return ind, ind.size
-# end
+def task37 l
+	ind = []
+	l.map.with_index { |e, i|  ind += [i] if i > 0 and e < l[i-1]}
+	return ind, ind.size
+end
 
 # def task49 l
 # 	list_pr_del = []
@@ -36,7 +32,7 @@ end
 
 puts 'Введите список:'
 l = gets.split().map { |e| e.to_i }
-puts "#{task13 l}"
+puts "#{task37 l}"
 
 # ans = ''
 
