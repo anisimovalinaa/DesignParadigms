@@ -56,13 +56,13 @@ def h
 	"\tmethod3 - прозведение таких делителей числа, сумма цифр которых меньше, чем сумма цифр исходного числа"
 end
 
-# begin
-# 	m = ARGV[1] + ' ' + ARGV[0]
-# 	puts eval m
-# rescue SyntaxError => e
-# 	h
-# rescue 
-# 	h
-# end
+begin
+	m = ARGV[1] + ' ' + ARGV[0]
+	puts eval m
+rescue SyntaxError => e
+	h
+rescue 
+	h
+end
 
-puts method2 456397
+# puts method2 456397
