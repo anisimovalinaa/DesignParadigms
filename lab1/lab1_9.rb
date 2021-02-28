@@ -13,12 +13,7 @@ def min_digit x
 end
 
 def mult_digits x
-	mult = 1
-	while x!=0
-		mult *= x%10
-		x /= 10
-	end
-	mult
+	x.digits.reduce(:*)
 end
 
 def sum_pr_del x
@@ -74,4 +69,4 @@ end
 # 	h
 # end
 
-puts sum_digits 45
+puts mult_digits 45
