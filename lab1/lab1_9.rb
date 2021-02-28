@@ -9,14 +9,7 @@ def max_digit x
 end
 
 def min_digit x
-	min = x%10
-	while x.nonzero?
-		if x%10 < min 
-			min = x%10
-		end
-		x /= 10
-	end
-	min
+	x.digits.min
 end
 
 def mult_digits x
