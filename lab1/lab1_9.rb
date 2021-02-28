@@ -29,12 +29,8 @@ end
 
 def method2 x
 	k = 0
-	while x.nonzero? 
-		if (x.remainder 10) > 3 and ((x.remainder 10).remainder 2) != 0
-			k += 1
-		end
-		x /= 10
-	end
+	digits = x.digits
+	digits.each { |digit| k += 1 if digit > 3 and (digit.remainder 2) != 0}
 	k
 end
 
@@ -69,4 +65,4 @@ end
 # 	h
 # end
 
-puts mult_digits 45
+puts method2 456397
