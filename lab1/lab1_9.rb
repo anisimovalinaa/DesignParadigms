@@ -1,13 +1,7 @@
 require 'prime'
 
 def sum_digits x
-	s = 0
-	while x.nonzero?
-		y = x%10
-		s += y
-		x /= 10
-	end
-	s
+	x.digits.sum
 end
 
 def max_digit x
@@ -94,5 +88,4 @@ end
 # 	h
 # end
 
-puts method2 5555899
-puts 56.div 10
+puts sum_digits 45
