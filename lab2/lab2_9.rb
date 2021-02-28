@@ -5,7 +5,17 @@ def task1 str
 	count
 end
 
-f = File.open('file.txt')
-str = f.read
+def task9 str
+	check = true
+	for i in (0..str.size/2)
+		if str[i] != str[str.size-i-1]
+			check = false
+		end
+	end
+	check
+end
 
-puts "#{task1 str}"
+f = File.open('file.txt')
+str = f.read.chomp
+
+puts "#{task9 str}"
