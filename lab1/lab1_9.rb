@@ -5,14 +5,7 @@ def sum_digits x
 end
 
 def max_digit x
-	max = x%10
-	while x.nonzero?
-		if x%10 > max 
-			max = x%10
-		end
-		x /= 10
-	end
-	max
+	x.digits.max
 end
 
 def min_digit x
