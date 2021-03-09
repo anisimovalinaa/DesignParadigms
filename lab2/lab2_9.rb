@@ -1,7 +1,12 @@
+def read_str
+	str = ''
+	File.open('file.txt') { |io| str = io.read() }
+	str
+end
+
 def task1 str
-	alphabet = (1040..1103).to_a + [1105, 1025]
 	count = 0
-	str.each_char { |ch| count += 1 if alphabet.include?(ch.ord) }
+	str.each_char { |ch| count += 1 if !(/[А-Яа-я]/ =~ ch).nil? }
 	count
 end
 
@@ -15,7 +20,10 @@ def task9 str
 	check
 end
 
-f = File.open('file.txt')
-str = f.read.chomp
+def task18
+	
+end
 
-puts "#{task9 str}"
+str = read_str
+
+puts "#{task1 str}"
