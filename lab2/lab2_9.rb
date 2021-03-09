@@ -1,6 +1,6 @@
 def read_str
 	str = ''
-	File.open('file.txt') { |io| str = io.read() }
+	File.open('file.txt') { |io| str = io.read().chomp }
 	str
 end
 
@@ -11,13 +11,8 @@ def task1 str
 end
 
 def task9 str
-	check = true
-	for i in (0..str.size/2)
-		if str[i] != str[str.size-i-1]
-			check = false
-		end
-	end
-	check
+	str == str.reverse
+	# puts str.reverse
 end
 
 def task18
@@ -26,4 +21,4 @@ end
 
 str = read_str
 
-puts "#{task1 str}"
+puts "#{task9 str}"
