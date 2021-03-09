@@ -6,7 +6,7 @@ end
 
 def task1 str
 	count = 0
-	str.each_char { |ch| count += 1 if !(/[А-Яа-я]/ =~ ch).nil? }
+	str.each_char { |ch| count += 1 if !(/[А-Яа-яёЁ]/ =~ ch).nil? }
 	count
 end
 
