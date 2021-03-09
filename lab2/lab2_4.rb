@@ -1,7 +1,6 @@
 def read_list_from_file
-	f = File.open('file.txt')
-
-	l = f.read()
+	l = []
+	File.open('file.txt') { |file| l = file.read()}
 	l = l.split().map { |e| e.to_i }
 	l
 end 
