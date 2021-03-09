@@ -12,6 +12,11 @@ def task13 list_str
 	list_str.sort { |a, b| a.split.size <=> b.split.size }
 end
 
+def task14 list_str
+	list_str.sort { |a, b| a.scan(/(?:[\d]) (?:[A-Za-zА-Яа-яЁё]+)/).size 
+		<=> b.scan(/(?:[\d]) (?:[A-Za-zА-Яа-яЁё]+)/).size }
+end
+
 list_str = read_str
 
-puts "#{task13 list_str}"
+puts "#{task14 list_str}"
