@@ -36,7 +36,7 @@ while ans != '0'
 		puts "Строка: #{str}"
 		puts "Решение: #{task9 str}"
 	when '18'
-		puts "Список: #{str}"
+		puts "Строка: #{str}"
 		puts "Решение: #{task18 str}"
 	when '0'
 		puts 'До свидания.'
