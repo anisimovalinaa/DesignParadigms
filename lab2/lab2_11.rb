@@ -16,6 +16,11 @@ def task9 str
 	real_digits.min
 end
 
+def task18 str
+	digits = str.scan(/[\d]+/)
+	digits.max { |a, b| a.size <=> b.size }.size
+end
+
 str = read_str
 
-puts "#{task9 str}"
+puts "#{task18 str}"
