@@ -12,7 +12,7 @@ end
 
 def task13 l
 	ind = l.index(l.min)
-	l += l[..ind-1]
+	l += l[...ind]
 	for i in 0..ind-1
 		l.delete_at(0)
 	end
