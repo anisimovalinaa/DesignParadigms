@@ -1,7 +1,7 @@
 class Employee
-	attr_accessor :name, :datebirth, :address, :e_mail, 
+	attr_accessor :name, :datebirth, :address, 
 	:passport, :specialty, :work_experience
-	attr_reader :phone_number
+	attr_reader :phone_number, :e_mail
 	def initialize(name, datebirth, phone_number, address, e_mail, passport,
 		specialty, work_experience, last_workplace = nil, last_post = nil,
 		last_salary = nil)
@@ -17,6 +17,23 @@ class Employee
 			@last_post = last_post
 			@last_salary = last_salary
 		end
+	end
+
+	def Employee.email?(x)
+		ind = x =~ /\w+@\w+\.\w+/
+		ind == 0 ? true : false
+	end
+
+	def Employee.convert_to_email(x)
+		if Employee.email?(x)
+			return x.downcase
+		else
+			raise 'Неправильный e-mail'
+		end
+	end
+
+	def e_mail=(x)
+		@e_mail = Employee.convert_to_email(x)
 	end
 
 	def Employee.all_digits(x)
@@ -37,7 +54,7 @@ class Employee
 			number = '7-' + d[1..3].join + '-' + d[4...].join
 			return number
 		else 
-			raise 'Nogggg'
+			raise 'Неправильный номер телефона'
 		end
 	end
 
@@ -76,4 +93,4 @@ end
 emp = Employee.new('Alina', '23.08.2000', '+79996975019', 'lala', 
 	'alina@gmail.com', '7565 928384', 'lala', 0)
 
-puts emp.phone_number
+puts Employee.convert_to_email('ffDFH@fgf.rt')
