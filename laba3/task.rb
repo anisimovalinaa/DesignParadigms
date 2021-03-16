@@ -10,6 +10,7 @@ class Employee
 		self.phone_number = phone_number
 		self.address = address
 		self.e_mail = e_mail
+		self.passport = passport
 		self.specialty = specialty
 		self.work_experience = work_experience
 		if work_experience != '0'
@@ -17,6 +18,24 @@ class Employee
 			@last_post = last_post
 			@last_salary = last_salary
 		end
+	end
+
+	def Employee.passport?(x)
+		digits = x.scan(/\d/)
+		digits.size == 10
+	end
+
+	def Employee.convert_to_passport(x)
+		if Employee.passport?(x)
+			digits = x.scan(/\d/)
+			return digits.join[0..3] + ' ' + digits.join[4...]
+		else
+			raise 'Неправильные паспортные данные'
+		end
+	end
+
+	def passport=(x)
+		@passport = Employee.convert_to_passport(x)
 	end
 
 	def Employee.email?(x)
@@ -91,6 +110,6 @@ class Employee
 end
 
 emp = Employee.new('Alina', '23.08.2000', '+79996975019', 'lala', 
-	'alina@gmail.com', '7565 928384', 'lala', 0)
+	'aLina@gmail.com', '7565928384', 'lala', 0)
 
-puts Employee.convert_to_email('ffDFH@fgf.rt')
+puts emp.passport
