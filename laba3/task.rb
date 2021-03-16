@@ -1,3 +1,5 @@
+require 'date'
+
 class Employee
 	attr_accessor :name, :datebirth, :address, 
 	:passport, :specialty, :work_experience
@@ -18,6 +20,34 @@ class Employee
 			@last_post = last_post
 			@last_salary = last_salary
 		end
+	end
+
+	def Employee.date?(x)
+		begin
+			DateTime.strptime(x, '%d.%m.%Y')
+			return true
+		rescue Date::Error
+			return false
+		end
+	end
+
+	def Employee.convert_to_date(x)
+		if Employee.date?(x)
+			date = DateTime.strptime(x, '%d.%m.%Y')
+			day = date.day.to_s
+			month = date.month.to_s
+			year = date.year.to_s
+			day = '0' + day if day.size == 1
+			month = '0' + month if month.size == 1
+			year = '20' + year if year.size == 2
+			puts day + '.' + month + '.' + year
+		else 
+			raise 'Дата инвалид'
+		end
+	end
+
+	def datebirth=(x)
+		@datebirth = Employee.convert_to_date(x)
 	end
 
 	def Employee.passport?(x)
@@ -109,7 +139,7 @@ class Employee
 	end
 end
 
-emp = Employee.new('Alina', '23.08.2000', '+79996975019', 'lala', 
+emp = Employee.new('Alina', '3.08.2000', '+79996975019', 'lala', 
 	'aLina@gmail.com', '7565928384', 'lala', 0)
 
-puts emp.passport
+puts emp.datebirth
