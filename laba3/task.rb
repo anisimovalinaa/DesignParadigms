@@ -40,7 +40,7 @@ class Employee
 			day = '0' + day if day.size == 1
 			month = '0' + month if month.size == 1
 			year = '20' + year if year.size == 2
-			puts day + '.' + month + '.' + year
+			return day + '.' + month + '.' + year
 		else 
 			raise 'Дата инвалид'
 		end
@@ -139,7 +139,22 @@ class Employee
 	end
 end
 
-emp = Employee.new('Alina', '3.08.2000', '+79996975019', 'lala', 
+class TestEmployee < Employee
+	def to_s
+		puts "Имя: #{name}", "Дата рождения: #{datebirth}", "Номер телефона: #{phone_number}", 
+		"Адрес: #{address}", "E-mail: #{e_mail}",  "Серия и номер паспорта: #{passport}", 
+		"Специальность: #{specialty}", "Стаж работы по специальности: #{work_experience}"
+		if work_experience > 0
+			puts "Последнее место работы: #{last_workplace}", "Должность: #{last_post}", 
+			"Заработная плата: #{last_salary}"
+		end
+	end
+end
+
+emp1 = TestEmployee.new('Alina', '3.08.2000', '+79996975019', 'lala', 
 	'aLina@gmail.com', '7565928384', 'lala', 0)
 
-puts emp.datebirth
+emp2 = TestEmployee.new('Ivan', '4.05.1994', '89186628610', 'lala', 'my@mail.ru', 
+	'8493 223510', 'lala', 5, 'Место работы', 'Должность', 'з/п')
+
+puts emp1, emp2
