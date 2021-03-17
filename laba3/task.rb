@@ -193,7 +193,7 @@ class TestEmployee < Employee
 		
 			case ans
 			when '1'
-				puts 'ggg'
+				puts TestEmployee.convert_to_fio(str)
 			when '2'
 				puts TestEmployee.convert_to_number(str)
 			when '3'
@@ -215,8 +215,6 @@ emp1 = TestEmployee.new('    АнисиМОва-Иванова Алина-Мал
 emp2 = TestEmployee.new('Бабина Наталья Алексеевна', '4.05.1994', '89186628610', 'lala', 'my@mail.ru', 
 	'8493 223510', 'lala', 5, 'Место работы', 'Должность', 'з/п')
 
-puts emp1, emp2
+# puts emp1, emp2
 
-# puts Employee.convert_to_fio('    АнисиМОва-Иванова Алина-Малина   Александровна заде  ')
-# puts emp1.fio
-
+TestEmployee.check_correct
