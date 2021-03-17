@@ -1,13 +1,12 @@
 require 'date'
 
 class Employee
-	attr_accessor :name, :datebirth, :address, 
-	:passport, :specialty, :work_experience
-	attr_reader :phone_number, :e_mail
-	def initialize(name, datebirth, phone_number, address, e_mail, passport,
+	attr_accessor :address, :specialty, :work_experience
+	attr_reader :fio, :datebirth, :phone_number, :e_mail, :passport
+	def initialize(fio, datebirth, phone_number, address, e_mail, passport,
 		specialty, work_experience, last_workplace = nil, last_post = nil,
 		last_salary = nil)
-		self.name = name
+		self.fio = fio
 		self.datebirth = datebirth
 		self.phone_number = phone_number
 		self.address = address
@@ -69,7 +68,7 @@ class Employee
 	end
 
 	def Employee.email?(x)
-		ind = x =~ /\w+@\w+\.\w+/
+		ind = x =~ /[-.\w]+@([\w-]+\.)+[\w-]+$/
 		ind == 0 ? true : false
 	end
 
@@ -111,6 +110,39 @@ class Employee
 		@phone_number = Employee.convert_to_number(x)
 	end
 
+	def Employee.fio?(x)
+		ind = x =~ /^\s*[А-Яа-яЁё]+(?:\s*-\s*[А-Яа-яЁё]+)?\s+[А-Яа-яЁё]+(?:\s*-\s*[А-Яа-яЁё]+)?\s+[А-Яа-яЁё]+(?: [А-Яа-яЁё]+)?\s*$/
+		ind == 0 ? true : false
+	end
+
+	def Employee.convert_to_fio(x)
+		if Employee.fio?(x)
+			x.strip!
+			res = ''
+			word = ''
+			x.each_char do |ch|
+				if ch != '-'
+					word += ch
+				else
+					word = word.split()
+					word.each { |el| el.capitalize!}
+					res += word.join(' ') + ch
+					word = ''
+				end
+			end
+
+			word = word.split()
+			res += word.join(' ')
+			return res
+		else
+			raise 'Имя инвалид'
+		end
+	end
+
+	def fio=(x)
+		@fio = Employee.convert_to_fio(x)
+	end
+
 	def last_workplace 
 		@last_workplace == nil ? puts('Значение отсутствует') : @last_workplace
 	end
@@ -141,7 +173,7 @@ end
 
 class TestEmployee < Employee
 	def to_s
-		puts "Имя: #{name}", "Дата рождения: #{datebirth}", "Номер телефона: #{phone_number}", 
+		puts "Имя: #{fio}", "Дата рождения: #{datebirth}", "Номер телефона: #{phone_number}", 
 		"Адрес: #{address}", "E-mail: #{e_mail}",  "Серия и номер паспорта: #{passport}", 
 		"Специальность: #{specialty}", "Стаж работы по специальности: #{work_experience}"
 		if work_experience > 0
@@ -149,12 +181,42 @@ class TestEmployee < Employee
 			"Заработная плата: #{last_salary}"
 		end
 	end
+
+	def TestEmployee.check_correct
+		puts 'Что вы хотите ввести?', '1. ФИО.', '2. Телефон.', '3. Дату.', '4. E-mail.', '0. Выйти.'
+		ans = ''
+		while ans != '0'
+			print 'Ваш ответ: '
+			ans = gets.chomp()
+			print 'Введите строку: '
+			str = gets.chomp()
+		
+			case ans
+			when '1'
+				puts 'ggg'
+			when '2'
+				puts TestEmployee.convert_to_number(str)
+			when '3'
+				puts TestEmployee.convert_to_date(str)
+			when '4'
+				puts TestEmployee.convert_to_email(str)
+			when '0'
+				puts 'До свидания.'
+			else
+				puts 'Такого пункта нет'
+			end
+		end
+	end
 end
 
-emp1 = TestEmployee.new('Alina', '3.08.2000', '+79996975019', 'lala', 
+emp1 = TestEmployee.new('    АнисиМОва-Иванова Алина-Малина   Александровна заде  ', '3.08.2000', '+79996975019', 'lala', 
 	'aLina@gmail.com', '7565928384', 'lala', 0)
 
-emp2 = TestEmployee.new('Ivan', '4.05.1994', '89186628610', 'lala', 'my@mail.ru', 
+emp2 = TestEmployee.new('Бабина Наталья Алексеевна', '4.05.1994', '89186628610', 'lala', 'my@mail.ru', 
 	'8493 223510', 'lala', 5, 'Место работы', 'Должность', 'з/п')
 
 puts emp1, emp2
+
+# puts Employee.convert_to_fio('    АнисиМОва-Иванова Алина-Малина   Александровна заде  ')
+# puts emp1.fio
+
