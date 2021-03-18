@@ -3,6 +3,7 @@ require 'date'
 class Employee
 	attr_accessor :address, :specialty, :work_experience
 	attr_reader :fio, :datebirth, :phone_number, :e_mail, :passport
+	attr_writer :last_workplace, :last_post, :last_salary
 	def initialize(fio, datebirth, phone_number, address, e_mail, passport,
 		specialty, work_experience, last_workplace = nil, last_post = nil,
 		last_salary = nil)
@@ -31,17 +32,21 @@ class Employee
 	end
 
 	def Employee.convert_to_date(x)
-		if Employee.date?(x)
-			date = DateTime.strptime(x, '%d.%m.%Y')
-			day = date.day.to_s
-			month = date.month.to_s
-			year = date.year.to_s
-			day = '0' + day if day.size == 1
-			month = '0' + month if month.size == 1
-			year = '20' + year if year.size == 2
-			return day + '.' + month + '.' + year
-		else 
-			raise 'Дата инвалид'
+		begin
+			if Employee.date?(x)
+				date = DateTime.strptime(x, '%d.%m.%Y')
+				day = date.day.to_s
+				month = date.month.to_s
+				year = date.year.to_s
+				day = '0' + day if day.size == 1
+				month = '0' + month if month.size == 1
+				year = '20' + year if year.size == 2
+				return day + '.' + month + '.' + year
+			else 
+				raise RuntimeError
+			end
+		rescue RuntimeError
+			puts 'Неверная дата'
 		end
 	end
 
@@ -55,11 +60,15 @@ class Employee
 	end
 
 	def Employee.convert_to_passport(x)
-		if Employee.passport?(x)
-			digits = x.scan(/\d/)
-			return digits.join[0..3] + ' ' + digits.join[4...]
-		else
-			raise 'Неправильные паспортные данные'
+		begin
+			if Employee.passport?(x)
+				digits = x.scan(/\d/)
+				return digits.join[0..3] + ' ' + digits.join[4...]
+			else
+				raise RuntimeError
+			end
+		rescue RuntimeError
+			puts 'Неверно введены паспортные данные'
 		end
 	end
 
@@ -73,10 +82,14 @@ class Employee
 	end
 
 	def Employee.convert_to_email(x)
-		if Employee.email?(x)
-			return x.downcase
-		else
-			raise 'Неправильный e-mail'
+		begin
+			if Employee.email?(x)
+				return x.downcase
+			else
+				raise RuntimeError
+			end
+		rescue RuntimeError
+			puts 'Неправильный e-mail'
 		end
 	end
 
@@ -97,12 +110,16 @@ class Employee
 	end
 
 	def Employee.convert_to_number(x)
-		if Employee.phone_number?(x)
-			d = Employee.all_digits(x)
-			number = '7-' + d[1..3].join + '-' + d[4...].join
-			return number
-		else 
-			raise 'Неправильный номер телефона'
+		begin
+			if Employee.phone_number?(x)
+				d = Employee.all_digits(x)
+				number = '7-' + d[1..3].join + '-' + d[4...].join
+				return number
+			else 
+				raise RuntimeError
+			end
+		rescue RuntimeError
+			puts 'Неправильно введен номер телефона'
 		end
 	end
 
@@ -116,26 +133,30 @@ class Employee
 	end
 
 	def Employee.convert_to_fio(x)
-		if Employee.fio?(x)
-			x.strip!
-			res = ''
-			word = ''
-			x.each_char do |ch|
-				if ch != '-'
-					word += ch
-				else
-					word = word.split()
-					word.each { |el| el.capitalize!}
-					res += word.join(' ') + ch
-					word = ''
+		begin
+			if Employee.fio?(x)
+				x.strip!
+				res = ''
+				word = ''
+				x.each_char do |ch|
+					if ch != '-'
+						word += ch
+					else
+						word = word.split()
+						word.each { |el| el.capitalize!}
+						res += word.join(' ') + ch
+						word = ''
+					end
 				end
-			end
 
-			word = word.split()
-			res += word.join(' ')
-			return res
-		else
-			raise 'Имя инвалид'
+				word = word.split()
+				res += word.join(' ')
+				return res
+			else
+				raise RuntimeError
+			end
+		rescue RuntimeError
+			puts 'Неверные ФИО'
 		end
 	end
 
@@ -173,12 +194,12 @@ end
 
 class TestEmployee < Employee
 	def to_s
-		puts "Имя: #{fio}", "Дата рождения: #{datebirth}", "Номер телефона: #{phone_number}", 
-		"Адрес: #{address}", "E-mail: #{e_mail}",  "Серия и номер паспорта: #{passport}", 
-		"Специальность: #{specialty}", "Стаж работы по специальности: #{work_experience}"
-		if work_experience > 0
-			puts "Последнее место работы: #{last_workplace}", "Должность: #{last_post}", 
-			"Заработная плата: #{last_salary}"
+		puts "Имя: #{@fio}", "Дата рождения: #{@datebirth}", "Номер телефона: #{@phone_number}", 
+		"Адрес: #{@address}", "E-mail: #{@e_mail}",  "Серия и номер паспорта: #{@passport}", 
+		"Специальность: #{@specialty}", "Стаж работы по специальности: #{@work_experience}"
+		if @work_experience > 0
+			puts "Последнее место работы: #{@last_workplace}", "Должность: #{@last_post}", 
+			"Заработная плата: #{@last_salary}"
 		end
 	end
 
@@ -188,17 +209,22 @@ class TestEmployee < Employee
 		while ans != '0'
 			print 'Ваш ответ: '
 			ans = gets.chomp()
-			print 'Введите строку: '
-			str = gets.chomp()
-		
 			case ans
 			when '1'
+				print 'Введите строку: '
+				str = gets.chomp()
 				puts TestEmployee.convert_to_fio(str)
 			when '2'
+				print 'Введите строку: '
+				str = gets.chomp()
 				puts TestEmployee.convert_to_number(str)
 			when '3'
+				print 'Введите строку: '
+				str = gets.chomp()
 				puts TestEmployee.convert_to_date(str)
 			when '4'
+				print 'Введите строку: '
+				str = gets.chomp()
 				puts TestEmployee.convert_to_email(str)
 			when '0'
 				puts 'До свидания.'
@@ -209,12 +235,75 @@ class TestEmployee < Employee
 	end
 end
 
-emp1 = TestEmployee.new('    АнисиМОва-Иванова Алина-Малина   Александровна заде  ', '3.08.2000', '+79996975019', 'lala', 
-	'aLina@gmail.com', '7565928384', 'lala', 0)
+class TerminalViewListEmployee
+	@@list_employee = []
+
+	def TerminalViewListEmployee.check_nil(user)
+		user.fio == nil or user.datebirth == nil or user.passport == nil or 
+			user.phone_number == nil or user.e_mail == nil
+	end
+
+	def TerminalViewListEmployee.input_data
+		ans = ''
+		while ans != '0'
+			puts '1. Добавить запись.', '0. Выход.'
+			print 'Ваш ответ'
+			ans = gets.chomp
+			case ans
+			when '1'
+				check = true
+				while check
+					puts 'Введите данные'
+					print 'ФИО: '
+					fio = gets.chomp
+					print 'Дата рождения: '
+					daybirth = gets.chomp
+					print 'Телефон: '
+					phone = gets.chomp
+					print 'Адрес: '
+					addres = gets.chomp
+					print 'E-mail: '
+					e_mail = gets.chomp
+					print 'Паспорт: '
+					passport = gets.chomp
+					print 'Специальность: '
+					specialty = gets.chomp
+					print 'Опыт работы: '
+					work_experience = gets.chomp
+					if work_experience.to_i > 0
+						print 'Последнее место работы: '
+						last_workplace = gets.chomp
+						print 'Должность: '
+						last_post = gets.chomp
+						print 'Заработная плата: '
+						last_salary = gets.chomp
+					end
+					user = Employee.new(fio, daybirth, phone, addres, e_mail, passport, 
+						specialty, work_experience, last_workplace, last_post, last_salary)
+					check = TerminalViewListEmployee.check_nil(user)
+					@@list_employee << user if !check
+					puts 'Успешно' if !check
+					puts
+				end
+			when '0'
+				puts 'До свидания'
+			else
+				puts 'Нет такого пункта'
+			end
+		end
+	end
+
+	def TerminalViewListEmployee.output_data
+		puts "#{@@list_employee}"
+	end
+end
+
+emp1 = TestEmployee.new('    АнисиМОва-Иванова Алина-Малина   Александровна заде  ', '63.08.2000', '+79996975019', 'lala', 
+	'aLina@gma@il.com', '7565928384', 'lala', 0)
 
 emp2 = TestEmployee.new('Бабина Наталья Алексеевна', '4.05.1994', '89186628610', 'lala', 'my@mail.ru', 
 	'8493 223510', 'lala', 5, 'Место работы', 'Должность', 'з/п')
 
-# puts emp1, emp2
-
-TestEmployee.check_correct
+# puts emp1
+TerminalViewListEmployee.input_data
+TerminalViewListEmployee.output_data
