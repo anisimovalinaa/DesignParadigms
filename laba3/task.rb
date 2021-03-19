@@ -1,4 +1,5 @@
 require 'date'
+require 'openssl'
 
 class Employee
 	attr_accessor :address, :specialty, :work_experience
@@ -237,6 +238,7 @@ end
 
 class TerminalViewListEmployee
 	@@list_employee = []
+	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
 
 	def TerminalViewListEmployee.check_nil(user)
 		user.fio == nil or user.datebirth == nil or user.passport == nil or 
@@ -247,7 +249,7 @@ class TerminalViewListEmployee
 		ans = ''
 		while ans != '0'
 			puts '1. Добавить запись.', '0. Выход.'
-			print 'Ваш ответ'
+			print 'Ваш ответ: '
 			ans = gets.chomp
 			case ans
 			when '1'
@@ -296,6 +298,30 @@ class TerminalViewListEmployee
 	def TerminalViewListEmployee.output_data
 		puts "#{@@list_employee}"
 	end
+
+	def TerminalViewListEmployee.write_file
+		File.open("list_employee.txt", "a") do |file|
+			data = ['Алина паа вавва', '23.08.2000', '79999443762', 'Адрес', 'my@mail.ru']
+			data << @@keypair.public_encrypt('3950 472188')
+			data += ['Специальность', '0']
+			file.write(data[0] + ',' + data[1] + ',' + data[2] + ',' + data[3] + ',' + 
+				+ data[4] + ',' + data[5].force_encoding("UTF-8") + ',' + data[6] + ',' + data[7] + "\n\n")
+		end
+	end
+
+	def TerminalViewListEmployee.read_file
+		File.open("list_employee.txt") do |file|
+			users = file.read
+			users = users.force_encoding("windows-1251")
+			users = users.split("\n\n")
+			users.each do |user|
+				user = user.split(',')
+				user.map { |el| el.force_encoding("UTF-8") }
+				data_passport = @@keypair.private_decrypt(user[5])
+				@@list_employee << Employee.new(user[0], user[1], user[2], user[3], user[4], data_passport, user[6], user[7])
+			end
+		end
+	end
 end
 
 emp1 = TestEmployee.new('    АнисиМОва-Иванова Алина-Малина   Александровна заде  ', '63.08.2000', '+79996975019', 'lala', 
@@ -304,6 +330,7 @@ emp1 = TestEmployee.new('    АнисиМОва-Иванова Алина-Мал
 emp2 = TestEmployee.new('Бабина Наталья Алексеевна', '4.05.1994', '89186628610', 'lala', 'my@mail.ru', 
 	'8493 223510', 'lala', 5, 'Место работы', 'Должность', 'з/п')
 
-# puts emp1
-TerminalViewListEmployee.input_data
+# TerminalViewListEmployee.input_data
+# TerminalViewListEmployee.write_file
+TerminalViewListEmployee.read_file
 TerminalViewListEmployee.output_data
