@@ -301,11 +301,14 @@ class TerminalViewListEmployee
 
 	def TerminalViewListEmployee.write_file
 		File.open("list_employee.txt", "a") do |file|
-			data = ['Алина паа вавва', '23.08.2000', '79999443762', 'Адрес', 'my@mail.ru']
-			data << @@keypair.public_encrypt('3950 472188')
-			data += ['Специальность', '0']
-			file.write(data[0] + ',' + data[1] + ',' + data[2] + ',' + data[3] + ',' + 
-				+ data[4] + ',' + data[5].force_encoding("UTF-8") + ',' + data[6] + ',' + data[7] + "\n\n")
+			@@list_employee.each do |user|
+				# data = ['Алина паа вавва', '23.08.2000', '79999443762', 'Адрес', 'my@mail.ru']
+				passport_sifr = @@keypair.public_encrypt(user.passport)
+				# data += ['Специальность', '0']
+				file.write(user.fio + ',' + user.datebirth + ',' + user.phone_number + ',' +
+					+ user.address + ',' + user.e_mail + ',' + passport_sifr.force_encoding("UTF-8") + 
+					+ ',' + user.specialty + ',' + user.work_experience + "\n\n")
+			end
 		end
 	end
 
@@ -324,13 +327,7 @@ class TerminalViewListEmployee
 	end
 end
 
-emp1 = TestEmployee.new('    АнисиМОва-Иванова Алина-Малина   Александровна заде  ', '63.08.2000', '+79996975019', 'lala', 
-	'aLina@gma@il.com', '7565928384', 'lala', 0)
-
-emp2 = TestEmployee.new('Бабина Наталья Алексеевна', '4.05.1994', '89186628610', 'lala', 'my@mail.ru', 
-	'8493 223510', 'lala', 5, 'Место работы', 'Должность', 'з/п')
-
-# TerminalViewListEmployee.input_data
-# TerminalViewListEmployee.write_file
+TerminalViewListEmployee.input_data
+TerminalViewListEmployee.write_file
 TerminalViewListEmployee.read_file
 TerminalViewListEmployee.output_data
