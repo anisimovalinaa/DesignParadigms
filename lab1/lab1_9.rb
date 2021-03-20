@@ -47,22 +47,48 @@ end
 
 def h
 	puts 'Первый аргумент: число', 'Второй агрумент: один из методов'
-	puts 'Методы:', "\tsum_digits - сумма цифр числа", 
-	"\tmax_digit - максимальная цифра числа", 
-	"\tmin_digit - максимальная цифра числа", 
-	"\tmult_digits - произведение цифра числа", 
-	"\tsum_pr_del - сумма простых делителей числа", 
-	"\tmethod2 - количество нечетных цифр числа, больших 3", 
-	"\tmethod3 - прозведение таких делителей числа, сумма цифр которых меньше, чем сумма цифр исходного числа"
+	puts 'Методы:', "\t1. sum_digits - сумма цифр числа", 
+	"\t2. max_digit - максимальная цифра числа", 
+	"\t3. min_digit - максимальная цифра числа", 
+	"\t4. mult_digits - произведение цифра числа", 
+	"\t5. sum_pr_del - сумма простых делителей числа", 
+	"\t6. method2 - количество нечетных цифр числа, больших 3", 
+	"\t7. method3 - прозведение таких делителей числа, сумма цифр которых меньше, чем сумма цифр исходного числа"
 end
 
 begin
-	m = ARGV[1] + ' ' + ARGV[0]
-	puts eval m
+	raise if ARGV.size == 0
+	ARGV.each_with_index do |met, ind|
+		if ind != 0
+			case met
+			when '1'
+				m = 'sum_digits ' + ARGV[0]
+				puts "Сумма цифр = #{eval m}"
+			when '2'
+				m = 'max_digit ' + ARGV[0]
+				puts "Максимальная цифра = #{eval m}"
+			when '3'
+				m = 'min_digit ' + ARGV[0]
+				puts "Минимальная цифра = #{eval m}"
+			when '4'
+				m = 'mult_digits ' + ARGV[0]
+				puts "Призведение цифр = #{eval m}"
+			when '5'
+				m = 'sum_pr_del ' + ARGV[0]
+				puts "Сумма простых делителей = #{eval m}"
+			when '6'
+				m = 'method2 ' + ARGV[0]
+				puts "Количество нечетных цифр числа, больших 3 = #{eval m}"
+			when '7'
+				m = 'method3 ' + ARGV[0]
+				puts "Прозведение делителей числа, сумма цифр которых меньше, чем сумма цифр исходного числа = #{eval m}"
+			else
+				raise
+			end
+		end
+	end
 rescue SyntaxError => e
 	h
 rescue 
 	h
 end
-
-# puts method2 456397
