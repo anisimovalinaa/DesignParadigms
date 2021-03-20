@@ -22,9 +22,7 @@ def task37 l
 end
 
 def task49 l
-	list_pr_del = []
-	l.map { |el| list_pr_del += Prime.take_while { 
-		|a| a <= el}.reject { |e| el%e != 0 } }
+	list_pr_del = l.reduce([]) { |list, num| list + Prime.take_while { |pr| pr <= num }.reject { |a| num % a != 0 } } 
 	list_pr_del.uniq().sort()
 end
 
