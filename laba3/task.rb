@@ -151,8 +151,13 @@ class Employee
 				end
 
 				word = word.split()
+				word.each { |el| el.capitalize!}
 				res += word.join(' ')
-				return res
+				res = res.split()
+				if res.size == 4
+					res[3].downcase!
+				end
+				return res.join(' ')
 			else
 				raise RuntimeError
 			end
@@ -210,7 +215,7 @@ class TestEmployee < Employee
 	end
 
 	def self.check_correct
-		puts 'Что вы хотите ввести?', '1. ФИО.', '2. Телефон.', '3. Дату.', '4. E-mail.', '0. Выйти.'
+		puts 'Что вы хотите проверить?', '1. ФИО.', '2. Телефон.', '3. Дату.', '4. E-mail.', '5. Паспортные данные.', '0. Выйти.'
 		ans = ''
 		while ans != '0'
 			print 'Ваш ответ: '
@@ -219,19 +224,23 @@ class TestEmployee < Employee
 			when '1'
 				print 'Введите строку: '
 				str = gets.chomp()
-				puts TestEmployee.convert_to_fio(str)
+				puts convert_to_fio(str)
 			when '2'
 				print 'Введите строку: '
 				str = gets.chomp()
-				puts TestEmployee.convert_to_number(str)
+				puts convert_to_number(str)
 			when '3'
 				print 'Введите строку: '
 				str = gets.chomp()
-				puts TestEmployee.convert_to_date(str)
+				puts convert_to_date(str)
 			when '4'
 				print 'Введите строку: '
 				str = gets.chomp()
-				puts TestEmployee.convert_to_email(str)
+				puts convert_to_email(str)
+			when '5'
+				print 'Введите строку: '
+				str = gets.chomp()
+				puts convert_to_passport(str)
 			when '0'
 				puts 'До свидания.'
 			else
@@ -301,7 +310,7 @@ class TerminalViewListEmployee
 	end
 
 	def self.output_data
-		@@list_employee.each { |user| puts user}
+		@@list_employee.each { |user| puts user.get_info}
 	end
 
 	def self.write_file
@@ -340,14 +349,15 @@ class TerminalViewListEmployee
 	end
 end
 
-emp1 = TestEmployee.new('лапавм вк ренр', '31.08.2000', '77777777777', 'fghjk', 'vergre@gfbfbf.grt',  '5555555555', 'fgbbth', 0)
-emp = TestEmployee.new('лапавм вк ренр', '31.08.2000', '77777777777', 'fghjk', 'vergre@gfbfbf.grt',  '5555555555', 'fgbbth', 0)
+# emp1 = Employee.new('лапавм вк ренр', '31.08.2000', '77777777777', 'fghjk', 'vergre@gfbfbf.grt',  '5555555555', 'fgbbth', 0)
+# emp = TestEmployee.new('лапавм вк ренр', '31.08.2000', '77777777777', 'fghjk', 'vergre@gfbfbf.grt',  '5555555555', 'fgbbth', 0)
 
-ObjectSpace.each_object(TestEmployee) { |o| 
-	o.get_info
-}
+# ObjectSpace.each_object(Employee) { |o| 
+# 	o.get_info
+# }
 
+# TestEmployee.check_correct
 # TerminalViewListEmployee.input_data
 # TerminalViewListEmployee.write_file
-# TerminalViewListEmployee.read_file
-# TerminalViewListEmployee.output_data
+TerminalViewListEmployee.read_file
+TerminalViewListEmployee.output_data
