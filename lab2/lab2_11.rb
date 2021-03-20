@@ -11,9 +11,12 @@ def task1 str
 end
 
 def task9 str
-	real_digits = str.scan(/-?[\d]+\.[\d]+/)
-	real_digits = real_digits.map { |el| el.to_f }
-	real_digits.min
+	str_real_digits = str.scan(/-?[\d]+(?:\/[\d]+)?/)
+	real_digits = [] 
+	str_real_digits.map { |num| Rational(num) }
+	
+	# real_digits = real_digits.map { |el| el.to_f }
+	# real_digits.min
 end
 
 def task18 str
@@ -49,4 +52,7 @@ while ans != '0'
 		puts 'Такого пункта нет'
 	end
 end
-puts "#{task18 str}"
+
+
+# a = Rational('5')
+# puts a + 1
