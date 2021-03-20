@@ -44,8 +44,21 @@ def task7 list_str
 	list_str.sort { |a, b| pair_count_difference(a) <=> pair_count_difference(b) }
 end
 
+def count_trio str
+	count = 0
+	str.each_char.each_cons(3) do |a|
+		troika = a.join
+		count += 1 if troika == troika.reverse
+	end
+	count
+end
+
+def task10 list_str
+	list_str.sort { |a, b| count_trio(a) <=> count_trio(b) }
+end
+
 list_str = read_str
-puts task10 list_str
+
 ans = ''
 
 while ans != '0'
@@ -61,26 +74,27 @@ while ans != '0'
 	ans = gets.chomp()
 	case ans
 	when '12'
-		puts "Строка: #{list_str}"
+		puts "\nСтрока: #{list_str}"
 		puts "Решение: #{task12 list_str}"
 	when '13'
-		puts "Строка: #{list_str}"
+		puts "\nСтрока: #{list_str}"
 		puts "Решение: #{task13 list_str}"
 	when '14'
-		puts "Строка: #{list_str}"
+		puts "\nСтрока: #{list_str}"
 		puts "Решение: #{task14 list_str}"
 	when '1'
-		puts "Строка: #{list_str}"
+		puts "\nСтрока: #{list_str}"
 		puts "Решение: #{task1 list_str}"
 	when '7'
-		puts "Строка: #{list_str}"
+		puts "\nСтрока: #{list_str}"
 		puts "Решение: #{task7 list_str}"
 	when '10'
-		puts "Строка: #{list_str}"
+		puts "\nСтрока: #{list_str}"
 		puts "Решение: #{task10 list_str}"
 	when '0'
 		puts 'До свидания.'
 	else
 		puts 'Такого пункта нет'
 	end
+	puts
 end
