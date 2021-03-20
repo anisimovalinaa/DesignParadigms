@@ -23,7 +23,7 @@ class Employee
 		end
 	end
 
-	def Employee.date?(x)
+	def self.date?(x)
 		begin
 			DateTime.strptime(x, '%d.%m.%Y')
 			return true
@@ -32,9 +32,9 @@ class Employee
 		end
 	end
 
-	def Employee.convert_to_date(x)
+	def self.convert_to_date(x)
 		begin
-			if Employee.date?(x)
+			if date?(x)
 				date = DateTime.strptime(x, '%d.%m.%Y')
 				day = date.day.to_s
 				month = date.month.to_s
@@ -55,14 +55,14 @@ class Employee
 		@datebirth = Employee.convert_to_date(x)
 	end
 
-	def Employee.passport?(x)
+	def self.passport?(x)
 		digits = x.scan(/\d/)
 		digits.size == 10
 	end
 
-	def Employee.convert_to_passport(x)
+	def self.convert_to_passport(x)
 		begin
-			if Employee.passport?(x)
+			if passport?(x)
 				digits = x.scan(/\d/)
 				return digits.join[0..3] + ' ' + digits.join[4...]
 			else
@@ -77,14 +77,14 @@ class Employee
 		@passport = Employee.convert_to_passport(x)
 	end
 
-	def Employee.email?(x)
+	def self.email?(x)
 		ind = x =~ /[-.\w]+@([\w-]+\.)+[\w-]+$/
 		ind == 0 ? true : false
 	end
 
-	def Employee.convert_to_email(x)
+	def self.convert_to_email(x)
 		begin
-			if Employee.email?(x)
+			if email?(x)
 				return x.downcase
 			else
 				raise RuntimeError
@@ -98,7 +98,7 @@ class Employee
 		@e_mail = Employee.convert_to_email(x)
 	end
 
-	def Employee.all_digits(x)
+	def self.all_digits(x)
 		digits = x.scan(/^(8|\+?7)/)
 		if digits.size > 0
 			digits += x[digits[0][0].size..].scan(/\d/)
@@ -106,14 +106,14 @@ class Employee
 		digits
 	end
 
-	def Employee.phone_number?(x)
-		Employee.all_digits(x).size == 11
+	def self.phone_number?(x)
+		all_digits(x).size == 11
 	end
 
-	def Employee.convert_to_number(x)
+	def self.convert_to_number(x)
 		begin
-			if Employee.phone_number?(x)
-				d = Employee.all_digits(x)
+			if phone_number?(x)
+				d = all_digits(x)
 				number = '7-' + d[1..3].join + '-' + d[4...].join
 				return number
 			else 
@@ -128,14 +128,14 @@ class Employee
 		@phone_number = Employee.convert_to_number(x)
 	end
 
-	def Employee.fio?(x)
+	def self.fio?(x)
 		ind = x =~ /^\s*[А-Яа-яЁё]+(?:\s*-\s*[А-Яа-яЁё]+)?\s+[А-Яа-яЁё]+(?:\s*-\s*[А-Яа-яЁё]+)?\s+[А-Яа-яЁё]+(?: [А-Яа-яЁё]+)?\s*$/
 		ind == 0 ? true : false
 	end
 
-	def Employee.convert_to_fio(x)
+	def self.convert_to_fio(x)
 		begin
-			if Employee.fio?(x)
+			if fio?(x)
 				x.strip!
 				res = ''
 				word = ''
@@ -191,10 +191,14 @@ class Employee
 		@work_experience != 0 ? @last_salary = x : 
 		puts('Нет опыта работы')
 	end
+
+	def get_info
+		puts "#{@fio}, #{@datebirth}, #{@phone_number}, #{@address}, #{@e_mail}, #{@passport}, #{@specialty}, #{@work_experience}, #{@last_workplace}, #{@last_post}, #{@last_salary}"
+	end
 end
 
 class TestEmployee < Employee
-	def to_s
+	def get_info
 		puts "Имя: #{@fio}", "Дата рождения: #{@datebirth}", "Номер телефона: #{@phone_number}", 
 		"Адрес: #{@address}", "E-mail: #{@e_mail}",  "Серия и номер паспорта: #{@passport}", 
 		"Специальность: #{@specialty}", "Стаж работы по специальности: #{@work_experience}"
@@ -202,9 +206,10 @@ class TestEmployee < Employee
 			puts "Последнее место работы: #{@last_workplace}", "Должность: #{@last_post}", 
 			"Заработная плата: #{@last_salary}"
 		end
+		puts
 	end
 
-	def TestEmployee.check_correct
+	def self.check_correct
 		puts 'Что вы хотите ввести?', '1. ФИО.', '2. Телефон.', '3. Дату.', '4. E-mail.', '0. Выйти.'
 		ans = ''
 		while ans != '0'
@@ -240,12 +245,12 @@ class TerminalViewListEmployee
 	@@list_employee = []
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
 
-	def TerminalViewListEmployee.check_nil(user)
+	def self.check_nil(user)
 		user.fio == nil or user.datebirth == nil or user.passport == nil or 
 			user.phone_number == nil or user.e_mail == nil
 	end
 
-	def TerminalViewListEmployee.input_data
+	def self.input_data
 		ans = ''
 		while ans != '0'
 			puts '1. Добавить запись.', '0. Выход.'
@@ -280,9 +285,9 @@ class TerminalViewListEmployee
 						print 'Заработная плата: '
 						last_salary = gets.chomp
 					end
-					user = Employee.new(fio, daybirth, phone, addres, e_mail, passport, 
-						specialty, work_experience, last_workplace, last_post, last_salary)
-					check = TerminalViewListEmployee.check_nil(user)
+					user = TestEmployee.new(fio, daybirth, phone, addres, e_mail, passport, 
+						specialty, work_experience.to_i, last_workplace, last_post, last_salary)
+					check = check_nil(user)
 					@@list_employee << user if !check
 					puts 'Успешно' if !check
 					puts
@@ -295,24 +300,26 @@ class TerminalViewListEmployee
 		end
 	end
 
-	def TerminalViewListEmployee.output_data
-		puts "#{@@list_employee}"
+	def self.output_data
+		@@list_employee.each { |user| puts user}
 	end
 
-	def TerminalViewListEmployee.write_file
+	def self.write_file
 		File.open("list_employee.txt", "a") do |file|
 			@@list_employee.each do |user|
-				# data = ['Алина паа вавва', '23.08.2000', '79999443762', 'Адрес', 'my@mail.ru']
 				passport_sifr = @@keypair.public_encrypt(user.passport)
-				# data += ['Специальность', '0']
 				file.write(user.fio + ',' + user.datebirth + ',' + user.phone_number + ',' +
 					+ user.address + ',' + user.e_mail + ',' + passport_sifr.force_encoding("UTF-8") + 
-					+ ',' + user.specialty + ',' + user.work_experience + "\n\n")
+					+ ',' + user.specialty + ',' + user.work_experience.to_s)
+				if user.work_experience > 0 
+					file.write(',' + user.last_workplace + ',' + user.last_post + ',' + user.last_salary) 
+				end
+				file.write("\n\n")
 			end
 		end
 	end
 
-	def TerminalViewListEmployee.read_file
+	def self.read_file
 		File.open("list_employee.txt") do |file|
 			users = file.read
 			users = users.force_encoding("windows-1251")
@@ -321,13 +328,26 @@ class TerminalViewListEmployee
 				user = user.split(',')
 				user.map { |el| el.force_encoding("UTF-8") }
 				data_passport = @@keypair.private_decrypt(user[5])
-				@@list_employee << Employee.new(user[0], user[1], user[2], user[3], user[4], data_passport, user[6], user[7])
+				if user[7].to_i > 0
+					@@list_employee << TestEmployee.new(user[0], user[1], user[2], user[3], 
+						user[4], data_passport, user[6], user[7].to_i, user[8], user[9], user[10])
+				else
+					@@list_employee << TestEmployee.new(user[0], user[1], user[2], user[3], 
+						user[4], data_passport, user[6], user[7].to_i)
+				end
 			end
 		end
 	end
 end
 
-TerminalViewListEmployee.input_data
-TerminalViewListEmployee.write_file
-TerminalViewListEmployee.read_file
-TerminalViewListEmployee.output_data
+emp1 = TestEmployee.new('лапавм вк ренр', '31.08.2000', '77777777777', 'fghjk', 'vergre@gfbfbf.grt',  '5555555555', 'fgbbth', 0)
+emp = TestEmployee.new('лапавм вк ренр', '31.08.2000', '77777777777', 'fghjk', 'vergre@gfbfbf.grt',  '5555555555', 'fgbbth', 0)
+
+ObjectSpace.each_object(TestEmployee) { |o| 
+	o.get_info
+}
+
+# TerminalViewListEmployee.input_data
+# TerminalViewListEmployee.write_file
+# TerminalViewListEmployee.read_file
+# TerminalViewListEmployee.output_data
