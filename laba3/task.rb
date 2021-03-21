@@ -320,6 +320,12 @@ class ListEmployee
 			end
 		end
 	end
+
+	def self.find_by_fio fio_str
+		found_items = []
+		@@list_employee.each { |user| found_items << user if user.fio == fio_str }
+		found_items
+	end
 end
 
 class TerminalViewListEmployee < ListEmployee
@@ -371,6 +377,10 @@ class TerminalViewListEmployee < ListEmployee
 				output_data
 			when '3'
 				read_file
+			when '4'
+				el = gets.chomp
+				list_items = find_by_fio el
+				list_items.each { |el| el.get_info}
 			when '0'
 				exit
 			else
