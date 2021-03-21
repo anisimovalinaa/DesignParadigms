@@ -307,7 +307,7 @@ class ListEmployee
 			users = users.force_encoding("windows-1251")
 			users = users.split("\n\n")
 			users.each do |user|
-				user = user.split(',')
+				user = user.split('|')
 				user.map { |el| el.force_encoding("UTF-8") }
 				data_passport = @@keypair.private_decrypt(user[5])
 				if user[7].to_i > 0
@@ -333,6 +333,10 @@ class ListEmployee
 			user.phone_number == phone_str && user.passport == passport_str }
 		found_items
 	end
+
+	def self.find_by_phone phone_str
+		@@list_employee.each { |user| return user if user.phone_number == phone_str }
+	end
 end
 
 class TerminalViewListEmployee < ListEmployee
@@ -354,14 +358,14 @@ class TerminalViewListEmployee < ListEmployee
 	end
 
 	def self.write_file
-		File.open("list_employee.txt", "a") do |file|
+		File.open("list_employee.txt", "w") do |file|
 			@@list_employee.each do |user|
 				passport_sifr = @@keypair.public_encrypt(user.passport)
-				file.write(user.fio + ',' + user.datebirth + ',' + user.phone_number + ',' +
-					+ user.address + ',' + user.e_mail + ',' + passport_sifr.force_encoding("UTF-8") + 
-					+ ',' + user.specialty + ',' + user.work_experience.to_s)
+				file.write(user.fio + '|' + user.datebirth + '|' + user.phone_number + '|' +
+					+ user.address + '|' + user.e_mail + '|' + passport_sifr.force_encoding("UTF-8") + 
+					+ '|' + user.specialty + '|' + user.work_experience.to_s)
 				if user.work_experience > 0 
-					file.write(',' + user.last_workplace + ',' + user.last_post + ',' + user.last_salary) 
+					file.write('|' + user.last_workplace + '|' + user.last_post + '|' + user.last_salary) 
 				end
 				file.write("\n\n")
 			end
@@ -369,10 +373,13 @@ class TerminalViewListEmployee < ListEmployee
 	end
 
 	def self.menu
+		read_file
 		ans = ''
 		while ans != '0'
 			puts "--------Меню-------", '1. Добавить нового пользователя.', 
-			'2. Отобразить список пользователей', '3. Найти пользователя по введенным данным.', '0. Закрыть программу.'
+			'2. Отобразить список пользователей', '3. Найти пользователя по введенным данным.', 
+			'4. Изменить конкретного пользователя.', '5. Удалить пользователя.', 
+			'6. Сохранить изменения в файл.', '0. Закрыть программу.'
 			print 'Ответ: '
 			ans = gets.chomp
 			case ans
@@ -382,10 +389,7 @@ class TerminalViewListEmployee < ListEmployee
 			when '2'
 				puts
 				output_data
-			when '9'
-				read_file
 			when '3'
-				ans_find = ''
 				puts "\t1. По ФИО.", "\t2. По e_mail, телефону и  паспортным данным."
 				print "\tОтвет: "
 				ans_find = gets.chomp
@@ -408,6 +412,61 @@ class TerminalViewListEmployee < ListEmployee
 				else 
 					puts 'Такого пункта нет'
 				end
+			when '4'
+				print "\tВведите номер телефона: "
+				person = find_by_phone gets.chomp
+				if person.class == TestEmployee
+					person.fio
+					puts "\tЧто вы хотите изменить?", "\t1. ФИО.", "\t2. Дату рождения.", 
+					"\t3. Адрес.", "\t4. Специальность.", "\t5. Опыт работы.", 
+					"\t6. Предыдущее место работы.", "\t7. Предыдущая должность.", 
+					"\t8. Предыдущая зарплата."
+					print "\tОтвет: "
+					ans_change = gets.chomp
+					case ans_change
+					when '1'
+						print "\tВведите ФИО: "
+						person.fio = gets.chomp
+					when '2'
+						print "\tВведите дату рождения: "
+						person.datebirth = gets.chomp
+					when '3'
+						print "\tВведите адрес: "
+						person.address = gets.chomp
+					when '4'
+						print "\tВведите специальность: "
+						person.specialty = gets.chomp
+					when '5'
+						print "\tВведите опыт работы: "
+						person.work_experience = gets.chomp.to_i
+					when '6'
+						print "\tВведите последнее место работы: "
+						person.last_workplace = gets.chomp
+					when '7'
+						print "\tВведите предыдущую должность: "
+						person.last_post = gets.chomp
+					when '8'
+						print "\tВведите предыдущую зарплату: "
+						person.last_salary = gets.chomp
+					else 
+						puts 'Такого пункта нет'
+					end
+					puts
+				else
+					puts "\tПользователя с таким номером телефона нет\n\n"
+				end
+			when '5'
+				print "\tВведите номер телефона: "
+				person = find_by_phone gets.chomp
+				if person.class == TestEmployee
+					@@list_employee.delete(person)
+					puts "\tУспешно\n\n"
+				else
+					puts "\tПользователя с таким номером телефона нет\n\n"
+				end
+			when '6'
+				write_file
+				puts "Успешно\n\n"
 			when '0'
 				exit
 			else
@@ -436,11 +495,14 @@ TerminalViewListEmployee.menu
 # ListEmployee.add_user
 # ListEmployee.output_data
 
-# екпкп рнере укаук
+# Пивоварова Диана Сергеевна
 # 23.08.2000
-# 76665548943
-# ываолд
-# ffrefe@gvfg.gf
-# 9936523175
-# dyul
-# 0
+# 79185548943
+# Селезнева 216, кв.2
+# dianochka@yandex.ru
+# 5437289750
+# Архитектура
+# 2
+# ОсноваЛюкс
+# Архитектор малоэтажного строительства
+# 40000
