@@ -337,6 +337,34 @@ class ListEmployee
 	def self.find_by_phone phone_str
 		@@list_employee.each { |user| return user if user.phone_number == phone_str }
 	end
+
+	def self.sort_by_fio
+		@@list_employee.sort! { |a, b| a.fio <=> b.fio }
+	end
+
+	def self.sort_by_datebirth
+		@@list_employee.sort! { |a, b| a.datebirth <=> b.datebirth }
+	end
+
+	def self.sort_by_phone
+		@@list_employee.sort! { |a, b| a.phone_number <=> b.phone_number }
+	end
+
+	def self.sort_by_email
+		@@list_employee.sort! { |a, b| a.e_mail <=> b.e_mail }
+	end
+
+	def self.sort_by_passport
+		@@list_employee.sort! { |a, b| a.passport <=> b.passport }
+	end
+
+	def self.sort_by_work_experience
+		@@list_employee.sort! { |a, b| a.work_experience <=> b.work_experience }
+	end
+
+	def self.sort_by_speciality
+		@@list_employee.sort! { |a, b| a.specialty <=> b.specialty }
+	end
 end
 
 class TerminalViewListEmployee < ListEmployee
@@ -379,7 +407,7 @@ class TerminalViewListEmployee < ListEmployee
 			puts "--------Меню-------", '1. Добавить нового пользователя.', 
 			'2. Отобразить список пользователей', '3. Найти пользователя по введенным данным.', 
 			'4. Изменить конкретного пользователя.', '5. Удалить пользователя.', 
-			'6. Сохранить изменения в файл.', '0. Закрыть программу.'
+			'6. Сохранить изменения в файл.', '7. Сортировать по конкретному полю.', '0. Закрыть программу.'
 			print 'Ответ: '
 			ans = gets.chomp
 			case ans
@@ -416,7 +444,6 @@ class TerminalViewListEmployee < ListEmployee
 				print "\tВведите номер телефона: "
 				person = find_by_phone gets.chomp
 				if person.class == TestEmployee
-					person.fio
 					puts "\tЧто вы хотите изменить?", "\t1. ФИО.", "\t2. Дату рождения.", 
 					"\t3. Адрес.", "\t4. Специальность.", "\t5. Опыт работы.", 
 					"\t6. Предыдущее место работы.", "\t7. Предыдущая должность.", 
@@ -467,6 +494,31 @@ class TerminalViewListEmployee < ListEmployee
 			when '6'
 				write_file
 				puts "Успешно\n\n"
+			when '7'
+				puts "\tПо какому полю вы хотите отсортировать?", "\t1. ФИО.", "\t2. Дата рождения.", 
+					"\t3. Телефон.", "\t4. E-mail.", "\t5. Паспорт.", 
+					"\t6. Специальность.", "\t7. Опыт работы."
+				print "\tОтвет: "
+				ans_sort = gets.chomp
+				case ans_sort
+				when '1'
+					sort_by_fio
+				when '2'
+					sort_by_datebirth
+				when '3'
+					sort_by_phone
+				when '4'
+					sort_by_email
+				when '5'
+					sort_by_passport
+				when '6'
+					sort_by_speciality
+				when '7'
+					sort_by_work_experience
+				else
+					puts "\tТакого пункта нет"
+				end
+				puts
 			when '0'
 				exit
 			else
@@ -484,25 +536,4 @@ end
 # 	o.get_info
 # }
 
-# TestEmployee.check_correct
-# TerminalViewListEmployee.input_data
-# TerminalViewListEmployee.write_file
-# TerminalViewListEmployee.read_file
-# TerminalViewListEmployee.output_data
-
 TerminalViewListEmployee.menu
-
-# ListEmployee.add_user
-# ListEmployee.output_data
-
-# Пивоварова Диана Сергеевна
-# 23.08.2000
-# 79185548943
-# Селезнева 216, кв.2
-# dianochka@yandex.ru
-# 5437289750
-# Архитектура
-# 2
-# ОсноваЛюкс
-# Архитектор малоэтажного строительства
-# 40000
