@@ -326,6 +326,13 @@ class ListEmployee
 		@@list_employee.each { |user| found_items << user if user.fio == fio_str }
 		found_items
 	end
+
+	def self.find_by_passport(e_mail_str, phone_str, passport_str)
+		found_items = []
+		@@list_employee.each { |user| found_items << user if user.e_mail == e_mail_str && 
+			user.phone_number == phone_str && user.passport == passport_str }
+		found_items
+	end
 end
 
 class TerminalViewListEmployee < ListEmployee
@@ -365,7 +372,7 @@ class TerminalViewListEmployee < ListEmployee
 		ans = ''
 		while ans != '0'
 			puts "--------Меню-------", '1. Добавить нового пользователя.', 
-			'2. Отобразить список пользователей', '0. Закрыть программу.'
+			'2. Отобразить список пользователей', '3. Найти пользователя по введенным данным.', '0. Закрыть программу.'
 			print 'Ответ: '
 			ans = gets.chomp
 			case ans
@@ -375,12 +382,32 @@ class TerminalViewListEmployee < ListEmployee
 			when '2'
 				puts
 				output_data
-			when '3'
+			when '9'
 				read_file
-			when '4'
-				el = gets.chomp
-				list_items = find_by_fio el
-				list_items.each { |el| el.get_info}
+			when '3'
+				ans_find = ''
+				puts "\t1. По ФИО.", "\t2. По e_mail, телефону и  паспортным данным."
+				print "\tОтвет: "
+				ans_find = gets.chomp
+				case ans_find
+				when '1'
+					print "\tВведите ФИО: "	
+					list_items = find_by_fio gets.chomp
+					puts
+					list_items.each { |el| el.get_info}
+				when '2'
+					print "\tВведите e_mail: "
+					email = gets.chomp
+					print "\tВведите телефон: "
+					tel = gets.chomp
+					print "\tВведите серию и номер паспорта: "
+					pas = gets.chomp
+					list_items = find_by_passport(email, tel, pas)
+					puts
+					list_items.each { |el| el.get_info}
+				else 
+					puts 'Такого пункта нет'
+				end
 			when '0'
 				exit
 			else
