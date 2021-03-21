@@ -250,7 +250,8 @@ class TestEmployee < Employee
 	end
 end
 
-class TerminalViewListEmployee
+
+class ListEmployee
 	@@list_employee = []
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
 
@@ -259,73 +260,45 @@ class TerminalViewListEmployee
 			user.phone_number == nil or user.e_mail == nil
 	end
 
-	def self.input_data
-		ans = ''
-		while ans != '0'
-			puts '1. Добавить запись.', '0. Выход.'
-			print 'Ваш ответ: '
-			ans = gets.chomp
-			case ans
-			when '1'
-				check = true
-				while check
-					puts 'Введите данные'
-					print 'ФИО: '
-					fio = gets.chomp
-					print 'Дата рождения: '
-					daybirth = gets.chomp
-					print 'Телефон: '
-					phone = gets.chomp
-					print 'Адрес: '
-					addres = gets.chomp
-					print 'E-mail: '
-					e_mail = gets.chomp
-					print 'Паспорт: '
-					passport = gets.chomp
-					print 'Специальность: '
-					specialty = gets.chomp
-					print 'Опыт работы: '
-					work_experience = gets.chomp
-					if work_experience.to_i > 0
-						print 'Последнее место работы: '
-						last_workplace = gets.chomp
-						print 'Должность: '
-						last_post = gets.chomp
-						print 'Заработная плата: '
-						last_salary = gets.chomp
-					end
-					user = TestEmployee.new(fio, daybirth, phone, addres, e_mail, passport, 
-						specialty, work_experience.to_i, last_workplace, last_post, last_salary)
-					check = check_nil(user)
-					@@list_employee << user if !check
-					puts 'Успешно' if !check
-					puts
-				end
-			when '0'
-				puts 'До свидания'
-			else
-				puts 'Нет такого пункта'
+	def self.add_user
+		check = true
+		while check
+			puts 'Введите данные'
+			print 'ФИО: '
+			fio = gets.chomp
+			print 'Дата рождения: '
+			daybirth = gets.chomp
+			print 'Телефон: '
+			phone = gets.chomp
+			print 'Адрес: '
+			addres = gets.chomp
+			print 'E-mail: '
+			e_mail = gets.chomp
+			print 'Паспорт: '
+			passport = gets.chomp
+			print 'Специальность: '
+			specialty = gets.chomp
+			print 'Опыт работы: '
+			work_experience = gets.chomp
+			if work_experience.to_i > 0
+				print 'Последнее место работы: '
+				last_workplace = gets.chomp
+				print 'Должность: '
+				last_post = gets.chomp
+				print 'Заработная плата: '
+				last_salary = gets.chomp
 			end
+			user = TestEmployee.new(fio, daybirth, phone, addres, e_mail, passport, 
+				specialty, work_experience.to_i, last_workplace, last_post, last_salary)
+			check = check_nil(user)
+			@@list_employee << user if !check
+			puts 'Успешно' if !check
+			puts
 		end
 	end
 
 	def self.output_data
 		@@list_employee.each { |user| puts user.get_info}
-	end
-
-	def self.write_file
-		File.open("list_employee.txt", "a") do |file|
-			@@list_employee.each do |user|
-				passport_sifr = @@keypair.public_encrypt(user.passport)
-				file.write(user.fio + ',' + user.datebirth + ',' + user.phone_number + ',' +
-					+ user.address + ',' + user.e_mail + ',' + passport_sifr.force_encoding("UTF-8") + 
-					+ ',' + user.specialty + ',' + user.work_experience.to_s)
-				if user.work_experience > 0 
-					file.write(',' + user.last_workplace + ',' + user.last_post + ',' + user.last_salary) 
-				end
-				file.write("\n\n")
-			end
-		end
 	end
 
 	def self.read_file
@@ -349,6 +322,65 @@ class TerminalViewListEmployee
 	end
 end
 
+class TerminalViewListEmployee < ListEmployee
+	def self.input_data
+		ans = ''
+		while ans != '0'
+			puts '1. Добавить запись.', '0. Выход.'
+			print 'Ваш ответ: '
+			ans = gets.chomp
+			case ans
+			when '1'
+				add_user
+			when '0'
+				exit
+			else
+				puts 'Нет такого пункта'
+			end
+		end
+	end
+
+	def self.write_file
+		File.open("list_employee.txt", "a") do |file|
+			@@list_employee.each do |user|
+				passport_sifr = @@keypair.public_encrypt(user.passport)
+				file.write(user.fio + ',' + user.datebirth + ',' + user.phone_number + ',' +
+					+ user.address + ',' + user.e_mail + ',' + passport_sifr.force_encoding("UTF-8") + 
+					+ ',' + user.specialty + ',' + user.work_experience.to_s)
+				if user.work_experience > 0 
+					file.write(',' + user.last_workplace + ',' + user.last_post + ',' + user.last_salary) 
+				end
+				file.write("\n\n")
+			end
+		end
+	end
+
+	def self.menu
+		ans = ''
+		while ans != '0'
+			puts "--------Меню-------", '1. Добавить нового пользователя.', 
+			'2. Отобразить список пользователей', '0. Закрыть программу.'
+			print 'Ответ: '
+			ans = gets.chomp
+			case ans
+			when '1'
+				puts
+				add_user
+			when '2'
+				puts
+				output_data
+			when '3'
+				read_file
+			when '0'
+				exit
+			else
+				puts 'Такого пункта нет'
+			end	
+		end
+	end
+end
+
+
 # emp1 = Employee.new('лапавм вк ренр', '31.08.2000', '77777777777', 'fghjk', 'vergre@gfbfbf.grt',  '5555555555', 'fgbbth', 0)
 # emp = TestEmployee.new('лапавм вк ренр', '31.08.2000', '77777777777', 'fghjk', 'vergre@gfbfbf.grt',  '5555555555', 'fgbbth', 0)
 
@@ -359,5 +391,19 @@ end
 # TestEmployee.check_correct
 # TerminalViewListEmployee.input_data
 # TerminalViewListEmployee.write_file
-TerminalViewListEmployee.read_file
-TerminalViewListEmployee.output_data
+# TerminalViewListEmployee.read_file
+# TerminalViewListEmployee.output_data
+
+TerminalViewListEmployee.menu
+
+# ListEmployee.add_user
+# ListEmployee.output_data
+
+# екпкп рнере укаук
+# 23.08.2000
+# 76665548943
+# ываолд
+# ffrefe@gvfg.gf
+# 9936523175
+# dyul
+# 0
