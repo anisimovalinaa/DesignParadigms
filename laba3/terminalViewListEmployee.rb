@@ -6,34 +6,29 @@ class TerminalViewListEmployee
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
 	@@list_employee = ListEmployee.new()
 
-	def self.input_data
-		ans = ''
-		while ans != '0'
-			puts '1. Добавить запись.', '0. Выход.'
-			print 'Ваш ответ: '
-			ans = gets.chomp
-			case ans
-			when '1'
-				add_user
-			when '0'
-				exit
-			else
-				puts 'Нет такого пункта'
+	def self.read_file(file_name)
+		File.open(file_name) do |file|
+			users = file.read
+			users = users.force_encoding("windows-1251")
+			users = users.split("\n\n")
+			users.each do |user|
+				user = user.split('|')
+				user.map { |el| el.force_encoding("UTF-8") }
+				data_passport = @@keypair.private_decrypt(user[5])
+				if user[7].to_i > 0
+					@@list_employee.add_user(Employee.new(user[0], user[1], user[2], user[3], 
+						user[4], data_passport, user[6], user[7].to_i, user[8], user[9], user[10]))
+				else
+					@@list_employee.add_user(Employee.new(user[0], user[1], user[2], user[3], 
+						user[4], data_passport, user[6], user[7].to_i))
+				end
 			end
-		end
-	end
-
-	def self.try_to_convert(str)
-		begin
-			eval str
-		rescue ArgumentError => e
-			puts e.message
 		end
 	end
 
 	def self.write_file(file_name)
 		File.open(file_name, "w") do |file|
-			list_employee.each do |user|
+			@@list_employee.each do |user|
 				passport_sifr = @@keypair.public_encrypt(user.passport)
 				file.write(user.fio + '|' + user.datebirth + '|' + user.phone_number + '|' +
 					+ user.address + '|' + user.e_mail + '|' + passport_sifr.force_encoding("UTF-8") + 
@@ -43,6 +38,14 @@ class TerminalViewListEmployee
 				end
 				file.write("\n\n")
 			end
+		end
+	end
+
+	def self.try_to_convert(str)
+		begin
+			eval str
+		rescue ArgumentError => e
+			puts e.message
 		end
 	end
 
@@ -97,7 +100,7 @@ class TerminalViewListEmployee
 	end
 
 	def self.menu
-		@@list_employee.read_file("list_employee.txt")
+		read_file("list_employee.txt")
 		ans = ''
 		while ans != '0'
 			puts "--------Меню-------", '1. Добавить нового пользователя.', 
@@ -188,7 +191,7 @@ class TerminalViewListEmployee
 					puts "\tПользователя с таким номером телефона нет\n\n"
 				end
 			when '6'
-				@@list_employee.write_file("list_employee.txt")
+				write_file("list_employee.txt")
 				puts "Успешно\n\n"
 			when '7'
 				puts "\tПо какому полю вы хотите отсортировать?", "\t1. ФИО.", "\t2. Дата рождения.", 
@@ -198,19 +201,19 @@ class TerminalViewListEmployee
 				ans_sort = gets.chomp
 				case ans_sort
 				when '1'
-					sort_by_fio
+					@@list_employee.sort 'fio'
 				when '2'
-					sort_by_datebirth
+					@@list_employee.sort 'datebirth'
 				when '3'
-					sort_by_phone
+					@@list_employee.sort 'phone_number'
 				when '4'
-					sort_by_email
+					@@list_employee.sort 'e_mail'
 				when '5'
-					sort_by_passport
+					@@list_employee.sort 'passport'
 				when '6'
-					sort_by_speciality
+					@@list_employee.sort 'specialty'
 				when '7'
-					sort_by_work_experience
+					@@list_employee.sort 'work_experience'
 				else
 					puts "\tТакого пункта нет"
 				end
