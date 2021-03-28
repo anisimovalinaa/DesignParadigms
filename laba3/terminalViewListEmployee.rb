@@ -1,6 +1,9 @@
 require_relative 'listEmployee'
+require_relative 'employee'
+require 'openssl'
 
 class TerminalViewListEmployee
+	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
 	@@list_employee = ListEmployee.new()
 
 	def self.input_data
@@ -20,9 +23,17 @@ class TerminalViewListEmployee
 		end
 	end
 
-	def self.write_file
-		File.open("list_employee.txt", "w") do |file|
-			@@list_employee.each do |user|
+	def self.try_to_convert(str)
+		begin
+			eval str
+		rescue ArgumentError => e
+			puts e.message
+		end
+	end
+
+	def self.write_file(file_name)
+		File.open(file_name, "w") do |file|
+			list_employee.each do |user|
 				passport_sifr = @@keypair.public_encrypt(user.passport)
 				file.write(user.fio + '|' + user.datebirth + '|' + user.phone_number + '|' +
 					+ user.address + '|' + user.e_mail + '|' + passport_sifr.force_encoding("UTF-8") + 
@@ -63,13 +74,20 @@ class TerminalViewListEmployee
 				print 'Заработная плата: '
 				last_salary = gets.chomp
 			end
-			begin
-				@@list_employee.add_user(fio, daybirth, phone, address, e_mail, passport, 
+
+			fio = try_to_convert("Employee.convert_to_fio('#{fio}')")
+			daybirth = try_to_convert("Employee.convert_to_date('#{daybirth}')")
+			phone = try_to_convert("Employee.convert_to_number('#{phone}')")
+			e_mail = try_to_convert("Employee.convert_to_email('#{e_mail}')")
+			passport = try_to_convert("Employee.convert_to_passport('#{passport}')")
+
+			if not([fio, daybirth, phone, e_mail, passport].include? nil)
+				user = Employee.new(fio, daybirth, phone, address, e_mail, passport, 
 				specialty, work_experience.to_i, last_workplace, last_post, last_salary)
-				check = false
-			rescue ArgumentError
-				puts "Неверный аргумент"
+				@@list_employee.add_user(user)
+				check = false	
 			end
+			puts 'Успешно' if not check
 			puts
 		end
 	end
@@ -170,7 +188,7 @@ class TerminalViewListEmployee
 					puts "\tПользователя с таким номером телефона нет\n\n"
 				end
 			when '6'
-				write_file
+				@@list_employee.write_file("list_employee.txt")
 				puts "Успешно\n\n"
 			when '7'
 				puts "\tПо какому полю вы хотите отсортировать?", "\t1. ФИО.", "\t2. Дата рождения.", 
@@ -201,7 +219,7 @@ class TerminalViewListEmployee
 				exit
 			else
 				puts 'Такого пункта нет'
-			end	
+			end
 		end
 	end
 end

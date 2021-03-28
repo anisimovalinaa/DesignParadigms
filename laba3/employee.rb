@@ -16,10 +16,10 @@ class Employee
 		self.passport = passport
 		self.specialty = specialty
 		self.work_experience = work_experience
-		if work_experience != '0'
-			@last_workplace = last_workplace
-			@last_post = last_post
-			@last_salary = last_salary
+		if work_experience != 0
+			self.last_workplace = last_workplace
+			self.last_post = last_post
+			self.last_salary = last_salary
 		end
 	end
 
@@ -48,7 +48,11 @@ class Employee
 	end
 
 	def datebirth=(x)
-		@datebirth = Employee.convert_to_date(x)
+		begin
+			@datebirth = Employee.convert_to_date(x)
+		rescue ArgumentError => e
+			e.message
+		end
 	end
 
 	def self.passport?(x)
@@ -66,7 +70,11 @@ class Employee
 	end
 
 	def passport=(x)
-		@passport = Employee.convert_to_passport(x)
+		begin
+			@passport = Employee.convert_to_passport(x)
+		rescue ArgumentError => e
+			e.message
+		end		
 	end
 
 	def self.email?(x)
@@ -83,7 +91,11 @@ class Employee
 	end
 
 	def e_mail=(x)
-		@e_mail = Employee.convert_to_email(x)
+		begin
+			@e_mail = Employee.convert_to_email(x)
+		rescue ArgumentError => e
+			e.message
+		end
 	end
 
 	def self.all_digits(x)
@@ -109,7 +121,11 @@ class Employee
 	end
 
 	def phone_number=(x)
-		@phone_number = Employee.convert_to_number(x)
+		begin
+			@phone_number = Employee.convert_to_number(x)		
+		rescue ArgumentError
+			'Неправильно введен номер'
+		end
 	end
 
 	def self.fio?(x)
@@ -141,13 +157,17 @@ class Employee
 				res[3].downcase!
 			end
 			return res.join(' ')
-		else
+		else		
 			raise ArgumentError, 'Неверные ФИО'
 		end
 	end
 
 	def fio=(x)
-		@fio = Employee.convert_to_fio(x)
+		begin
+			@fio = Employee.convert_to_fio(x)
+		rescue ArgumentError => e
+			e.message
+		end
 	end
 
 	def last_workplace 
@@ -178,6 +198,10 @@ class Employee
 	end
 
 	def to_s
-		return "#{@fio}, #{@datebirth}, #{@phone_number}, #{@address}, #{@e_mail}, #{@passport}, #{@specialty}, #{@work_experience}, #{@last_workplace}, #{@last_post}, #{last_salary}"
+		if work_experience != 0
+			return "#{fio}, #{datebirth}, #{phone_number}, #{address}, #{e_mail}, #{passport}, #{specialty}, #{work_experience}, #{last_workplace}, #{last_post}, #{last_salary}"
+		else
+			return "#{fio}, #{datebirth}, #{phone_number}, #{address}, #{e_mail}, #{passport}, #{specialty}, #{work_experience}"
+		end
 	end
 end

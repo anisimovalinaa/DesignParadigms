@@ -1,14 +1,17 @@
+require_relative 'employee'
+
 class TestEmployee < Employee
-	# def get_info
-	# 	puts "Имя: #{@fio}", "Дата рождения: #{@datebirth}", "Номер телефона: #{@phone_number}", 
-	# 	"Адрес: #{@address}", "E-mail: #{@e_mail}",  "Серия и номер паспорта: #{@passport}", 
-	# 	"Специальность: #{@specialty}", "Стаж работы по специальности: #{@work_experience}"
-	# 	if @work_experience > 0
-	# 		puts "Последнее место работы: #{@last_workplace}", "Должность: #{@last_post}", 
-	# 		"Заработная плата: #{@last_salary}"
-	# 	end
-	# 	puts
-	# end
+	def to_s
+		# puts "Имя: #{@fio}", "Дата рождения: #{@datebirth}", "Номер телефона: #{@phone_number}", 
+		# "Адрес: #{@address}", "E-mail: #{@e_mail}",  "Серия и номер паспорта: #{@passport}", 
+		# "Специальность: #{@specialty}", "Стаж работы по специальности: #{@work_experience}"
+		# if @work_experience > 0
+		# 	puts "Последнее место работы: #{@last_workplace}", "Должность: #{@last_post}", 
+		# 	"Заработная плата: #{@last_salary}"
+		# end
+		# puts
+		'Данные работника: ' + super
+	end
 
 	def self.check_correct
 		puts 'Что вы хотите проверить?', '1. ФИО.', '2. Телефон.', '3. Дату.', '4. E-mail.', '5. Паспортные данные.', '0. Выйти.'

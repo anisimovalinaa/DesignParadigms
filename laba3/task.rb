@@ -8,7 +8,8 @@ require_relative 'terminalViewListEmployee'
 # emp = TestEmployee.new('лапавм вк ренр', '31.08.2000', '77777777777', 'fghjk', 'vergre@gfbfbf.grt',  '5555555555', 'fgbbth', 0)
 
 # ObjectSpace.each_object(Employee) { |o| 
-# 	o.get_info
+# 	puts o
 # }
+# TestEmployee.check_correct
 
 TerminalViewListEmployee.menu

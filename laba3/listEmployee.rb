@@ -1,5 +1,5 @@
-require 'openssl'
 require_relative 'employee'
+require 'openssl'
 
 class ListEmployee
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
@@ -8,10 +8,8 @@ class ListEmployee
 		self.list_employee = []
 	end
 
-	def add_user(fio, daybirth, phone, address, e_mail, passport, 
-				specialty, work_experience, last_workplace, last_post, last_salary)
-		user = Employee.new(fio, daybirth, phone, address, e_mail, passport, 
-				specialty, work_experience, last_workplace, last_post, last_salary)
+	def add_user(user)
+		@list_employee << user
 	end
 
 	def to_s
@@ -36,6 +34,21 @@ class ListEmployee
 					list_employee << Employee.new(user[0], user[1], user[2], user[3], 
 						user[4], data_passport, user[6], user[7].to_i)
 				end
+			end
+		end
+	end
+
+	def write_file(file_name)
+		File.open(file_name, "w") do |file|
+			list_employee.each do |user|
+				passport_sifr = @@keypair.public_encrypt(user.passport)
+				file.write(user.fio + '|' + user.datebirth + '|' + user.phone_number + '|' +
+					+ user.address + '|' + user.e_mail + '|' + passport_sifr.force_encoding("UTF-8") + 
+					+ '|' + user.specialty + '|' + user.work_experience.to_s)
+				if user.work_experience > 0 
+					file.write('|' + user.last_workplace + '|' + user.last_post + '|' + user.last_salary) 
+				end
+				file.write("\n\n")
 			end
 		end
 	end
