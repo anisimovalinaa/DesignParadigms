@@ -6,41 +6,6 @@ class TerminalViewListEmployee
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
 	@@list_employee = ListEmployee.new()
 
-	def self.read_file(file_name)
-		File.open(file_name) do |file|
-			users = file.read
-			users = users.force_encoding("windows-1251")
-			users = users.split("\n\n")
-			users.each do |user|
-				user = user.split('|')
-				user.map { |el| el.force_encoding("UTF-8") }
-				data_passport = @@keypair.private_decrypt(user[5])
-				if user[7].to_i > 0
-					@@list_employee.add_user(Employee.new(user[0], user[1], user[2], user[3], 
-						user[4], data_passport, user[6], user[7].to_i, user[8], user[9], user[10]))
-				else
-					@@list_employee.add_user(Employee.new(user[0], user[1], user[2], user[3], 
-						user[4], data_passport, user[6], user[7].to_i))
-				end
-			end
-		end
-	end
-
-	def self.write_file(file_name)
-		File.open(file_name, "w") do |file|
-			@@list_employee.each do |user|
-				passport_sifr = @@keypair.public_encrypt(user.passport)
-				file.write(user.fio + '|' + user.datebirth + '|' + user.phone_number + '|' +
-					+ user.address + '|' + user.e_mail + '|' + passport_sifr.force_encoding("UTF-8") + 
-					+ '|' + user.specialty + '|' + user.work_experience.to_s)
-				if user.work_experience > 0 
-					file.write('|' + user.last_workplace + '|' + user.last_post + '|' + user.last_salary) 
-				end
-				file.write("\n\n")
-			end
-		end
-	end
-
 	def self.try_to_convert(str)
 		begin
 			eval str
@@ -100,7 +65,7 @@ class TerminalViewListEmployee
 	end
 
 	def self.menu
-		read_file("list_employee.txt")
+		@@list_employee.read_file("list_employee.txt")
 		ans = ''
 		while ans != '0'
 			puts "--------Меню-------", '1. Добавить нового пользователя.', 
@@ -117,13 +82,13 @@ class TerminalViewListEmployee
 				output_users
 				puts
 			when '3'
-				puts "\t1. По ФИО.", "\t2. По e_mail, телефону и  паспортным данным."
+				puts "\t1. По ФИО.", "\t2. По e-mail, телефону и  паспортным данным."
 				print "\tОтвет: "
 				ans_find = gets.chomp
 				case ans_find
 				when '1'
 					print "\tВведите ФИО: "	
-					list_items = find_by_fio gets.chomp
+					list_items = @@list_employee.find_by_fio gets.chomp
 					puts
 					list_items.each { |el| el.get_info}
 				when '2'
@@ -133,7 +98,7 @@ class TerminalViewListEmployee
 					tel = gets.chomp
 					print "\tВведите серию и номер паспорта: "
 					pas = gets.chomp
-					list_items = find_by_passport(email, tel, pas)
+					list_items = @@list_employee.find_by_passport(email, tel, pas)
 					puts
 					list_items.each { |el| el.get_info}
 				else 
@@ -141,8 +106,8 @@ class TerminalViewListEmployee
 				end
 			when '4'
 				print "\tВведите номер телефона: "
-				person = find_by_phone gets.chomp
-				if person.class == TestEmployee
+				person = @@list_employee.find_by_phone gets.chomp
+				if person.class == Employee
 					puts "\tЧто вы хотите изменить?", "\t1. ФИО.", "\t2. Дату рождения.", 
 					"\t3. Адрес.", "\t4. Специальность.", "\t5. Опыт работы.", 
 					"\t6. Предыдущее место работы.", "\t7. Предыдущая должность.", 
@@ -183,7 +148,7 @@ class TerminalViewListEmployee
 				end
 			when '5'
 				print "\tВведите номер телефона: "
-				person = find_by_phone gets.chomp
+				person = @@list_employee.find_by_phone gets.chomp
 				if person.class == TestEmployee
 					@@list_employee.delete(person)
 					puts "\tУспешно\n\n"
@@ -191,7 +156,7 @@ class TerminalViewListEmployee
 					puts "\tПользователя с таким номером телефона нет\n\n"
 				end
 			when '6'
-				write_file("list_employee.txt")
+				@@list_employee.write_file("list_employee.txt")
 				puts "Успешно\n\n"
 			when '7'
 				puts "\tПо какому полю вы хотите отсортировать?", "\t1. ФИО.", "\t2. Дата рождения.", 
