@@ -26,15 +26,15 @@ class Abonent
 			number = '7-' + d[1..3].join + '-' + d[4...].join
 			return number
 		else 
-			raise ArgumentError
+			raise ArgumentError, "Неправильно введен номер телнфона"
 		end
 	end
 
 	def phone_number=(x)
 		begin
 			@phone_number = Abonent.convert_to_number(x)		
-		rescue ArgumentError
-			'Неправильно введен номер'
+		rescue ArgumentError => e
+			e.message
 		end
 	end
 
@@ -47,23 +47,36 @@ class Abonent
 			digits = x.scan(/\d/)
 			digits.join
 		else
-			raise ArgumentError
+			raise ArgumentError, "Неправильно введен ИНН"
 		end
 	end
 
 	def inn=(x)
 		begin
 			@inn = Abonent.convert_to_inn(x)
-		rescue ArgumentError
-			'Неправильно введен ИНН'
+		rescue ArgumentError => e
+			e.message
+		end
+	end
+
+	def self.bank_account?(x)
+		x.scan(/\d/).size == 20 ? true : false
+	end
+
+	def self.convert_to_bank_account(x)
+		if bank_account?(x)
+			digits = x.scan(/\d/)
+			digits.join
+		else
+			raise ArgumentError, "Неправильно введен расчетный счет"
 		end
 	end
 
 	def bank_account=(x)
 		begin
-			@bank_account = Float(x)		
-		rescue ArgumentError
-			'Неправильно введен расчетный счет'
+			@bank_account = Abonent.convert_to_bank_account(x)		
+		rescue ArgumentError => e
+			e.message
 		end
 	end
 
@@ -71,98 +84,3 @@ class Abonent
 		"#{inn}, #{name}, #{phone_number}, #{bank_account}"
 	end
 end
-
-class ListAbonent
-	attr_accessor :list_abonents
-	def initialize()
-		self.list_abonents = []
-	end
-
-	def add_abonent(inn, name, phone_number, bank_account)		
-		abonent = Abonent.new(inn, name, phone_number, bank_account)
-		list_abonents << abonent
-	end
-
-	def to_s
-		str = ""
-		list_abonents.each { |user| str += "\n\n" + user.to_s }
-		str
-	end
-
-	def read(file_name)
-		File.open(file_name) do |file|
-			users = file.read
-			users = users.force_encoding("windows-1251")
-			users = users.split("\n\n")
-			users.each do |user|
-				user = user.split('|')
-				user.map { |el| el.force_encoding("UTF-8") }				
-				list_abonents << Abonent.new(user[0], user[1], user[2], user[3])			
-			end
-		end
-	end
-
-	def write(file_name)
-		File.open(file_name, "w") do |file|
-			list_abonents.each do |user|				
-				file.write(user.inn + '|' + user.name + '|' + user.phone_number + '|' +
-					+ user.bank_account.to_s)				
-				file.write("\n\n")
-			end
-		end
-	end
-end
-
-class TerminalView
-	@@list_abonents = ListAbonent.new
-
-	def self.add
-		puts "Введите данные:", "ИНН: "
-		inn = gets.chomp
-		puts "Наименование юр.лица: "
-		name = gets.chomp
-		puts "Номер телефона: "
-		phone_number = gets.chomp
-		puts "Расчетный счет в банке: "
-		bank_account = gets.chomp
-		@@list_abonents.add_abonent(inn, name, phone_number, bank_account)
-	end
-
-	def self.read
-		@@list_abonents.read("listAbonents.txt")
-	end
-
-	def self.write
-		@@list_abonents.write("listAbonents.txt")
-	end
-
-	def self.output_users
-		puts @@list_abonents
-	end
-
-	def self.menu
-		read
-		ans = ''
-		while ans != 0
-			puts "1. Добавить пользователя.", "2. Отобразить список пользователей.",  "3. Сохранить измениения в файл."
-			ans = gets.chomp
-			case ans
-			when '1'
-				add
-			when '2'
-				output_users			
-			when '3'
-				write
-			when '0'
-				exit
-			else
-				puts 'Такого пункта нет'
-			end
-		end
-	end
-end
-
-# TerminalView.menu
-ab = Abonent.new('7584621', 'lalaa', '79763452267', '54723000')
-puts ab
-# puts Abonents.bank_account?('77tfc786')

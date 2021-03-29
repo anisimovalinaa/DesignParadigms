@@ -53,9 +53,9 @@ class TerminalViewListEmployee
 				user = Employee.new(fio, daybirth, phone, address, e_mail, passport, 
 				specialty, work_experience.to_i, last_workplace, last_post, last_salary)
 				@@list_employee.add_user(user)
-				check = false	
-			end
-			puts 'Успешно' if not check
+				check = false
+				puts 'Успешно'
+			end		
 			puts
 		end
 	end
