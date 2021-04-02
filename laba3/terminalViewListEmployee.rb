@@ -64,6 +64,15 @@ class TerminalViewListEmployee
 		puts @@list_employee
 	end
 
+	def self.find(data)
+		emp = @@list_employee.find_emp(data)
+		if emp == nil
+			puts 'Неверные данные'
+		else
+			emp
+		end
+	end
+
 	def self.menu
 		@@list_employee.read_file("list_employee.txt")
 		ans = ''
@@ -82,31 +91,14 @@ class TerminalViewListEmployee
 				output_users
 				puts
 			when '3'
-				puts "\t1. По ФИО.", "\t2. По e-mail, телефону и  паспортным данным."
-				print "\tОтвет: "
-				ans_find = gets.chomp
-				case ans_find
-				when '1'
-					print "\tВведите ФИО: "	
-					list_items = @@list_employee.find_by_fio gets.chomp
-					puts
-					list_items.each { |el| el.get_info}
-				when '2'
-					print "\tВведите e_mail: "
-					email = gets.chomp
-					print "\tВведите телефон: "
-					tel = gets.chomp
-					print "\tВведите серию и номер паспорта: "
-					pas = gets.chomp
-					list_items = @@list_employee.find_by_passport(email, tel, pas)
-					puts
-					list_items.each { |el| el.get_info}
-				else 
-					puts 'Такого пункта нет'
-				end
+				print 'Введите ФИО, номер телефона, паспортные данные или e-mail: '
+				data = gets.chomp
+				puts find(data)
+				puts
 			when '4'
-				print "\tВведите номер телефона: "
-				person = @@list_employee.find_by_phone gets.chomp
+				print 'Введите ФИО, номер телефона, паспортные данные или e-mail: '
+				data = gets.chomp
+				person = find(data)
 				if person.class == Employee
 					puts "\tЧто вы хотите изменить?", "\t1. ФИО.", "\t2. Дату рождения.", 
 					"\t3. Адрес.", "\t4. Специальность.", "\t5. Опыт работы.", 
@@ -117,10 +109,12 @@ class TerminalViewListEmployee
 					case ans_change
 					when '1'
 						print "\tВведите ФИО: "
-						person.fio = gets.chomp
+						fio = try_to_convert("Employee.convert_to_fio('#{gets.chomp}')")
+						person.fio = fio if fio != nil
 					when '2'
 						print "\tВведите дату рождения: "
-						person.datebirth = gets.chomp
+						date = try_to_convert("Employee.convert_to_date('#{gets.chomp}')")
+						person.datebirth = date if date != nil
 					when '3'
 						print "\tВведите адрес: "
 						person.address = gets.chomp
@@ -143,45 +137,45 @@ class TerminalViewListEmployee
 						puts 'Такого пункта нет'
 					end
 					puts
-				else
-					puts "\tПользователя с таким номером телефона нет\n\n"
 				end
 			when '5'
-				print "\tВведите номер телефона: "
-				person = @@list_employee.find_by_phone gets.chomp
-				if person.class == TestEmployee
+				print 'Введите ФИО, номер телефона, паспортные данные или e-mail: '
+				data = gets.chomp
+				person = find(data)
+
+				if person.class == Employee
 					@@list_employee.delete(person)
-					puts "\tУспешно\n\n"
-				else
-					puts "\tПользователя с таким номером телефона нет\n\n"
+					puts "Успешно\n\n"
 				end
 			when '6'
 				@@list_employee.write_file("list_employee.txt")
 				puts "Успешно\n\n"
 			when '7'
-				puts "\tПо какому полю вы хотите отсортировать?", "\t1. ФИО.", "\t2. Дата рождения.", 
+				puts "\tПо каким полям вы хотите отсортировать?", "\t1. ФИО.", "\t2. Дата рождения.",
 					"\t3. Телефон.", "\t4. E-mail.", "\t5. Паспорт.", 
 					"\t6. Специальность.", "\t7. Опыт работы."
 				print "\tОтвет: "
-				ans_sort = gets.chomp
-				case ans_sort
-				when '1'
-					@@list_employee.sort 'fio'
-				when '2'
-					@@list_employee.sort 'datebirth'
-				when '3'
-					@@list_employee.sort 'phone_number'
-				when '4'
-					@@list_employee.sort 'e_mail'
-				when '5'
-					@@list_employee.sort 'passport'
-				when '6'
-					@@list_employee.sort 'specialty'
-				when '7'
-					@@list_employee.sort 'work_experience'
-				else
-					puts "\tТакого пункта нет"
-				end
+				ans_sort = gets.chomp.split()
+				ans_sort.each { |field|
+					case field
+					when '1'
+						@@list_employee.sort 'fio'
+					when '2'
+						@@list_employee.sort 'datebirth'
+					when '3'
+						@@list_employee.sort 'phone_number'
+					when '4'
+						@@list_employee.sort 'e_mail'
+					when '5'
+						@@list_employee.sort 'passport'
+					when '6'
+						@@list_employee.sort 'specialty'
+					when '7'
+						@@list_employee.sort 'work_experience'
+					else
+						puts "\tТакого пункта нет"
+					end
+				}
 				puts
 			when '0'
 				exit

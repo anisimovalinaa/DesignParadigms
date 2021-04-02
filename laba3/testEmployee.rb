@@ -2,14 +2,6 @@ require_relative 'employee'
 
 class TestEmployee < Employee
 	def to_s
-		# puts "Имя: #{@fio}", "Дата рождения: #{@datebirth}", "Номер телефона: #{@phone_number}", 
-		# "Адрес: #{@address}", "E-mail: #{@e_mail}",  "Серия и номер паспорта: #{@passport}", 
-		# "Специальность: #{@specialty}", "Стаж работы по специальности: #{@work_experience}"
-		# if @work_experience > 0
-		# 	puts "Последнее место работы: #{@last_workplace}", "Должность: #{@last_post}", 
-		# 	"Заработная плата: #{@last_salary}"
-		# end
-		# puts
 		'Данные работника: ' + super
 	end
 
@@ -23,23 +15,43 @@ class TestEmployee < Employee
 			when '1'
 				print 'Введите строку: '
 				str = gets.chomp()
-				puts convert_to_fio(str)
+				begin
+					puts convert_to_fio(str)
+				rescue ArgumentError => e
+					puts e.message
+				end
 			when '2'
 				print 'Введите строку: '
 				str = gets.chomp()
-				puts convert_to_number(str)
+				begin
+					puts convert_to_number(str)
+				rescue ArgumentError => e
+					puts e.message
+				end
 			when '3'
 				print 'Введите строку: '
 				str = gets.chomp()
-				puts convert_to_date(str)
+				begin
+					puts convert_to_date(str)
+				rescue ArgumentError => e
+					puts e.message
+				end
 			when '4'
 				print 'Введите строку: '
 				str = gets.chomp()
-				puts convert_to_email(str)
+				begin
+					puts convert_to_email(str)
+				rescue ArgumentError => e
+					puts e.message
+				end
 			when '5'
 				print 'Введите строку: '
 				str = gets.chomp()
-				puts convert_to_passport(str)
+				begin
+					puts convert_to_passport(str)
+				rescue ArgumentError => e
+					puts e.message
+				end
 			when '0'
 				puts 'До свидания.'
 			else

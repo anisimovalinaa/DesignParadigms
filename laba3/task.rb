@@ -12,4 +12,5 @@ require_relative 'terminalViewListEmployee'
 # }
 # TestEmployee.check_correct
 
-TerminalViewListEmployee.menu
+# TerminalViewListEmployee.menu
+TestEmployee.check_correct
