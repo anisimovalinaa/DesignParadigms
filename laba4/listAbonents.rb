@@ -25,6 +25,7 @@ class ListAbonent
 			users = users.split("\n\n")
 			users.each do |user|
 				user = user.split('|||')
+				# user.each { |u| print u + "\n\n" }
 				user.map { |el| el.force_encoding("UTF-8") }
 				user[0] = @@keypair.private_decrypt(user[0])
 				add_abonent(Abonent.new(user[0], user[1], user[2], user[3]))
