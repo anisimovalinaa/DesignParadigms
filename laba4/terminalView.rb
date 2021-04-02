@@ -60,6 +60,7 @@ class TerminalView
 
 	def self.menu
 		read
+		# puts @@list_abonents
 		ans = ''
 		while ans != 0
 			puts "**********Меню**********", "1. Добавить пользователя.", 
@@ -73,6 +74,7 @@ class TerminalView
 			when '1'
 				puts
 				add
+				puts
 			when '2'
 				output_users
 				puts		
@@ -96,8 +98,7 @@ class TerminalView
 						abonent.inn = inn if inn != nil
 					when '2'
 						print "\tВведите наименование: "
-						name = try_to_convert("Abonent.convert_to_name('#{gets.chomp}')")
-						abonent.name = name if name != nil
+						abonent.name = gets.chomp if name != nil
 					when '3'
 						print "\tВведите номер телефона: "
 						phone = try_to_convert("Abonent.convert_to_number('#{gets.chomp}')")
@@ -123,22 +124,24 @@ class TerminalView
 				write
 				puts
 			when '7'
-				puts "\tПо какому полю вы хотите отсортировать?", "\t1. ИНН.", "\t2. Наименование юр.лица.", 
+				puts "\tПо каким полям вы хотите отсортировать?", "\t1. ИНН.", "\t2. Наименование юр.лица.",
 					"\t3. Телефон.", "\t4. Расчетный счет."
 				print "\tОтвет: "
-				ans_sort = gets.chomp
-				case ans_sort
-				when '1'
-					@@list_abonents.sort 'inn'
-				when '2'
-					@@list_abonents.sort 'name'
-				when '3'
-					@@list_abonents.sort 'phone_number'
-				when '4'
-					@@list_abonents.sort 'bank_account'				
-				else
-					puts "\tТакого пункта нет"
-				end
+				ans_sort = gets.chomp.split()
+				ans_sort.each { |field|
+					case field
+					when '1'
+						@@list_abonents.sort 'inn'
+					when '2'
+						@@list_abonents.sort 'name'
+					when '3'
+						@@list_abonents.sort 'phone_number'
+					when '4'
+						@@list_abonents.sort 'bank_account'
+					else
+						puts "\tТакого пункта нет"
+					end
+				}
 				puts
 			when '0'
 				exit
