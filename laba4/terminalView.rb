@@ -2,7 +2,7 @@ require_relative 'abonents'
 require_relative 'listAbonents'
 
 class TerminalView
-	@@list_abonents = ListAbonent.new
+	@@list_abonents = ListAbonent.new()
 
 	def self.try_to_convert(str)
 		begin

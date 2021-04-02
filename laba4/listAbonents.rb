@@ -1,6 +1,8 @@
 require_relative 'abonents'
+require 'openssl'
 
 class ListAbonent
+	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
 	attr_accessor :list_abonents
 	def initialize()
 		self.list_abonents = []
@@ -19,9 +21,12 @@ class ListAbonent
 	def read(file_name)
 		File.open(file_name) do |file|
 			users = file.read
+			users = users.force_encoding("windows-1251")
 			users = users.split("\n\n")
 			users.each do |user|
-				user = user.split('|')			
+				user = user.split('|||')
+				user.map { |el| el.force_encoding("UTF-8") }
+				user[0] = @@keypair.private_decrypt(user[0])
 				add_abonent(Abonent.new(user[0], user[1], user[2], user[3]))
 			end
 		end
@@ -29,8 +34,9 @@ class ListAbonent
 
 	def write(file_name)
 		File.open(file_name, "w") do |file|
-			list_abonents.each do |user|				
-				file.write(user.inn + '|' + user.name + '|' + user.phone_number + '|' +
+			list_abonents.each do |user|
+				encrypted_inn = @@keypair.public_encrypt(user.inn)
+				file.write(encrypted_inn + '|||' + user.name + '|||' + user.phone_number + '|||' +
 					+ user.bank_account.to_s)				
 				file.write("\n\n")
 			end
