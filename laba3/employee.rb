@@ -2,11 +2,11 @@ require 'date'
 require 'openssl'
 
 class Employee
-	attr_accessor :address, :specialty, :work_experience
+	attr_accessor :address, :speciality, :work_experience
 	attr_reader :fio, :datebirth, :phone_number, :e_mail, :passport
 	attr_writer :last_workplace, :last_post, :last_salary
 	def initialize(fio, datebirth, phone_number, address, e_mail, passport,
-		specialty, work_experience, last_workplace = nil, last_post = nil,
+		speciality, work_experience, last_workplace = nil, last_post = nil,
 		last_salary = nil)
 		self.fio = fio
 		self.datebirth = datebirth
@@ -14,7 +14,7 @@ class Employee
 		self.address = address
 		self.e_mail = e_mail
 		self.passport = passport
-		self.specialty = specialty
+		self.speciality = speciality
 		self.work_experience = work_experience
 		if work_experience != 0
 			self.last_workplace = last_workplace
@@ -171,7 +171,7 @@ class Employee
 	end
 
 	def last_workplace 
-		@last_workplace == nil ? raise('Значение отсутствует') : @last_workplace
+		@work_experience == 0 ? raise('Значение отсутствует') : @last_workplace
 	end
 
 	def last_workplace=(x)
@@ -180,7 +180,7 @@ class Employee
 	end
 
 	def last_post
-		@last_post == nil ? raise('Значение отсутствует') : @last_post
+		@work_experience == 0 ? raise('Значение отсутствует') : @last_post
 	end
 
 	def last_post=(x)
@@ -189,7 +189,7 @@ class Employee
 	end
 
 	def last_salary
-		@last_salary == nil ? raise('Значение отсутствует') : @last_salary
+		@work_experience == 0 ? raise('Значение отсутствует') : @last_salary
 	end
 
 	def last_salary=(x)
@@ -199,9 +199,9 @@ class Employee
 
 	def to_s
 		if work_experience != 0
-			return "#{fio}, #{datebirth}, #{phone_number}, #{address}, #{e_mail}, #{passport}, #{specialty}, #{work_experience}, #{last_workplace}, #{last_post}, #{last_salary}"
+			return "#{fio}, #{datebirth}, #{phone_number}, #{address}, #{e_mail}, #{passport}, #{speciality}, #{work_experience}, #{last_workplace}, #{last_post}, #{last_salary}"
 		else
-			return "#{fio}, #{datebirth}, #{phone_number}, #{address}, #{e_mail}, #{passport}, #{specialty}, #{work_experience}"
+			return "#{fio}, #{datebirth}, #{phone_number}, #{address}, #{e_mail}, #{passport}, #{speciality}, #{work_experience}"
 		end
 	end
 end

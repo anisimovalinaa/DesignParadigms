@@ -4,8 +4,43 @@ require 'openssl'
 class ListEmployee
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
 	attr_accessor :list_employee
-	def initialize()
+	def initialize(connection = nil)
 		self.list_employee = []
+		read_list_DB(connection) if connection != nil
+		list_employee
+	end
+
+	def read_list_DB(connection)
+		results = connection.query("SELECT * FROM employees")
+		results.each do |row|
+			data = row['datebirth'].to_s.split('-').reverse.join('.')
+			emp = Employee.new(row['FIO'], data, row['phone_number'], row['address'],
+												 row['e_mail'], row['passport'], row['speciality'], row['work_experience'],
+												 row['last_workplace'], row['last_post'], row['last_salary'])
+			add_user(emp)
+		end
+	end
+
+	def add_to_DB(connnection, user)
+		connnection.query("INSERT INTO `staff`.`employees` (`FIO`, `datebirth`, `phone_number`, `address`, `e_mail`,
+													`passport`, `speciality`, `work_experience`, `last_workplace`, `last_post`, `last_salary`)
+											VALUES (#{user.fio}, #{user.datebirth}, #{user.phone_number}, #{user.address}, #{user.e_mail},
+															#{user.passport}, #{user.speciality}, #{user.work_experience}, #{user.last_workplace},
+															#{user.last_post}, #{user.last_salary});")
+	end
+
+	def change_node(connection, emp)
+		date = emp.datebirth.to_s.split('.').reverse.join('-')
+		connection.query("UPDATE employees SET FIO = '#{emp.fio}', datebirth = '#{date}',
+										phone_number = '#{emp.phone_number}', address = '#{emp.address}',
+										e_mail = '#{emp.e_mail}', passport = '#{emp.passport}', speciality = '#{emp.speciality}',
+										work_experience = '#{emp.work_experience}', last_workplace = '#{emp.last_workplace}',
+										last_post = '#{emp.last_post}', last_salary = '#{emp.last_salary}'
+										WHERE passport = '#{emp.passport}'")
+	end
+
+	def delete_from_db(connection, emp)
+		connection.query("DELETE FROM employees WHERE passport = '#{emp.passport}'")
 	end
 
 	def add_user(user)
@@ -60,6 +95,10 @@ class ListEmployee
 			end
 		end
 		return nil
+	end
+
+	def each(&block)
+		@list_employee.each { |user| block.call(user) }
 	end
 
 	def delete(emp)

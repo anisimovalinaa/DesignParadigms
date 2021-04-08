@@ -1,10 +1,26 @@
 require_relative 'listEmployee'
 require_relative 'employee'
 require 'openssl'
+require 'mysql2'
 
 class TerminalViewListEmployee
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
-	@@list_employee = ListEmployee.new()
+	@@connection = Mysql2::Client.new(
+		:host => 'localhost',
+		:username => 'alina',
+		:password => 'mama',
+		:database => 'staff',
+		)
+
+	def self.connect_to_database
+		connection = Mysql2::Client.new(
+			:host => 'localhost',
+			:username => 'alina',
+			:password => 'mama',
+			:database => 'staff',
+			)
+		connection
+	end
 
 	def self.try_to_convert(str)
 		begin
@@ -74,7 +90,9 @@ class TerminalViewListEmployee
 	end
 
 	def self.menu
-		@@list_employee.read_file("list_employee.txt")
+		@@list_employee = ListEmployee.new(@@connection)
+
+
 		ans = ''
 		while ans != '0'
 			puts "--------Меню-------", '1. Добавить нового пользователя.', 
@@ -137,6 +155,7 @@ class TerminalViewListEmployee
 						puts 'Такого пункта нет'
 					end
 					puts
+					@@list_employee.change_node(@@connection, person)
 				end
 			when '5'
 				print 'Введите ФИО, номер телефона, паспортные данные или e-mail: '
@@ -145,6 +164,7 @@ class TerminalViewListEmployee
 
 				if person.class == Employee
 					@@list_employee.delete(person)
+					@@list_employee.delete_from_db(@@connection, person)
 					puts "Успешно\n\n"
 				end
 			when '6'
@@ -183,5 +203,6 @@ class TerminalViewListEmployee
 				puts 'Такого пункта нет'
 			end
 		end
+		@@connection.close
 	end
 end
