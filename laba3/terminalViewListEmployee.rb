@@ -3,6 +3,15 @@ require_relative 'employee'
 require 'openssl'
 require 'mysql2'
 
+if (Gem.win_platform?)
+	Encoding.default_external = Encoding.find(Encoding.locale_charmap)
+	Encoding.default_internal = __ENCODING__
+
+	[STDIN, STDOUT].each do |io|
+		io.set_encoding(Encoding.default_external, Encoding.default_internal)
+	end
+end
+
 class TerminalViewListEmployee
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
 	@@connection = Mysql2::Client.new(
@@ -11,16 +20,6 @@ class TerminalViewListEmployee
 		:password => 'mama',
 		:database => 'staff',
 		)
-
-	def self.connect_to_database
-		connection = Mysql2::Client.new(
-			:host => 'localhost',
-			:username => 'alina',
-			:password => 'mama',
-			:database => 'staff',
-			)
-		connection
-	end
 
 	def self.try_to_convert(str)
 		begin
@@ -66,12 +65,13 @@ class TerminalViewListEmployee
 			passport = try_to_convert("Employee.convert_to_passport('#{passport}')")
 
 			if not([fio, daybirth, phone, e_mail, passport].include? nil)
-				user = Employee.new(fio, daybirth, phone, address, e_mail, passport, 
+				user = Employee.new(fio, daybirth, phone, address, e_mail, passport,
 				specialty, work_experience.to_i, last_workplace, last_post, last_salary)
 				@@list_employee.add_user(user)
+				@@list_employee.add_to_DB(@@connection, user)
 				check = false
 				puts 'Успешно'
-			end		
+			end
 			puts
 		end
 	end
@@ -91,8 +91,6 @@ class TerminalViewListEmployee
 
 	def self.menu
 		@@list_employee = ListEmployee.new(@@connection)
-
-
 		ans = ''
 		while ans != '0'
 			puts "--------Меню-------", '1. Добавить нового пользователя.', 

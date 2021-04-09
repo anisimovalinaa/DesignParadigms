@@ -22,11 +22,12 @@ class ListEmployee
 	end
 
 	def add_to_DB(connnection, user)
-		connnection.query("INSERT INTO `staff`.`employees` (`FIO`, `datebirth`, `phone_number`, `address`, `e_mail`,
-													`passport`, `speciality`, `work_experience`, `last_workplace`, `last_post`, `last_salary`)
-											VALUES (#{user.fio}, #{user.datebirth}, #{user.phone_number}, #{user.address}, #{user.e_mail},
-															#{user.passport}, #{user.speciality}, #{user.work_experience}, #{user.last_workplace},
-															#{user.last_post}, #{user.last_salary});")
+		date = user.datebirth.to_s.split('.').reverse.join('-')
+		connnection.query("INSERT INTO `staff`.`employees` (`FIO` ,`datebirth` ,`phone_number` ,`address` ,`e_mail` ,
+														`passport` ,`speciality` ,`work_experience` ,`last_workplace` ,`last_post` ,`last_salary`)
+													VALUES ('#{user.fio}', '#{date}', '#{user.phone_number}', '#{user.address}', '#{user.e_mail}',
+														'#{user.passport}', '#{user.speciality}', #{user.work_experience.to_i},
+														'#{user.last_workplace}', '#{user.last_post}', #{user.last_salary.to_i})")
 	end
 
 	def change_node(connection, emp)
