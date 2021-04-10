@@ -171,7 +171,7 @@ class Employee
 	end
 
 	def last_workplace 
-		@work_experience == 0 ? raise('Значение отсутствует') : @last_workplace
+		@work_experience == 0 ? raise(NameError, 'Значение отсутствует') : @last_workplace
 	end
 
 	def last_workplace=(x)
@@ -180,7 +180,7 @@ class Employee
 	end
 
 	def last_post
-		@work_experience == 0 ? raise('Значение отсутствует') : @last_post
+		@work_experience == 0 ? raise(NameError, 'Значение отсутствует') : @last_post
 	end
 
 	def last_post=(x)
@@ -189,7 +189,7 @@ class Employee
 	end
 
 	def last_salary
-		@work_experience == 0 ? raise('Значение отсутствует') : @last_salary
+		@work_experience == 0 ? raise(NameError, 'Значение отсутствует') : @last_salary
 	end
 
 	def last_salary=(x)

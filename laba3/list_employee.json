@@ -1,0 +1,25 @@
+{
+  "0": {
+    "fio": "Анисимова Алина Александровна",
+    "datebirth": "23.08.2000",
+    "phone_number": "7-999-6975019",
+    "address": "ул.Селезнева 216 кв.2",
+    "e_mail": "anisimova.linaa@yandex.ru",
+    "passport": "2417 890271",
+    "speciality": "WEB",
+    "work_experience": 0
+  },
+  "1": {
+    "fio": "Вапр Апро Апро",
+    "datebirth": "13.04.2021",
+    "phone_number": "7-918-5601237",
+    "address": "авпрол",
+    "e_mail": "fghj@dfghj.fghj",
+    "passport": "3417 898709",
+    "speciality": "dfghjk",
+    "work_experience": 2,
+    "last_workplace": "fghj",
+    "last_post": "fghjk",
+    "last_salary": 20000
+  }
+}

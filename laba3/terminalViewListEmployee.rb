@@ -1,5 +1,6 @@
 require_relative 'listEmployee'
 require_relative 'employee'
+require_relative 'work_with_DB'
 require 'openssl'
 require 'mysql2'
 
@@ -14,12 +15,8 @@ end
 
 class TerminalViewListEmployee
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
-	@@connection = Mysql2::Client.new(
-		:host => 'localhost',
-		:username => 'alina',
-		:password => 'mama',
-		:database => 'staff',
-		)
+	@@list_employee = ListEmployee.new()
+	@@connection = WorkWithDB.new(@@list_employee)
 
 	def self.try_to_convert(str)
 		begin
@@ -68,7 +65,7 @@ class TerminalViewListEmployee
 				user = Employee.new(fio, daybirth, phone, address, e_mail, passport,
 				specialty, work_experience.to_i, last_workplace, last_post, last_salary)
 				@@list_employee.add_user(user)
-				@@list_employee.add_to_DB(@@connection, user)
+				@@connection.add_to_DB(user)
 				check = false
 				puts 'Успешно'
 			end
@@ -90,7 +87,9 @@ class TerminalViewListEmployee
 	end
 
 	def self.menu
-		@@list_employee = ListEmployee.new(@@connection)
+		@@connection.read_list_DB
+		# @@list_employee.read_list_YAML 'yaml'
+		# @@list_employee.read_list_JSON 'list_employee.json'
 		ans = ''
 		while ans != '0'
 			puts "--------Меню-------", '1. Добавить нового пользователя.', 
@@ -153,7 +152,7 @@ class TerminalViewListEmployee
 						puts 'Такого пункта нет'
 					end
 					puts
-					@@list_employee.change_node(@@connection, person)
+					@@connection.change_node(person)
 				end
 			when '5'
 				print 'Введите ФИО, номер телефона, паспортные данные или e-mail: '
@@ -162,11 +161,12 @@ class TerminalViewListEmployee
 
 				if person.class == Employee
 					@@list_employee.delete(person)
-					@@list_employee.delete_from_db(@@connection, person)
+					@@connection.delete_from_db(person)
 					puts "Успешно\n\n"
 				end
 			when '6'
-				@@list_employee.write_file("list_employee.txt")
+				# @@list_employee.write_file("list_employee.txt")
+				@@list_employee.write_list_JSON 'list_employee.json'
 				puts "Успешно\n\n"
 			when '7'
 				puts "\tПо каким полям вы хотите отсортировать?", "\t1. ФИО.", "\t2. Дата рождения.",

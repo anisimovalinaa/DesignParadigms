@@ -1,47 +1,59 @@
 require_relative 'employee'
 require 'openssl'
+require 'yaml'
+require 'json'
 
 class ListEmployee
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
 	attr_accessor :list_employee
-	def initialize(connection = nil)
+	def initialize
 		self.list_employee = []
-		read_list_DB(connection) if connection != nil
-		list_employee
 	end
 
-	def read_list_DB(connection)
-		results = connection.query("SELECT * FROM employees")
-		results.each do |row|
-			data = row['datebirth'].to_s.split('-').reverse.join('.')
-			emp = Employee.new(row['FIO'], data, row['phone_number'], row['address'],
-												 row['e_mail'], row['passport'], row['speciality'], row['work_experience'],
-												 row['last_workplace'], row['last_post'], row['last_salary'])
-			add_user(emp)
+	def read_list_YAML file_name
+		@list_employee = YAML::load(File.open(file_name))
+	end
+
+	def write_list_YAML file_name
+		File.open(file_name, 'w:UTF-8') do |file|
+			file.puts(list_employee.to_yaml)
 		end
 	end
 
-	def add_to_DB(connnection, user)
-		date = user.datebirth.to_s.split('.').reverse.join('-')
-		connnection.query("INSERT INTO `staff`.`employees` (`FIO` ,`datebirth` ,`phone_number` ,`address` ,`e_mail` ,
-														`passport` ,`speciality` ,`work_experience` ,`last_workplace` ,`last_post` ,`last_salary`)
-													VALUES ('#{user.fio}', '#{date}', '#{user.phone_number}', '#{user.address}', '#{user.e_mail}',
-														'#{user.passport}', '#{user.speciality}', #{user.work_experience.to_i},
-														'#{user.last_workplace}', '#{user.last_post}', #{user.last_salary.to_i})")
+	def read_list_JSON file_name
+		File.open(file_name, 'r:UTF-8') do |file|
+			data = JSON.parse(file.read)
+			data.each do |key, value|
+				emp = Employee.new(value["fio"], value["datebirth"], value["phone_number"], value["address"],
+													 value["e_mail"], value["passport"], value["speciality"], value["work_experience"],
+													 value["last_workplace"], value["last_post"], value["last_salary"])
+			add_user(emp)
+			end
+		end
 	end
 
-	def change_node(connection, emp)
-		date = emp.datebirth.to_s.split('.').reverse.join('-')
-		connection.query("UPDATE employees SET FIO = '#{emp.fio}', datebirth = '#{date}',
-										phone_number = '#{emp.phone_number}', address = '#{emp.address}',
-										e_mail = '#{emp.e_mail}', passport = '#{emp.passport}', speciality = '#{emp.speciality}',
-										work_experience = '#{emp.work_experience}', last_workplace = '#{emp.last_workplace}',
-										last_post = '#{emp.last_post}', last_salary = '#{emp.last_salary}'
-										WHERE passport = '#{emp.passport}'")
-	end
-
-	def delete_from_db(connection, emp)
-		connection.query("DELETE FROM employees WHERE passport = '#{emp.passport}'")
+	def write_list_JSON file_name
+		File.open(file_name,"w:UTF-8") do |file|
+			tempHash = {}
+			@list_employee.each_with_index do |emp, ind|
+				tempHash[ind] = {
+					"fio": emp.fio,
+					"datebirth": emp.datebirth,
+					"phone_number": emp.phone_number,
+					"address": emp.address,
+					"e_mail": emp.e_mail,
+					"passport": emp.passport,
+					"speciality": emp.speciality,
+					"work_experience": emp.work_experience,
+				}
+				if emp.work_experience != 0
+					tempHash[ind]["last_workplace"] = emp.last_workplace
+					tempHash[ind]["last_post"] =  emp.last_post
+					tempHash[ind]["last_salary"] = emp.last_salary
+				end
+			end
+			file.write(JSON.pretty_generate(tempHash))
+		end
 	end
 
 	def add_user(user)
