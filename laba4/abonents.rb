@@ -8,6 +8,11 @@ class Abonent
 		self.bank_account = bank_account
 	end
 
+	def ==(user)
+		return @inn == user.inn && @name == user.name && @phone_number == user.phone_number &&
+			@bank_account == user.bank_account
+	end
+
 	def self.all_digits(x)
 		digits = x.scan(/^(8|\+?7)/)
 		if digits.size > 0
@@ -39,13 +44,12 @@ class Abonent
 	end
 
 	def self.inn?(x)		
-		x.scan(/\d/).size == 9 ? true : false
+		x.to_s.size == 9 ? true : false
 	end
 
 	def self.convert_to_inn(x)
 		if inn?(x)
-			digits = x.scan(/\d/)
-			digits.join
+			x
 		else
 			raise ArgumentError, "Неправильно введен ИНН"
 		end

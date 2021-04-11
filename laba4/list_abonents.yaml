@@ -1,0 +1,26 @@
+---
+- !ruby/object:Abonent
+  inn: 271287133
+  name: cvzb
+  phone_number: 7-918-5601214
+  bank_account: '12973643392342131903'
+- !ruby/object:Abonent
+  inn: 271687133
+  name: cvzb
+  phone_number: 7-918-5601213
+  bank_account: '12973643392342131903'
+- !ruby/object:Abonent
+  inn: 786921654
+  name: sasxw
+  phone_number: 7-788-5599043
+  bank_account: '12973643392342131903'
+- !ruby/object:Abonent
+  inn: 887733998
+  name: kxsxw
+  phone_number: 7-918-5601213
+  bank_account: '12973643392342131903'
+- !ruby/object:Abonent
+  inn: 889955664
+  name: xxq
+  phone_number: 7-665-5998043
+  bank_account: '32989823982398239876'

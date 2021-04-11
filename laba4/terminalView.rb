@@ -1,5 +1,6 @@
 require_relative 'abonents'
 require_relative 'listAbonents'
+require_relative 'work_with_DB'
 
 class TerminalView
 	@@list_abonents = ListAbonent.new()
@@ -17,7 +18,7 @@ class TerminalView
 		while check
 			puts "Введите данные:"
 			print "ИНН: "
-			inn = gets.chomp
+			inn = gets.chomp.to_i
 			print "Наименование юр.лица: "
 			name = gets.chomp
 			print "Номер телефона: "
@@ -31,6 +32,7 @@ class TerminalView
 
 			if not [inn, phone_number, bank_account].include? nil
 				@@list_abonents.add_abonent(Abonent.new(inn, name, phone_number, bank_account))
+				@@connection.add_to_DB(Abonent.new(inn, name, phone_number, bank_account))
 				check = false
 				puts 'Успешно'
 			end
@@ -58,9 +60,66 @@ class TerminalView
 		end
 	end
 
+	def self.compare_data(list1, list2)
+		return false if list1.size != list2.size
+		return list1 == list2
+	end
+
+	def self.try_connect
+		begin
+			list_serialized = ListAbonent.new()
+			list_serialized.read_list_YAML 'list_abonents.yaml'
+
+			@@connection = WorkWithDB.new(@@list_abonents)
+			@@connection.read_list_DB
+
+			check = compare_data(@@list_abonents, list_serialized)
+			if check == false
+				ans = ''
+				while ans != '0'
+					puts 'Записи в базе данных и в сериализованном файле не совпадают. Какой вариант вам предпочтительнее?',
+							 '1. Данные из БД', '2. Данные из файла'
+					print 'Ответ: '
+					ans = gets.chomp
+					case ans
+					when '1'
+						@@list_abonents.write_list_YAML 'list_abonents.yaml'
+						puts 'Работаем с БД'
+						ans = '0'
+					when '2'
+						@@list_abonents = list_serialized
+						@@connection.update_DB(list_serialized)
+						puts 'Работаем с файлом'
+						ans = '0'
+					else
+						puts 'Такого пункта нет'
+					end
+				end
+			end
+		rescue Mysql2::Error
+			ans = ''
+			while ans != '1'
+				puts 'Подключение к базе невозможно.', '1. Прочитать данные из сериализованного файла.', '2. Завершить работу.'
+				print 'Ответ: '
+				ans = gets.chomp
+				case ans
+				when '1'
+					@@list_abonents.read_list_YAML 'list_abonents.yaml'
+				when '2'
+					exit
+				else
+					puts 'Такого пункта нет'
+				end
+			end
+		end
+	end
+
+
 	def self.menu
-		read
-		# puts @@list_abonents
+		try_connect
+		# @@connection.read_list_DB
+		# @@list_abonents.read_list_YAML 'list_abonents.yaml'
+		# @@list_abonents.read_list_JSON 'list_abonents.json'
 		ans = ''
 		while ans != 0
 			puts "**********Меню**********", "1. Добавить пользователя.", 
@@ -88,28 +147,26 @@ class TerminalView
 				data = gets.chomp
 				abonent = find(data)
 				if abonent.class == Abonent
-					puts "\tЧто вы хотите изменить?", "\t1. ИНН.", "\t2. Наименование юр.лица.", 
-					"\t3. Номер телефона.", "\t4. Расчетный счет."
+					puts "\tЧто вы хотите изменить?", "\t1. Наименование юр.лица.",
+					"\t2. Номер телефона.", "\t3. Расчетный счет."
 					print "\tОтвет: "
-					case ans_change = gets.chomp
+					ans_change = gets.chomp
+					case ans_change
 					when '1'
-						print "\tВведите ИНН: "
-						inn = try_to_convert("Abonent.convert_to_inn('#{gets.chomp}')")
-						abonent.inn = inn if inn != nil
-					when '2'
 						print "\tВведите наименование: "
 						abonent.name = gets.chomp if name != nil
-					when '3'
+					when '2'
 						print "\tВведите номер телефона: "
 						phone = try_to_convert("Abonent.convert_to_number('#{gets.chomp}')")
 						abonent.phone_number = phone if phone != nil
-					when '4'
+					when '3'
 						print "\tВведите расчетный счет: "
 						bank = try_to_convert("Abonent.convert_to_bank_account('#{gets.chomp}')")
 						abonent.bank_account = bank if bank != nil
 					else 
 						puts 'Такого пункта нет'
 					end
+					@@connection.change_node(abonent)
 					puts				
 				end
 			when '5'
@@ -118,10 +175,12 @@ class TerminalView
 				abonent = find(data)
 				if abonent.class == Abonent
 					@@list_abonents.delete(abonent)
+					@@connection.delete_from_db(abonent)
 					puts "Успешно\n\n"
 				end
 			when '6'
-				write
+				@@list_abonents.write_list_YAML 'list_abonents.yaml'
+				@@list_abonents.write_list_JSON 'list_abonents.json'
 				puts
 			when '7'
 				puts "\tПо каким полям вы хотите отсортировать?", "\t1. ИНН.", "\t2. Наименование юр.лица.",
@@ -149,5 +208,6 @@ class TerminalView
 				puts 'Такого пункта нет'
 			end
 		end
+		@@connection.close
 	end
 end

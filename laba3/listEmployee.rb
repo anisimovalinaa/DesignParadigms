@@ -25,7 +25,7 @@ class ListEmployee
 
 	def write_list_YAML file_name
 		File.open(file_name, 'w:UTF-8') do |file|
-			file.puts(list_employee.to_yaml)
+			file.puts(@list_employee.to_yaml)
 		end
 	end
 
@@ -74,7 +74,7 @@ class ListEmployee
 
 	def to_s
 		str = ""
-		list_employee.each { |user| str += "\n\n" + user.to_s }
+		@list_employee.each { |user| str += "\n\n" + user.to_s }
 		str
 	end
 

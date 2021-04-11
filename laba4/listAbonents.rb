@@ -1,5 +1,7 @@
 require_relative 'abonents'
 require 'openssl'
+require 'yaml'
+require 'json'
 
 class ListAbonent
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
@@ -7,6 +9,55 @@ class ListAbonent
 	def initialize()
 		self.list_abonents = []
 	end
+
+	def size
+		@list_abonents.size
+	end
+
+	def == (list1)
+		@list_abonents.zip(list1).each { |el1, el2| return false if !(el1 == el2) }
+		return true
+	end
+
+	def each(&block)
+		@list_abonents.each { |user| block.call(user) }
+	end
+
+	def read_list_YAML file_name
+		@list_abonents = YAML::load(File.open(file_name))
+	end
+
+	def write_list_YAML file_name
+		File.open(file_name, 'w:UTF-8') do |file|
+			file.puts(@list_abonents.to_yaml)
+		end
+	end
+
+	def read_list_JSON file_name
+		File.open(file_name, 'r:UTF-8') do |file|
+			data = JSON.parse(file.read)
+			data.each do |key, value|
+				user = Abonent.new(value["inn"], value["name"], value["phone_number"], value["bank_account"])
+				add_abonent(user)
+			end
+		end
+	end
+
+	def write_list_JSON file_name
+		File.open(file_name,"w:UTF-8") do |file|
+			tempHash = {}
+			@list_abonents.each_with_index do |user, ind|
+				tempHash[ind] = {
+					"inn": user.inn,
+					"name": user.name,
+					"phone_number": user.phone_number,
+					"bank_account": user.bank_account
+				}
+			end
+			file.write(JSON.pretty_generate(tempHash))
+		end
+	end
+
 
 	def add_abonent(abonent)		
 		list_abonents << abonent
@@ -49,7 +100,7 @@ class ListAbonent
 
 	def find_abonent(info)
 		list_abonents.each do |abonent| 
-			if [abonent.inn, abonent.phone_number, abonent.bank_account].include? info
+			if [abonent.inn.to_s, abonent.phone_number, abonent.bank_account].include? info
 				return abonent
 			end
 		end
