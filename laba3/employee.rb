@@ -16,11 +16,32 @@ class Employee
 		self.passport = passport
 		self.speciality = speciality
 		self.work_experience = work_experience
-		if work_experience != 0
-			self.last_workplace = last_workplace
-			self.last_post = last_post
-			self.last_salary = last_salary
-		end
+
+		self.last_workplace = last_workplace
+		self.last_post = last_post
+		self.last_salary = last_salary
+
+	end
+
+	# def ==(emp1)
+	# 	begin
+	# 		return false if @work_experience != emp1.work_experience
+	# 		return @fio == emp1.fio && @datebirth == emp1.datebirth && @phone_number == emp1.phone_number &&
+	# 			@address == emp1.address && @e_mail == emp1.e_mail && @passport == emp1.passport &&
+	# 			@speciality == emp1.speciality && @work_experience == emp1.work_experience &&
+	# 			@last_workplace == emp1.last_workplace && @last_post == emp1.last_post && @last_salary == emp1.last_salary
+	# 	rescue
+	# 		return @fio == emp1.fio && @datebirth == emp1.datebirth && @phone_number == emp1.phone_number &&
+	# 			@address == emp1.address && @e_mail == emp1.e_mail && @passport == emp1.passport &&
+	# 			@speciality == emp1.speciality && @work_experience == emp1.work_experience
+	# 	end
+	# end
+
+	def ==(emp1)
+		return @fio == emp1.fio && @datebirth == emp1.datebirth && @phone_number == emp1.phone_number &&
+			@address == emp1.address && @e_mail == emp1.e_mail && @passport == emp1.passport &&
+			@speciality == emp1.speciality && @work_experience == emp1.work_experience &&
+			@last_workplace == emp1.last_workplace && @last_post == emp1.last_post && @last_salary == emp1.last_salary
 	end
 
 	def self.date?(x)
@@ -171,29 +192,29 @@ class Employee
 	end
 
 	def last_workplace 
-		@work_experience == 0 ? raise(NameError, 'Значение отсутствует') : @last_workplace
+		@last_workplace
 	end
 
 	def last_workplace=(x)
-		@work_experience != 0 ? @last_workplace = x : 
+		@work_experience != 0 || x == nil ? @last_workplace = x :
 		raise('Нет опыта работы')
 	end
 
 	def last_post
-		@work_experience == 0 ? raise(NameError, 'Значение отсутствует') : @last_post
+		@last_post
 	end
 
 	def last_post=(x)
-		@work_experience != 0 ? @last_post = x : 
+		@work_experience != 0 || x == nil ? @last_post = x :
 		raise('Нет опыта работы')
 	end
 
 	def last_salary
-		@work_experience == 0 ? raise(NameError, 'Значение отсутствует') : @last_salary
+		@last_salary
 	end
 
 	def last_salary=(x)
-		@work_experience != 0 ? @last_salary = x : 
+		@work_experience != 0 || x == nil ? @last_salary = x :
 		raise('Нет опыта работы')
 	end
 

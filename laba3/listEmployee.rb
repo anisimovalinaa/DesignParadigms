@@ -10,6 +10,15 @@ class ListEmployee
 		self.list_employee = []
 	end
 
+	def size
+		@list_employee.size
+	end
+
+	def == (list1)
+		@list_employee.zip(list1).each { |el1, el2| return false if !(el1 == el2) }
+		return true
+	end
+
 	def read_list_YAML file_name
 		@list_employee = YAML::load(File.open(file_name))
 	end
@@ -24,9 +33,14 @@ class ListEmployee
 		File.open(file_name, 'r:UTF-8') do |file|
 			data = JSON.parse(file.read)
 			data.each do |key, value|
-				emp = Employee.new(value["fio"], value["datebirth"], value["phone_number"], value["address"],
-													 value["e_mail"], value["passport"], value["speciality"], value["work_experience"],
-													 value["last_workplace"], value["last_post"], value["last_salary"])
+				if value["work_experience"] > 0
+					emp = Employee.new(value["fio"], value["datebirth"], value["phone_number"], value["address"],
+														 value["e_mail"], value["passport"], value["speciality"], value["work_experience"],
+														 value["last_workplace"], value["last_post"], value["last_salary"])
+				else
+					emp = Employee.new(value["fio"], value["datebirth"], value["phone_number"], value["address"],
+														 value["e_mail"], value["passport"], value["speciality"], value["work_experience"])
+				end
 			add_user(emp)
 			end
 		end
@@ -45,12 +59,10 @@ class ListEmployee
 					"passport": emp.passport,
 					"speciality": emp.speciality,
 					"work_experience": emp.work_experience,
+					"last_workplace": emp.last_workplace,
+					"last_post": emp.last_post,
+					"last_salary": emp.last_salary
 				}
-				if emp.work_experience != 0
-					tempHash[ind]["last_workplace"] = emp.last_workplace
-					tempHash[ind]["last_post"] =  emp.last_post
-					tempHash[ind]["last_salary"] = emp.last_salary
-				end
 			end
 			file.write(JSON.pretty_generate(tempHash))
 		end

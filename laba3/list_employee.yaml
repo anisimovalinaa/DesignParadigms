@@ -1,0 +1,37 @@
+---
+- !ruby/object:Employee
+  fio: Анисимова Алина Александровна
+  datebirth: 21.08.2000
+  phone_number: 7-999-6975019
+  address: ул.Селезнева 216 кв.20
+  e_mail: anisimova.linaa@yandex.ru
+  passport: 2417 890271
+  speciality: WEB
+  work_experience: 0
+  last_workplace:
+  last_post:
+  last_salary:
+- !ruby/object:Employee
+  fio: Пивоварова Диана Павловна
+  datebirth: 21.03.2000
+  phone_number: 7-918-6640921
+  address: авпролд
+  e_mail: dianochka@gmail.com
+  passport: 7783 209121
+  speciality: hjkl
+  work_experience: 0
+  last_workplace:
+  last_post:
+  last_salary:
+- !ruby/object:Employee
+  fio: Апро Аернол Кенгш
+  datebirth: 05.05.2000
+  phone_number: 7-777-7666443
+  address: нгш
+  e_mail: sdfg@rtg.yuijk
+  passport: 5559 990086
+  speciality: dftyui
+  work_experience: 0
+  last_workplace:
+  last_post:
+  last_salary:

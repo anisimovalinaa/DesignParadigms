@@ -1,25 +1,41 @@
 {
   "0": {
     "fio": "Анисимова Алина Александровна",
-    "datebirth": "23.08.2000",
+    "datebirth": "21.08.2000",
     "phone_number": "7-999-6975019",
-    "address": "ул.Селезнева 216 кв.2",
+    "address": "ул.Селезнева 216 кв.4",
     "e_mail": "anisimova.linaa@yandex.ru",
     "passport": "2417 890271",
     "speciality": "WEB",
-    "work_experience": 0
+    "work_experience": 0,
+    "last_workplace": null,
+    "last_post": null,
+    "last_salary": null
   },
   "1": {
-    "fio": "Вапр Апро Апро",
-    "datebirth": "13.04.2021",
-    "phone_number": "7-918-5601237",
-    "address": "авпрол",
-    "e_mail": "fghj@dfghj.fghj",
-    "passport": "3417 898709",
-    "speciality": "dfghjk",
-    "work_experience": 2,
-    "last_workplace": "fghj",
-    "last_post": "fghjk",
-    "last_salary": 20000
+    "fio": "Пивоварова Диана Павловна",
+    "datebirth": "21.03.2000",
+    "phone_number": "7-918-6640921",
+    "address": "авпролд",
+    "e_mail": "dianochka@gmail.com",
+    "passport": "7783 209121",
+    "speciality": "hjkl",
+    "work_experience": 0,
+    "last_workplace": null,
+    "last_post": null,
+    "last_salary": null
+  },
+  "2": {
+    "fio": "Апро Аернол Кенгш",
+    "datebirth": "05.05.2000",
+    "phone_number": "7-777-7666443",
+    "address": "нгш",
+    "e_mail": "sdfg@rtg.yuijk",
+    "passport": "5559 990086",
+    "speciality": "dftyui",
+    "work_experience": 0,
+    "last_workplace": null,
+    "last_post": null,
+    "last_salary": null
   }
 }
