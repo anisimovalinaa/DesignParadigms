@@ -1,8 +1,9 @@
 require_relative 'post_list'
+require_relative 'work_with_DB'
 
 class Department
   attr_accessor :name_dep, :post_list
-  def initialize(post_list)
+  def initialize
     self.name_dep = name_dep
     self.post_list = post_list
   end
@@ -23,5 +24,6 @@ class Department
       e.message
     end
   end
-
 end
+
+# dep = Department.new('lsld', [])

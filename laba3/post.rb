@@ -41,4 +41,4 @@ emp1 = Employee.new('лапавм вк ренр', '31.08.2000', '77777777777', '
 post = Post.new('lala', 10, 20, 30, 0.3, 'lala2', emp1)
 # # post.emp = emp1
 #
-puts post.salary
+# puts post.salary

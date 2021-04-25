@@ -49,5 +49,5 @@ end
 #
 # puts decorator2.get_salary
 #
-puts PossibleBonus.new(FixedPremium.new(QuarterlyAward.new(FixedSalary.new(
-  Salary.new(), 10), 20), 30), 0.4 + 1.0).get_salary
+# puts PossibleBonus.new(FixedPremium.new(QuarterlyAward.new(FixedSalary.new(
+#   Salary.new(), 10), 20), 30), 0.4 + 1.0).get_salary
