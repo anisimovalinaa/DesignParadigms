@@ -2,7 +2,8 @@ require_relative 'salary'
 require_relative 'employee'
 
 class Post
-  attr_accessor :post_name, :fixed_salary, :fixed_premium, :quarterly_award, :possible_bonus, :department, :emp, :salary
+  attr_accessor :post_name, :fixed_salary, :fixed_premium, :quarterly_award, :possible_bonus, :department, :salary
+  attr_reader :emp
   def initialize(post_name, fixed_salary, fixed_premium, quarterly_award, possible_bonus,
                  department, emp)
     self.post_name = post_name
@@ -11,7 +12,6 @@ class Post
     self.quarterly_award = quarterly_award
     self.possible_bonus = possible_bonus
     self.department = department
-    self.emp = emp
     self.salary = PossibleBonus.new(FixedPremium.new(QuarterlyAward.new(FixedSalary.new(
       Salary.new(), self.fixed_salary), self.quarterly_award), self.fixed_premium), self.possible_bonus + 1.0).get_salary
   end

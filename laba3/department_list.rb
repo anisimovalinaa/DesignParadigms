@@ -5,6 +5,10 @@ class Department_list
     self.department_list = []
   end
 
+  def read_DB
+    # department_list =
+  end
+
   def add(department)
     @department_list << department
   end

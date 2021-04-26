@@ -1,6 +1,14 @@
 class Salary
   attr_accessor :salary
 
+  def self.empty_salary
+
+  end
+
+  def self.bonus_and_quart(bonus_size, quart_size)
+    quart_size * (bonus_size + 1)
+  end
+
   def get_salary
     self.salary = 0
   end
@@ -51,3 +59,6 @@ end
 #
 # puts PossibleBonus.new(FixedPremium.new(QuarterlyAward.new(FixedSalary.new(
 #   Salary.new(), 10), 20), 30), 0.4 + 1.0).get_salary
+#
+
+puts Salary.bonus_and_quart(0.2, 30)

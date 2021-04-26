@@ -1,6 +1,7 @@
 require_relative 'post_list'
 
 class DB_work
+  @@db_work = nil
 
   def initialize
     @connection = Mysql2::Client.new(
@@ -11,25 +12,31 @@ class DB_work
       )
   end
 
-  private_class_method :new
-
-  def self.connection
-    @connection
+  def self.db_work
+    if @@db_work == nil
+      @@db_work = DB_work.new()
+    end
+    @@db_work
   end
 
   def self.find_departmentID(dep_name)
-    connection.query("SELECT departmentID from departments WHERE departmentName = #{dep_name}")['departmentID']
+    res = @connection.query("SELECT departmentID FROM departments WHERE departmentName = #{dep_name}")
+    res.each { |row| return row['departmentID']}
   end
 
   def self.find_employee(id)
-    connection.query("SELECT * FROM employees WHERE EmployeeID = #{id}")
+    @connection.query("SELECT * FROM employees WHERE EmployeeID = #{id}")
   end
 
   def read_post_list(dep_name)
+    res_id = @connection.query("SELECT departmentID FROM departments WHERE departmentName = #{dep_name}")
+    res_id.each { |row| return row['departmentID']}
     id_dep = DB_work.find_departmentID(dep_name)
+
+
     post_list = []
 
-    results = connection.query("SELECT * FROM post WHERE department = #{id_dep}")
+    results = @connection.query("SELECT * FROM post WHERE department = #{id_dep}")
     results.each do |row|
       fixed_premium = row['FixedPremiumBool'] == 1 ? row['FixedPremiumSize'] : nil
       quarterly_award = row['QuarterlyAwardBool'] == 1 ? row['QuarterlyAwardSize'] : nil

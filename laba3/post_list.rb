@@ -4,14 +4,13 @@ require_relative 'db_work'
 
 class Post_list
   attr_accessor :post_list, :department
-  def initialize(dep_name = nil)
+  def initialize(department = nil) # объект класса department
     self.post_list = []
-    self.department = Department.new
-    @connection = DB_work.connection
+    self.department = department
   end
 
   def read_DB
-    @post_list = @connection.read_post_list(@department.name_dep)
+    @post_list = DB_work.db_work.read_post_list(@department.name_dep)
   end
 
   def add(post)
@@ -22,6 +21,3 @@ class Post_list
     @post_list[num]
   end
 end
-
-post_list = Post_list.new('Лала')
-

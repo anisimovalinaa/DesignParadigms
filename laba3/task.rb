@@ -6,6 +6,8 @@ require 'yaml'
 require 'json'
 require 'rexml/document'
 require_relative 'db_work'
+require_relative 'department'
+require_relative 'post_list'
 
 
 # emp1 = Employee.new('лапавм вк ренр', '31.08.2000', '77777777777', 'fghjk', 'vergre@gfbfbf.grt',  '5555555555', 'fgbbth', 0)
@@ -21,7 +23,7 @@ require_relative 'db_work'
 # TerminalViewListEmployee.menu
 #
 
-con = DB_work.connection
-con2 = DB_work.connection
+dep = Department.new('Лала')
+post_list = Post_list.new(dep)
 
-puts con.equal?(con2)
+post_list.read_DB
