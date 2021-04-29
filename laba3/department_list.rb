@@ -17,8 +17,18 @@ class Department_list
     end
   end
 
+  def change(department)
+    DB_work.db_work.change_department(department)
+    read_DB
+  end
+
   def add(department)
     @department_list << department
+  end
+
+  def delete(department)
+    DB_work.db_work.delete_department(department)
+    read_DB
   end
 
   def choose(num)

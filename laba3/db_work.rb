@@ -103,9 +103,23 @@ class DB_work
   end
 
   def change_post(post)
-    @connection.query("UPDATE post SET FixedSalary = #{post.fixed_salary},
-                                          PremiumSalary = #{post.fixed_premium}
-                                          FixedSalary = #{post.quarterly_award}
-                                          FixedSalary = #{post.possible_bonus}")
+    fixed_premium_bool = post.fixed_premium > 0 ? 1 : 0
+    quarterly_award_bool = post.quarterly_award > 0 ? 1 : 0
+    possible_bonus_bool = post.possible_bonus > 0 ? 1 : 0
+    @connection.query("UPDATE post
+                           SET FixedSalary = #{post.fixed_salary},
+                               FixedPremiumSize = #{post.fixed_premium},
+                               FixedPremiumBool = #{fixed_premium_bool},
+                               QuarterlyAwardSize = #{post.quarterly_award},
+                               QuarterlyAwardBool = #{quarterly_award_bool},
+                               PossibleBonusPercent = #{post.possible_bonus}
+                               PossibleBonusBool = #{possible_bonus_bool}
+                           WHERE PostID = #{post.id}")
+  end
+
+  def change_department(department)
+    @connection.query("UPDATE departments
+                           SET departmentName = #{department.name}
+                           WHERE departmentID = #{department.id}")
   end
 end

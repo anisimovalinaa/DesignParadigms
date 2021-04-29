@@ -26,6 +26,11 @@ class Post_list
     read_DB
   end
 
+  def change(post)
+    DB_work.db_work.change_post(post)
+    read_DB
+  end
+
   def choose(num)
     @post_list[num]
   end
