@@ -2,7 +2,7 @@ require 'date'
 require 'openssl'
 
 class Employee
-	attr_accessor :address, :speciality, :work_experience
+	attr_accessor :address, :speciality, :work_experience, :post
 	attr_reader :fio, :datebirth, :phone_number, :e_mail, :passport
 	attr_writer :last_workplace, :last_post, :last_salary
 	def initialize(fio, datebirth, phone_number, address, e_mail, passport,
@@ -22,20 +22,6 @@ class Employee
 		self.last_salary = last_salary
 
 	end
-
-	# def ==(emp1)
-	# 	begin
-	# 		return false if @work_experience != emp1.work_experience
-	# 		return @fio == emp1.fio && @datebirth == emp1.datebirth && @phone_number == emp1.phone_number &&
-	# 			@address == emp1.address && @e_mail == emp1.e_mail && @passport == emp1.passport &&
-	# 			@speciality == emp1.speciality && @work_experience == emp1.work_experience &&
-	# 			@last_workplace == emp1.last_workplace && @last_post == emp1.last_post && @last_salary == emp1.last_salary
-	# 	rescue
-	# 		return @fio == emp1.fio && @datebirth == emp1.datebirth && @phone_number == emp1.phone_number &&
-	# 			@address == emp1.address && @e_mail == emp1.e_mail && @passport == emp1.passport &&
-	# 			@speciality == emp1.speciality && @work_experience == emp1.work_experience
-	# 	end
-	# end
 
 	def ==(emp1)
 		return @fio == emp1.fio && @datebirth == emp1.datebirth && @phone_number == emp1.phone_number &&

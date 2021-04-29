@@ -10,14 +10,27 @@ class Post_list
   end
 
   def read_DB
-    @post_list = DB_work.db_work.read_post_list(@department.name_dep)
+    if @department != nil
+      @post_list = DB_work.db_work.read_post_list(@department.name)
+    else
+      @post_list = DB_work.db_work.read_vacant_posts
+    end
   end
 
   def add(post)
     @post_list << post
   end
 
+  def delete(post)
+    DB_work.db_work.delete_post(post)
+    read_DB
+  end
+
   def choose(num)
     @post_list[num]
   end
 end
+
+# dep = Department.new('Лала')
+# post_list = Post_list.new(dep)
+# post_list.read_DB

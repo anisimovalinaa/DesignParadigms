@@ -1,3 +1,6 @@
+require_relative 'db_work'
+require_relative 'department'
+
 class Department_list
   attr_accessor :department_list
 
@@ -6,7 +9,12 @@ class Department_list
   end
 
   def read_DB
-    # department_list =
+    dep_names = DB_work.db_work.read_dep_names
+    dep_names.each do |name|
+      dep = Department.new(name)
+      dep.read_DB
+      add(dep)
+    end
   end
 
   def add(department)

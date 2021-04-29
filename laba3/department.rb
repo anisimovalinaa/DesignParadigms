@@ -1,18 +1,19 @@
 require_relative 'post_list'
-require_relative 'work_with_DB'
 
 class Department
-  attr_accessor :name_dep, :post_list
-  def initialize(name_dep)
-    self.name_dep = name_dep
+  attr_accessor :name, :post_list
+  def initialize(name)
+    self.name = name
   end
 
   def read_DB
-
+    @post_list = Post_list.new(Department.new(@name))
+    @post_list.read_DB
   end
-end
 
-# dep = Department.new('lsld')
-# puts dep.post_list
-# dep.post_list = []
-# print dep.post_list
+  def delete(department)
+    DB_work.db_work.delete_department(department)
+    read_DB
+  end
+
+end

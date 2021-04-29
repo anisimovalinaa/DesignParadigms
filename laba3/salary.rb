@@ -1,16 +1,20 @@
 class Salary
   attr_accessor :salary
 
-  def self.empty_salary
+  def get_salary
+    self.salary = 0
+  end
 
+  def self.empty_salary
+    FixedSalary.new(Salary.new, 0).get_salary
   end
 
   def self.bonus_and_quart(bonus_size, quart_size)
-    quart_size * (bonus_size + 1)
+    PossibleBonus.new(QuarterlyAward.new(Salary.new, quart_size), bonus_size).get_salary
   end
 
-  def get_salary
-    self.salary = 0
+  def self.premium(size_premium, size_fixed)
+    FixedPremium.new(FixedSalary.new(Salary.new, size_fixed), size_premium).get_salary
   end
 end
 
@@ -48,7 +52,7 @@ end
 
 class PossibleBonus < Decorator
   def get_salary
-    super * @size_salary
+    super * (@size_salary / 100 + 1)
   end
 end
 
@@ -61,4 +65,4 @@ end
 #   Salary.new(), 10), 20), 30), 0.4 + 1.0).get_salary
 #
 
-puts Salary.bonus_and_quart(0.2, 30)
+# puts Salary.premium(47, 20)
