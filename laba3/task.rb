@@ -30,6 +30,8 @@ require_relative 'department_list'
 # post_list.read_DB
 # dep.post_list = post_list
 dep_list = Department_list.new
-dep_list.read_DB
+# dep_list.read_DB
 
-dep_list
+dep_list.read_list_YAML
+
+dep_list.write_list_YAML

@@ -6,7 +6,7 @@ class Post
   attr_reader :emp, :id
   def initialize(id, post_name, fixed_salary, fixed_premium, quarterly_award, possible_bonus,
                  department)
-    self.id = id
+    @id = id
     self.post_name = post_name
     self.fixed_salary = fixed_salary
     self.fixed_premium = fixed_premium

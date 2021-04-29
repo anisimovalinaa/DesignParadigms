@@ -6,7 +6,7 @@ class Department
   attr_reader :id
   def initialize(name)
     self.name = name
-    self.id = DB_work.db_work.find_departmentID(name)
+    @id = DB_work.db_work.find_departmentID(name)
   end
 
   def read_DB

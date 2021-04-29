@@ -1,5 +1,6 @@
 require_relative 'db_work'
 require_relative 'department'
+require 'yaml'
 
 class Department_list
   attr_accessor :department_list
@@ -33,5 +34,15 @@ class Department_list
 
   def choose(num)
     @department_list[num]
+  end
+
+  def read_list_YAML
+    @department_list = YAML::load(File.open('dep_list.yaml'))
+  end
+
+  def write_list_YAML
+    File.open('dep_list.yaml', 'w:UTF-8') do |file|
+      file.puts(@department_list.to_yaml)
+    end
   end
 end
