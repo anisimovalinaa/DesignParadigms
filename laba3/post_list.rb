@@ -34,6 +34,14 @@ class Post_list
   def choose(num)
     @post_list[num]
   end
+
+  def to_s
+    result = ''
+    @post_list.each do |post|
+      result += post.to_s + "\n"
+    end
+    result
+  end
 end
 
 # dep = Department.new('Лала')

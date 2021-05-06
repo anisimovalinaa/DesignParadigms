@@ -33,7 +33,9 @@ class Department_list
   end
 
   def choose(num)
-    @department_list[num]
+    @department_list.each do |dep|
+      return dep if dep.id == num
+    end
   end
 
   def read_list_YAML
@@ -44,5 +46,13 @@ class Department_list
     File.open('dep_list.yaml', 'w:UTF-8') do |file|
       file.puts(@department_list.to_yaml)
     end
+  end
+
+  def to_s
+    result = ''
+    @department_list.each do |dep|
+      result += dep.to_s + "\n"
+    end
+    result
   end
 end

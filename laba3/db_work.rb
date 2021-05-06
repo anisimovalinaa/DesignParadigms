@@ -9,15 +9,32 @@ class DB_work
   def initialize
     @connection = Mysql2::Client.new(
       :host => 'localhost',
-      :username => 'alina',
-      :password => 'mama',
+      :username => 'root',
       :database => 'staff',
       )
   end
 
   def self.db_work
-      @@db_work |= DB_work.new
+    if @@db_work == nil
+      @@db_work = DB_work.new
+    end
     @@db_work
+  end
+
+  def add_department(department_name)
+    @connection.query("INSERT INTO `staff`.`departments` (`departmentName`) VALUES ('#{department_name}')")
+  end
+
+  def add_post(post)
+    bool_premium = post.fixed_salary > 0 ? 1 : 0
+    bool_quarterly = post.fixed_salary > 0 ? 1 : 0
+    bool_bonus = post.fixed_salary > 0 ? 1 : 0
+    @connection.query("INSERT INTO `staff`.`post` (`PostName`, `FixedSalary`, `FixedPremiumBool`,
+                      `FixedPremiumSize`, `QuarterlyAwardBool`, `QuarterlyAwardSize`, `PossibleBonusBool`,
+                      `PossibleBonusPercent`, `DepartmentID` )
+                      VALUES ('#{post.post_name}', #{post.fixed_salary}, #{bool_premium}, #{post.fixed_premium},
+                      #{bool_quarterly}, #{post.quarterly_award}, #{bool_bonus}, #{post.possible_bonus},
+                      #{post.department.id})")
   end
 
   def find_departmentID(dep_name)

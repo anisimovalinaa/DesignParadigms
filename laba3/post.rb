@@ -35,6 +35,9 @@ class Post
     end
   end
 
+  def to_s
+    "#{post_name}, #{salary.get_salary}"
+  end
 end
 
 

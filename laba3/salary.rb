@@ -61,13 +61,13 @@ end
 #
 # puts decorator2.get_salary
 #
-sal = PossibleBonus.new(FixedPremium.new(QuarterlyAward.new(FixedSalary.new(
-  Salary.new(), 10), 20), 30), 40)
-
-puts sal.get_salary
-
-sal2 = Salary.bonus_and_quart(20, 55)
-
-puts sal2.get_salary
+# sal = PossibleBonus.new(FixedPremium.new(QuarterlyAward.new(FixedSalary.new(
+#   Salary.new(), 10), 20), 30), 40)
+#
+# puts sal.get_salary
+#
+# sal2 = Salary.bonus_and_quart(20, 55)
+#
+# puts sal2.get_salary
 
 # puts Salary.premium(47, 20)

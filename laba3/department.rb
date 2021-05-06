@@ -14,4 +14,15 @@ class Department
     @post_list.read_DB
   end
 
+  def to_s
+    id.to_s + " " + name
+  end
+
+  def add_post(post)
+    @post_list.add(post)
+  end
+
+  def posts
+    @post_list
+  end
 end
