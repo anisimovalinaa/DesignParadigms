@@ -16,9 +16,7 @@ class DB_work
   end
 
   def self.db_work
-    if @@db_work == nil
-      @@db_work = DB_work.new
-    end
+      @@db_work |= DB_work.new
     @@db_work
   end
 

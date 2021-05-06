@@ -6,15 +6,15 @@ class Salary
   end
 
   def self.empty_salary
-    FixedSalary.new(Salary.new, 0).get_salary
+    FixedSalary.new(Salary.new, 0)
   end
 
   def self.bonus_and_quart(bonus_size, quart_size)
-    PossibleBonus.new(QuarterlyAward.new(Salary.new, quart_size), bonus_size).get_salary
+    PossibleBonus.new(QuarterlyAward.new(Salary.new, quart_size), bonus_size)
   end
 
   def self.premium(size_premium, size_fixed)
-    FixedPremium.new(FixedSalary.new(Salary.new, size_fixed), size_premium).get_salary
+    FixedPremium.new(FixedSalary.new(Salary.new, size_fixed), size_premium)
   end
 end
 
@@ -31,7 +31,7 @@ class Decorator < Salary
     @salary.get_salary
   end
 end
-#
+
 class FixedSalary < Decorator
   def get_salary
     super + @size_salary
@@ -52,7 +52,7 @@ end
 
 class PossibleBonus < Decorator
   def get_salary
-    super * (@size_salary / 100 + 1)
+    super * (@size_salary / 100.0 + 1)
   end
 end
 
@@ -61,8 +61,13 @@ end
 #
 # puts decorator2.get_salary
 #
-# puts PossibleBonus.new(FixedPremium.new(QuarterlyAward.new(FixedSalary.new(
-#   Salary.new(), 10), 20), 30), 0.4 + 1.0).get_salary
-#
+sal = PossibleBonus.new(FixedPremium.new(QuarterlyAward.new(FixedSalary.new(
+  Salary.new(), 10), 20), 30), 40)
+
+puts sal.get_salary
+
+sal2 = Salary.bonus_and_quart(20, 55)
+
+puts sal2.get_salary
 
 # puts Salary.premium(47, 20)

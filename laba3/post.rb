@@ -14,7 +14,7 @@ class Post
     self.possible_bonus = possible_bonus
     self.department = department
     self.salary = PossibleBonus.new(FixedPremium.new(QuarterlyAward.new(FixedSalary.new(
-      Salary.new(), self.fixed_salary), self.quarterly_award), self.fixed_premium), self.possible_bonus).get_salary
+      Salary.new(), self.fixed_salary), self.quarterly_award), self.fixed_premium), self.possible_bonus)
   end
 
   def self.is_emp?(x)
@@ -28,7 +28,7 @@ class Post
   def emp=(x)
     begin
       Post.is_emp?(x)
-      # x.post =
+      x.post = self
       @emp = x
     rescue ArgumentError => e
       e.message
