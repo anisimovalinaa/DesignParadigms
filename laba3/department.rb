@@ -10,7 +10,7 @@ class Department
   end
 
   def read_DB
-    @post_list = Post_list.new(Department.new(@name))
+    @post_list = Post_list.new(self)
     @post_list.read_DB
   end
 

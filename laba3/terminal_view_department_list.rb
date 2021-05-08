@@ -2,22 +2,21 @@ require_relative 'department_list'
 require_relative 'db_work'
 require_relative 'department'
 require_relative 'post'
+require_relative 'terminal_view_list'
 
-class Terminal_view_department_list
-  @@department_list = Department_list.new
-
-  def self.show_list
-    puts @@department_list
+class Terminal_view_department_list < Terminal_view_list
+  def show_list
+    puts @list
   end
 
 
-  def self.add_department(dep_name)
+  def add_department(dep_name)
     DB_work.db_work.add_department(dep_name)
     dep = Department.new(dep_name)
-    @@department_list.add(dep)
+    @department_list.add(dep)
   end
 
-  def self.add_post(dep)
+  def add_post(dep)
     print 'Наименование должности:'
     name_post = gets.chomp
     print 'Фиксированная зарплата:'
@@ -33,8 +32,11 @@ class Terminal_view_department_list
     dep.add_post(post)
   end
 
-  def self.show
-    @@department_list.read_DB
+  def choose_instance(num)
+    @department_list.choose(num)
+  end
+
+  def show
     ans = ''
     while ans != '0'
       puts "\n************Меню*************",
@@ -51,7 +53,7 @@ class Terminal_view_department_list
       when '2'
         print 'Введите номер отдела:'
         num = gets.chomp.to_i
-        dep = @@department_list.choose(num)
+        dep = choose_instance(num)
         if dep.class == Department
           puts
           ans_dep = ''

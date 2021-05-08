@@ -3,6 +3,7 @@ require_relative 'employee'
 require_relative 'work_with_DB'
 require 'openssl'
 require 'mysql2'
+require_relative 'terminal_view_list'
 
 if (Gem.win_platform?)
 	Encoding.default_external = Encoding.find(Encoding.locale_charmap)
@@ -13,9 +14,9 @@ if (Gem.win_platform?)
 	end
 end
 
-class TerminalViewListEmployee
+class TerminalViewListEmployee < Terminal_view_list
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
-	@@list_employee = ListEmployee.new()
+	@@list_employee = ListEmployee.new
 
 	def self.try_to_convert(str)
 		begin

@@ -24,4 +24,8 @@ require_relative 'terminal_view_department_list'
 # puts emp
 # TerminalViewListEmployee.menu
 
-Terminal_view_department_list.show()
+department_list = Department_list.new
+department_list.read_DB
+
+terminal = Terminal_view_department_list.new(department_list)
+terminal.show_list
