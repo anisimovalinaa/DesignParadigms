@@ -1,10 +1,5 @@
-require_relative 'controller'
-require_relative 'terminal_view_department_list'
-require_relative 'department_list'
-
 class Controller_list
-  # private_class_method :new
-
+  private_class_method :new
   def show_view
     @view_list.show
   end
