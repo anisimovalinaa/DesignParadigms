@@ -3,7 +3,8 @@ require_relative 'listEmployee'
 
 class WorkWithDB
   attr_accessor :list_emp
-  def initialize(list_emp)
+  @db_work = nil
+  def initialize
     @connection = Mysql2::Client.new(
       :host => 'localhost',
       :username => 'alina',
@@ -11,6 +12,13 @@ class WorkWithDB
       :database => 'staff',
       )
     self.list_emp = list_emp
+  end
+
+  def self.connection
+    if @db_work == nil
+      @db_work = WorkWithDB.new
+    end
+    @db_work
   end
 
   def update_DB list
@@ -23,22 +31,6 @@ class WorkWithDB
       else
         add_to_DB(record)
       end
-    end
-  end
-
-  def read_list_DB()
-    results = @connection.query("SELECT * FROM employees")
-    results.each do |row|
-      data = row['datebirth'].to_s.split('-').reverse.join('.')
-      if row['work_experience'] > 0
-        emp = Employee.new(row['FIO'], data, row['phone_number'], row['address'],
-                           row['e_mail'], row['passport'], row['speciality'], row['work_experience'],
-                           row['last_workplace'], row['last_post'], row['last_salary'])
-      else
-        emp = Employee.new(row['FIO'], data, row['phone_number'], row['address'],
-                           row['e_mail'], row['passport'], row['speciality'], row['work_experience'])
-      end
-      @list_emp.add_user(emp)
     end
   end
 

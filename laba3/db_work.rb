@@ -59,6 +59,24 @@ class DB_work
     emp
   end
 
+  def read_employee_list
+    results = @connection.query("SELECT * FROM employees")
+    list_emp = ListEmployee.new
+    results.each do |row|
+      data = row['datebirth'].to_s.split('-').reverse.join('.')
+      if row['work_experience'] > 0
+        emp = Employee.new(row['FIO'], data, row['phone_number'], row['address'],
+                           row['e_mail'], row['passport'], row['speciality'], row['work_experience'],
+                           row['last_workplace'], row['last_post'], row['last_salary'])
+      else
+        emp = Employee.new(row['FIO'], data, row['phone_number'], row['address'],
+                           row['e_mail'], row['passport'], row['speciality'], row['work_experience'])
+      end
+      list_emp.add_user(emp)
+    end
+    list_emp
+  end
+
   def read_post_list(dep_name)
     id_dep = find_departmentID(dep_name)
 

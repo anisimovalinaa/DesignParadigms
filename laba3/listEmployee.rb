@@ -2,6 +2,7 @@ require_relative 'employee'
 require 'openssl'
 require 'yaml'
 require 'json'
+require_relative 'db_work'
 
 class ListEmployee
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
@@ -132,5 +133,9 @@ class ListEmployee
 
 	def sort field
 		eval "list_employee.sort! { |a, b| a.#{field} <=> b.#{field} }"
+	end
+
+	def read_DB
+		@list_employee = DB_work.db_work.read_employee_list
 	end
 end

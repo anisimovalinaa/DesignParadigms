@@ -14,11 +14,11 @@ if (Gem.win_platform?)
 	end
 end
 
-class TerminalViewListEmployee < Terminal_view_list
+class Terminal_view_list_employee < Terminal_view_list
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
-	@@list_employee = ListEmployee.new
+	# @@list_employee = ListEmployee.new
 
-	def self.try_to_convert(str)
+	def try_to_convert(str)
 		begin
 			eval str
 		rescue ArgumentError => e
@@ -26,7 +26,7 @@ class TerminalViewListEmployee < Terminal_view_list
 		end
 	end
 
-	def self.add
+	def add
 		check = true
 		while check
 			puts 'Введите данные'
@@ -69,7 +69,7 @@ class TerminalViewListEmployee < Terminal_view_list
 					user = Employee.new(fio, daybirth, phone, address, e_mail, passport,
 															specialty, work_experience.to_i)
 				end
-				@@list_employee.add_user(user)
+				@list.add_user(user)
 				@@connection.add_to_DB(user)
 				check = false
 				puts 'Успешно'
@@ -78,12 +78,12 @@ class TerminalViewListEmployee < Terminal_view_list
 		end
 	end
 
-	def self.output_users
-		puts @@list_employee
+	def show_list
+		puts @list
 	end
 
-	def self.find(data)
-		emp = @@list_employee.find_emp(data)
+	def find(data)
+		emp = @list.find_emp(data)
 		if emp.class != Employee
 			puts 'Неверные данные'
 		else
@@ -91,7 +91,7 @@ class TerminalViewListEmployee < Terminal_view_list
 		end
 	end
 
-	def self.compare_data(list1, list2)
+	def compare_data(list1, list2)
 		return false if list1.size != list2.size
 		return list1 == list2
 	end
@@ -145,13 +145,13 @@ class TerminalViewListEmployee < Terminal_view_list
 		end
 	end
 
-	def self.menu
-		try_connect
-		# @@connection = WorkWithDB.new(@@list_employee)
-		# @@connection.read_list_DB
+	def close
+		exit
+	end
 
-		# @@list_employee.read_list_YAML 'list_employee.yaml'
-		# @@list_employee.read_list_JSON 'list_employee.json'
+	def show
+		# try_connect
+
 		ans = ''
 		while ans != '0'
 			puts "--------Меню-------", '1. Добавить нового пользователя.', 
@@ -165,7 +165,7 @@ class TerminalViewListEmployee < Terminal_view_list
 				puts
 				add
 			when '2'
-				output_users
+				show_list
 				puts
 			when '3'
 				print 'Введите ФИО, номер телефона, паспортные данные или e-mail: '
@@ -214,7 +214,7 @@ class TerminalViewListEmployee < Terminal_view_list
 						puts 'Такого пункта нет'
 					end
 					puts
-					@@connection.change_node(person)
+					WorkWithDB.connection.change_node(person)
 				end
 			when '5'
 				print 'Введите ФИО, номер телефона, паспортные данные или e-mail: '
@@ -222,14 +222,14 @@ class TerminalViewListEmployee < Terminal_view_list
 				person = find(data)
 
 				if person.class == Employee
-					@@list_employee.delete(person)
-					@@connection.delete_from_db(person)
+					@list.delete(person)
+					WorkWithDB.connection.delete_from_db(person)
 					puts "Успешно\n\n"
 				end
 			when '6'
 				# @@list_employee.write_file("list_employee.txt")
-				@@list_employee.write_list_JSON 'list_employee.json'
-				@@list_employee.write_list_YAML 'list_employee.yaml'
+				@list.write_list_JSON 'list_employee.json'
+				@list.write_list_YAML 'list_employee.yaml'
 				puts "Успешно\n\n"
 			when '7'
 				puts "\tПо каким полям вы хотите отсортировать?", "\t1. ФИО.", "\t2. Дата рождения.",
@@ -240,30 +240,29 @@ class TerminalViewListEmployee < Terminal_view_list
 				ans_sort.each { |field|
 					case field
 					when '1'
-						@@list_employee.sort 'fio'
+						@list.sort 'fio'
 					when '2'
-						@@list_employee.sort 'datebirth'
+						@list.sort 'datebirth'
 					when '3'
-						@@list_employee.sort 'phone_number'
+						@list.sort 'phone_number'
 					when '4'
-						@@list_employee.sort 'e_mail'
+						@list.sort 'e_mail'
 					when '5'
-						@@list_employee.sort 'passport'
+						@list.sort 'passport'
 					when '6'
-						@@list_employee.sort 'specialty'
+						@list.sort 'specialty'
 					when '7'
-						@@list_employee.sort 'work_experience'
+						@list.sort 'work_experience'
 					else
 						puts "\tТакого пункта нет"
 					end
 				}
 				puts
 			when '0'
-				exit
+				close
 			else
 				puts 'Такого пункта нет'
 			end
 		end
-		@@connection.close
 	end
 end
