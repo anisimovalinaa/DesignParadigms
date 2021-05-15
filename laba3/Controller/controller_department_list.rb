@@ -18,7 +18,12 @@ class Controller_department_list < Controller_list
     @list.choose(num)
   end
 
+  def delete_instance
+    @list.delete(@instance)
+  end
+
   def close
+    @list.write_list_yaml
     exit
   end
 
@@ -28,7 +33,7 @@ class Controller_department_list < Controller_list
         puts "\n************Меню*************",
              '1. Отобразить список отделов',
              '2. Выбрать отдел',
-             '3. Добавить отдел',
+             '3. Удалить выбранный отдел',
              '0. Завершить работу'
         print 'Ответ:'
         ans = gets.chomp
@@ -44,6 +49,14 @@ class Controller_department_list < Controller_list
             puts @instance
           else
             puts 'Отдела с таким номером нет'
+          end
+        when '3'
+          if @instance != nil
+            delete_instance
+            @instance = nil
+            puts 'Удаление прошло успешно'
+          else
+            puts 'Вы не выбрали отдел'
           end
         when '0'
           close

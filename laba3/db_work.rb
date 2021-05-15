@@ -90,7 +90,10 @@ class DB_work
       emp = find_employee(row['EmployeeID']) if row['EmployeeID'] != nil
 
       post = Post.new(row['PostID'], row['PostName'], row['FixedSalary'], fixed_premium, quarterly_award, possible_bonus, dep_name)
-      post.emp = emp if emp.class == Employee
+      if emp.class == Employee
+        post.emp = emp
+        emp.post = post
+      end
       post_list << post
     end
 
@@ -132,7 +135,7 @@ class DB_work
   end
 
   def delete_department(department)
-    @connection.query("DELETE FROM departments WHERE departmentName = #{department.name}")
+    @connection.query("DELETE FROM departments WHERE departmentName = '#{department.name}'")
   end
 
   def change_post(post)

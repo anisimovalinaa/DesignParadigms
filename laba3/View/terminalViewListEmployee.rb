@@ -15,7 +15,7 @@ if (Gem.win_platform?)
 end
 
 class Terminal_view_list_employee < Terminal_view_list
-	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
+	# @@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')
 
 	def show_list
 		@controller_list.show_list

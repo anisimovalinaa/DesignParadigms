@@ -17,11 +17,11 @@ class Terminal_view_department_list < Terminal_view_list
   #   dep = Department.new(dep_name)
   #   @list.add(dep)
   # end
-  #
-  # def delete_instance
-  #   @list.delete(@instance)
-  # end
-  #
+
+  def delete_instance
+    @controller_list.delete_instance
+  end
+
   # def add_post
   #   print 'Наименование должности:'
   #   name_post = gets.chomp

@@ -43,7 +43,7 @@ class Department_list
   end
 
   def write_list_yaml
-    File.open('dep_list.yaml', 'w:UTF-8') do |file|
+    File.open('Sources/dep_list.yaml', 'w:UTF-8') do |file|
       file.puts(@department_list.to_yaml)
     end
   end
