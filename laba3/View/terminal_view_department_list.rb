@@ -42,10 +42,10 @@ class Terminal_view_department_list < Terminal_view_list
   #   puts @instance
   # end
   #
-  # def choose_instance(num)
-  #   @list.choose(num)
-  # end
-  #
+  def choose_instance(num)
+    @controller_list.choose_instance
+  end
+
   def close
     @controller_list.close
   end

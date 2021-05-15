@@ -14,6 +14,10 @@ class Controller_department_list < Controller_list
     puts @list
   end
 
+  def choose_instance(num)
+    @list.choose(num)
+  end
+
   def close
     exit
   end
@@ -32,6 +36,15 @@ class Controller_department_list < Controller_list
         when '1'
           puts "\n========Отделы======="
           show_list
+        when '2'
+          print 'Введите номер отдела:'
+          num = gets.chomp.to_i
+          @instance = choose_instance(num)
+          if @instance.class == Department
+            puts @instance
+          else
+            puts 'Отдела с таким номером нет'
+          end
         when '0'
           close
         else
