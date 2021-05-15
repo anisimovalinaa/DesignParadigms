@@ -1,5 +1,5 @@
 require 'mysql2'
-require_relative 'employee'
+require_relative 'Model/employee'
 
 client = Mysql2::Client.new(
   :host => 'localhost',

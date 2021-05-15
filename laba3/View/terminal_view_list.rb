@@ -1,8 +1,8 @@
-require_relative 'department_list'
+require_relative '../Model/department_list'
 
 class Terminal_view_list
-  def initialize(list)
-    @list = list
+  def initialize(controller_list)
+    @controller_list = controller_list
   end
 
   def show # меню

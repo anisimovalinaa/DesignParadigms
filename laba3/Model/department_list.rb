@@ -1,4 +1,4 @@
-require_relative 'db_work'
+require_relative '../db_work'
 require_relative 'department'
 require 'yaml'
 
@@ -38,11 +38,11 @@ class Department_list
     end
   end
 
-  def read_list_YAML
-    @department_list = YAML::load(File.open('dep_list.yaml'))
+  def read_list_yaml
+    @department_list = YAML::load(File.open('../dep_list.yaml'))
   end
 
-  def write_list_YAML
+  def write_list_yaml
     File.open('dep_list.yaml', 'w:UTF-8') do |file|
       file.puts(@department_list.to_yaml)
     end

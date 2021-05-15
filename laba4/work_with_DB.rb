@@ -14,7 +14,7 @@ class WorkWithDB
 
   def update_DB list
     list.each do |record|
-      res = @connection.query("SELECT count(*) FROM abonents WHERE inn = '#{record.inn}'")
+      res = @connection.query("SELECT count(*) FROM abonent WHERE inn = '#{record.inn}'")
       count = 0
       res.each { |row| count = row['count(*)']}
       if count > 0
@@ -26,7 +26,7 @@ class WorkWithDB
   end
 
   def read_list_DB()
-    results = @connection.query("SELECT * FROM abonents")
+    results = @connection.query("SELECT * FROM abonent")
     results.each do |row|
       user = Abonent.new(row['inn'].to_i, row['name'], row['phone_number'], row['bank_account'])
       @list_ab.add_abonent(user)
@@ -37,19 +37,19 @@ class WorkWithDB
     # @connection.query("INSERT INTO `according_telephone_conversations`.`abonents` (`inn` ,`name` ,`phone_number` ,
     #                         `bank_account`)
     #                       VALUES ('#{user.inn}', '#{user.name}', #{user.phone_number}', '#{user.bank_account}')")
-    @connection.query("INSERT INTO `according_telephone_conversations`.`abonents` (`inn` ,`name` ,`phone_number` ,
+    @connection.query("INSERT INTO `accounting_for_phone_logs`.`abonent` (`inn` ,`name` ,`phone_number` ,
                             `bank_account`)
                           VALUES ('#{user.inn}', '#{user.name}', '#{user.phone_number}', '#{user.bank_account}');")
   end
 
   def change_node(user)
-    @connection.query("UPDATE abonents SET name = '#{user.name}', phone_number = '#{user.phone_number}',
+    @connection.query("UPDATE abonent SET name = '#{user.name}', phone_number = '#{user.phone_number}',
                   bank_account = '#{user.bank_account}'
                   WHERE inn = '#{user.inn}'")
   end
 
   def delete_from_db(user)
-    @connection.query("DELETE FROM abonents WHERE inn = '#{user.inn}'")
+    @connection.query("DELETE FROM abonent WHERE inn = '#{user.inn}'")
   end
 
   def close

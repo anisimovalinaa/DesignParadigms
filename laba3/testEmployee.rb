@@ -1,4 +1,4 @@
-require_relative 'employee'
+require_relative 'Model/employee'
 
 class TestEmployee < Employee
 	def to_s

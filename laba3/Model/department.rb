@@ -1,5 +1,5 @@
 require_relative 'post_list'
-require_relative 'db_work'
+require_relative '../db_work'
 
 class Department
   attr_accessor :name, :post_list

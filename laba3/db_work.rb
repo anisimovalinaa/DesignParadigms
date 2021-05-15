@@ -1,6 +1,6 @@
-require_relative 'post_list'
-require_relative 'post'
-require_relative 'employee'
+require_relative 'Model/post_list'
+require_relative 'Model/post'
+require_relative 'Model/employee'
 require 'mysql2'
 
 class DB_work

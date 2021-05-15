@@ -1,5 +1,5 @@
 require 'mysql2'
-require_relative 'listEmployee'
+require_relative 'Model/listEmployee'
 
 class WorkWithDB
   attr_accessor :list_emp

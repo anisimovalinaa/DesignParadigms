@@ -2,7 +2,7 @@ require_relative 'employee'
 require 'openssl'
 require 'yaml'
 require 'json'
-require_relative 'db_work'
+require_relative '../db_work'
 
 class ListEmployee
 	@@keypair = OpenSSL::PKey::RSA.new File.read('key.pem')

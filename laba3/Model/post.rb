@@ -1,5 +1,5 @@
 require_relative 'salary'
-require_relative 'employee'
+require_relative '../Model/employee'
 
 class Post
   attr_accessor :post_name, :fixed_salary, :fixed_premium, :quarterly_award, :possible_bonus, :department, :salary

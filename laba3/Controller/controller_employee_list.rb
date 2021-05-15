@@ -1,5 +1,5 @@
-require_relative 'terminalViewListEmployee'
-require_relative 'listEmployee'
+require_relative '../View/terminalViewListEmployee'
+require_relative '../Model/listEmployee'
 require_relative 'controller_list'
 
 class Controller_employee_list < Controller_list
