@@ -14,6 +14,10 @@ class Controller_department_list < Controller_list
     puts @list
   end
 
+  def close
+    exit
+  end
+
   def show_view
       ans = ''
       while ans != '0'
@@ -28,40 +32,10 @@ class Controller_department_list < Controller_list
         when '1'
           puts "\n========Отделы======="
           show_list
-        when '2'
-          print 'Введите номер отдела:'
-          num = gets.chomp.to_i
-          @instance = choose_instance(num)
-          if @instance.class == Department
-            puts
-            ans_dep = ''
-            while ans_dep != '0'
-              puts "\t#{@instance}",
-                   "\t1. Отобразить список должностей",
-                   "\t2. Добавить должность",
-                   "\t3. Удалить отдел",
-                   "\t0. Назад"
-              print "\tОтвет:"
-              ans_dep = gets.chomp
-              case ans_dep
-              when '1'
-                puts "\t#{@instance.posts}"
-              when '2'
-                add_post
-              when '3'
-                delete_department
-                break
-              when '0'
-                break
-              end
-            end
-          else
-            puts 'Отдела с таким номером нет'
-          end
-        when '3'
-          add_department
         when '0'
           close
+        else
+          puts 'Такого пункта нет'
         end
       end
   end

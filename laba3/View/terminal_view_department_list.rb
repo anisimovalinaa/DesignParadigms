@@ -46,10 +46,14 @@ class Terminal_view_department_list < Terminal_view_list
   #   @list.choose(num)
   # end
   #
-  # def close
-  #   exit
-  # end
-  #
+  def close
+    @controller_list.close
+  end
+
+  def show
+    @controller_list.show_view
+  end
+
   # def show
   #   ans = ''
   #   while ans != '0'
