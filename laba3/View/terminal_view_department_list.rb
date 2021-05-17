@@ -10,13 +10,9 @@ class Terminal_view_department_list < Terminal_view_list
     @controller_list.show_list
   end
 
-  # def add
-  #   print 'Введите название отдела:'
-  #   dep_name = gets.chomp
-  #   DB_work.db_work.add_department(dep_name)
-  #   dep = Department.new(dep_name)
-  #   @list.add(dep)
-  # end
+  def add
+    @controller_list.add
+  end
 
   def delete_instance
     @controller_list.delete_instance
@@ -51,58 +47,44 @@ class Terminal_view_department_list < Terminal_view_list
   end
 
   def show
-    @controller_list.show_view
+    ans = ''
+    while ans != '0'
+      puts "\n************Меню*************",
+           '1. Отобразить список отделов',
+           '2. Выбрать отдел',
+           '3. Добавить отдел',
+           '4. Удалить выбранный отдел',
+           '0. Завершить работу'
+      print 'Ответ:'
+      ans = gets.chomp
+      case ans
+      when '1'
+        puts "\n========Отделы======="
+        show_list
+      when '2'
+        print 'Введите номер отдела:'
+        num = gets.chomp.to_i
+        @instance = choose_instance(num)
+        if @instance.class == Department
+          puts @instance
+        else
+          puts 'Отдела с таким номером нет'
+        end
+      when '3'
+        add
+        puts 'Добавление прошло успешно'
+      when '4'
+        if @instance != nil
+          delete_instance
+          puts 'Удаление прошло успешно'
+        else
+          puts 'Вы не выбрали отдел'
+        end
+      when '0'
+        close
+      else
+        puts 'Такого пункта нет'
+      end
+    end
   end
-
-  # def show
-  #   ans = ''
-  #   while ans != '0'
-  #     puts "\n************Меню*************",
-  #          '1. Отобразить список отделов',
-  #          '2. Выбрать отдел',
-  #          '3. Добавить отдел',
-  #          '0. Завершить работу'
-  #     print 'Ответ:'
-  #     ans = gets.chomp
-  #     case ans
-  #     when '1'
-  #       puts "\n========Отделы======="
-  #       show_list
-  #     when '2'
-  #       print 'Введите номер отдела:'
-  #       num = gets.chomp.to_i
-  #       @instance = choose_instance(num)
-  #       if @instance.class == Department
-  #         puts
-  #         ans_dep = ''
-  #         while ans_dep != '0'
-  #           puts "\t#{@instance}",
-  #                "\t1. Отобразить список должностей",
-  #                "\t2. Добавить должность",
-  #                "\t3. Удалить отдел",
-  #                "\t0. Назад"
-  #           print "\tОтвет:"
-  #           ans_dep = gets.chomp
-  #           case ans_dep
-  #           when '1'
-  #             puts "\t#{@instance.posts}"
-  #           when '2'
-  #             add_post
-  #           when '3'
-  #             delete_department
-  #             break
-  #           when '0'
-  #             break
-  #           end
-  #         end
-  #       else
-  #         puts 'Отдела с таким номером нет'
-  #       end
-  #     when '3'
-  #       add_department
-  #     when '0'
-  #       close
-  #     end
-  #   end
-  # end
 end
