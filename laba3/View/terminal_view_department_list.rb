@@ -64,12 +64,7 @@ class Terminal_view_department_list < Terminal_view_list
       when '2'
         print 'Введите номер отдела:'
         num = gets.chomp.to_i
-        @instance = choose_instance(num)
-        if @instance.class == Department
-          puts @instance
-        else
-          puts 'Отдела с таким номером нет'
-        end
+        @controller_list.choose_instance(num).show
       when '3'
         add
         puts 'Добавление прошло успешно'
