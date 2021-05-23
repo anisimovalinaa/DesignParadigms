@@ -1,5 +1,5 @@
-require_relative 'Controller/controller_department_list_factory'
-require_relative 'Controller/controller_employee_list_factory'
+require_relative 'Controller/Factory_list/controller_department_list_factory'
+require_relative 'Controller/Factory_list/controller_employee_list_factory'
 require_relative 'View/terminal_view_department_list'
 
 class Main

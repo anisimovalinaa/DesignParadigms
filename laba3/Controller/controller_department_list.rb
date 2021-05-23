@@ -1,5 +1,5 @@
 require_relative 'controller_list'
-require_relative 'controller_department_instance'
+require_relative 'Instance/controller_department_instance'
 require_relative '../View/terminal_view_department_list'
 require_relative '../View/terminal_view_department_instance'
 
@@ -25,8 +25,11 @@ class Controller_department_list < Controller_list
   end
 
   def choose_instance(num)
-    instance = @list.choose(num)
-    Terminal_view_department_instance.new(Controller_department_instance.new(instance))
+    @list.choose(num)
+  end
+
+  def show_instance(num)
+    Terminal_view_department_instance.new(Controller_department_instance.new(choose_instance(num))).show
   end
 
   def delete_instance

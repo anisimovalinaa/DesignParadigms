@@ -18,6 +18,8 @@ class Terminal_view_department_instance < Terminal_view_instance
         show_instance
       when '0'
         break
+      else
+        'Такого пункта нет'
       end
     end
   end
