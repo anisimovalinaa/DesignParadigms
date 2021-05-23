@@ -1,5 +1,5 @@
 require_relative '../Model/department_list'
-require_relative '../db_work'
+require_relative '../Model/db_work'
 require_relative '../Model/department'
 require_relative '../Model/post'
 require_relative 'terminal_view_list'
@@ -11,7 +11,9 @@ class Terminal_view_department_list < Terminal_view_list
   end
 
   def add
-    @controller_list.add
+    print 'Введите название отдела:'
+    dep_name = gets.chomp
+    @controller_list.add(dep_name)
   end
 
   def delete_instance
@@ -39,7 +41,11 @@ class Terminal_view_department_list < Terminal_view_list
   # end
   #
   def choose_instance(num)
-    @controller_list.choose_instance
+    @controller_list.choose_instance(num)
+  end
+
+  def show_instance
+    @controller_list.show_instance
   end
 
   def close
@@ -52,8 +58,9 @@ class Terminal_view_department_list < Terminal_view_list
       puts "\n************Меню*************",
            '1. Отобразить список отделов',
            '2. Выбрать отдел',
-           '3. Добавить отдел',
-           '4. Удалить выбранный отдел',
+           '3. Отобразить выбранное',
+           '4. Добавить отдел',
+           '5. Удалить выбранный отдел',
            '0. Завершить работу'
       print 'Ответ:'
       ans = gets.chomp
@@ -64,15 +71,17 @@ class Terminal_view_department_list < Terminal_view_list
       when '2'
         print 'Введите номер отдела:'
         num = gets.chomp.to_i
-        @controller_list.choose_instance(num).show
+        choose_instance(num)
       when '3'
+        show_instance
+      when '4'
         add
         puts 'Добавление прошло успешно'
-      when '4'
-        if @instance != nil
+      when '5'
+        begin
           delete_instance
           puts 'Удаление прошло успешно'
-        else
+        rescue ArgumentError
           puts 'Вы не выбрали отдел'
         end
       when '0'

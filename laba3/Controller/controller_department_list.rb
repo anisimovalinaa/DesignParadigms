@@ -2,6 +2,7 @@ require_relative 'controller_list'
 require_relative 'Instance/controller_department_instance'
 require_relative '../View/terminal_view_department_list'
 require_relative '../View/terminal_view_department_instance'
+require_relative '../Controller/Factory_instance/controller_department_instance_factory'
 
 class Controller_department_list < Controller_list
   public_class_method :new
@@ -16,25 +17,29 @@ class Controller_department_list < Controller_list
     puts @list
   end
 
-  def add
-    print 'Введите название отдела:'
-    dep_name = gets.chomp
+  def add(dep_name)
     DB_work.db_work.add_department(dep_name)
     dep = Department.new(dep_name)
     @list.add(dep)
   end
 
   def choose_instance(num)
-    @list.choose(num)
+    @instance = @list.choose(num)
   end
 
-  def show_instance(num)
-    Terminal_view_department_instance.new(Controller_department_instance.new(choose_instance(num))).show
+  def show_instance
+    controller_instance = Controller_department_instance_factory.new
+    controller_instance = controller_instance.create_controller_instance(@instance)
+    Terminal_view_department_instance.new(controller_instance).show
   end
 
   def delete_instance
-    @list.delete(@instance)
-    @instance = nil
+    if @instance == nil
+      raise ArgumentError
+    else
+      @list.delete(@instance)
+      @instance = nil
+    end
   end
 
   def close

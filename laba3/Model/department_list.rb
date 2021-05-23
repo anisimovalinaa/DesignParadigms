@@ -1,4 +1,4 @@
-require_relative '../db_work'
+require_relative 'db_work'
 require_relative 'department'
 require 'yaml'
 
@@ -20,6 +20,7 @@ class Department_list
 
   def change(department)
     DB_work.db_work.change_department(department)
+    @department_list = []
     read_DB
   end
 
@@ -29,6 +30,7 @@ class Department_list
 
   def delete(department)
     DB_work.db_work.delete_department(department)
+    @department_list = []
     read_DB
   end
 

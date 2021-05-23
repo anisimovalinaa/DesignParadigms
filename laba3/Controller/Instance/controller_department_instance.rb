@@ -6,6 +6,10 @@ class Controller_department_instance < Controller_instance
   end
 
   def show_instance
-    puts @instance
+    @instance
+  end
+
+  def show_posts
+    @instance.post_list
   end
 end
