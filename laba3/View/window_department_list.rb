@@ -18,11 +18,34 @@ class Window_department_list < FXMainWindow
 
     @frame2 = FXVerticalFrame.new(@main_frame, :padding => 60)
 
+    table_head = FXLabel.new(@frame1, 'Таблица отделов', :padding => 10)
+    table_head.font = FXFont.new(@app, "Geneva", 10)
+    @table = FXTable.new(@frame1,
+                         :opts => TABLE_COL_SIZABLE,
+                         :padding => 10)
+
     show_dep
+
+    name_dep = FXTextField.new(@frame2, 17)
     @button_add = FXButton.new(@frame2,
                "Добавить отдел",
                :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
                :width => 130, :height => 30)
+    @button_add.connect(SEL_COMMAND) do
+      if name_dep.text == ''
+        FXMessageBox.warning(
+          self,
+          MBOX_OK,
+          "Ошибка",
+          "Поле пустое!"
+        )
+      else
+        @table.setTableSize(0, 0)
+        @controller_list.add(name_dep.text)
+        name_dep.text = ''
+        show_dep
+      end
+    end
 
     @button_delete = FXButton.new(@frame2,
               "Удалить отдел",
@@ -32,14 +55,13 @@ class Window_department_list < FXMainWindow
       delete_instance
     end
 
-    @button_save_change = FXButton.new(@frame2,
-              "Сохранить изменения",
-              :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
-              :width => 130, :height => 30)
-    @button_save_cha = FXButton.new(@frame2,
+    @button_detailed = FXButton.new(@frame2,
                "Подробнее об отделе",
                :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
                :width => 130, :height => 30)
+    @button_detailed.connect(SEL_COMMAND) do
+
+    end
   end
 
   def create
@@ -48,14 +70,8 @@ class Window_department_list < FXMainWindow
   end
 
   def show_dep
-    table_head = FXLabel.new(@frame1, 'Таблица отделов', :padding => 10)
-    table_head.font = FXFont.new(@app, "Geneva", 10)
     info = @controller_list.show_list.to_s
     info = info.split("\n")
-
-    @table = FXTable.new(@frame1,
-             :opts => TABLE_COL_SIZABLE,
-             :padding => 10)
 
     @table.setTableSize(info.size + 1, 2)
 
@@ -64,7 +80,7 @@ class Window_department_list < FXMainWindow
     @table.rowHeaderWidth = 5
 
 
-    @table.visibleRows = info.size + 1
+    @table.visibleRows = info.size
     @table.visibleColumns = 3
 
     # Initialize the scrollable part of the table

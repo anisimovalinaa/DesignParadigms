@@ -1,0 +1,3 @@
+class Window_department_instance
+
+end
