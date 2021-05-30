@@ -91,14 +91,19 @@ class Window_department_instance < FXMainWindow
       choose_instance
     end
 
-    # @table.connect(SEL_REPLACED) do
-    #
-    # end
+    @table.connect(SEL_REPLACED) do
+      change_instance
+    end
 
   end
 
-  def change_instance(name)
-
+  def change_instance
+    @controller_instance.instance_post.post_name = @table.getItemText(@table.anchorRow, 0)
+    @controller_instance.instance_post.fixed_salary = @table.getItemText(@table.anchorRow, 1).to_i
+    @controller_instance.instance_post.fixed_premium = @table.getItemText(@table.anchorRow, 2).to_i
+    @controller_instance.instance_post.quarterly_award = @table.getItemText(@table.anchorRow, 3).to_i
+    @controller_instance.instance_post.possible_bonus = @table.getItemText(@table.anchorRow, 4).to_i
+    @controller_instance.change
   end
 
   def choose_instance

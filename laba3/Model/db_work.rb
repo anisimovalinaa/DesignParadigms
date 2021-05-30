@@ -143,12 +143,13 @@ class DB_work
     quarterly_award_bool = post.quarterly_award > 0 ? 1 : 0
     possible_bonus_bool = post.possible_bonus > 0 ? 1 : 0
     @connection.query("UPDATE post
-                           SET FixedSalary = #{post.fixed_salary},
+                           SET PostName = '#{post.post_name}',
+                               FixedSalary = #{post.fixed_salary},
                                FixedPremiumSize = #{post.fixed_premium},
                                FixedPremiumBool = #{fixed_premium_bool},
                                QuarterlyAwardSize = #{post.quarterly_award},
                                QuarterlyAwardBool = #{quarterly_award_bool},
-                               PossibleBonusPercent = #{post.possible_bonus}
+                               PossibleBonusPercent = #{post.possible_bonus},
                                PossibleBonusBool = #{possible_bonus_bool}
                            WHERE PostID = #{post.id}")
   end

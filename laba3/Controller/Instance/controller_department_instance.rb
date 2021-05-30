@@ -25,4 +25,12 @@ class Controller_department_instance < Controller_instance
       @instance_post = nil
     end
   end
+
+  def change
+    if @instance_post == nil
+      raise ArgumentError
+    else
+      @instance.change(@instance_post)
+    end
+  end
 end

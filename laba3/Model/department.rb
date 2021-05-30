@@ -30,4 +30,8 @@ class Department
     @post_list.delete(post)
   end
 
+  def change(post)
+    @post_list.change(post)
+  end
+
 end
