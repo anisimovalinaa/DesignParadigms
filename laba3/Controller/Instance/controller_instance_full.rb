@@ -1,2 +1,0 @@
-class Controller_instance_full
-end

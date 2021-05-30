@@ -7,7 +7,7 @@ class Window_department_list < FXMainWindow
   attr_accessor :hFrame1
   def initialize(app, controller_list)
     @controller_list = controller_list
-    super(app, "Staff" , :width => 600, :height => 400)
+    super(app, "Staff" , :width => 1200, :height => 600)
     @app = app
 
     head = FXLabel.new(self, 'Работа отдела кадров', :opts => JUSTIFY_CENTER_X, :padding => 15)

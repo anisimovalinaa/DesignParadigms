@@ -36,14 +36,6 @@ class Post
   end
 
   def to_s
-    "#{post_name}, #{salary.get_salary}"
+    "#{id}, #{post_name}, #{fixed_salary}, #{fixed_premium}, #{quarterly_award}, #{possible_bonus}, #{emp}"
   end
 end
-
-
-
-# emp1 = Employee.new('лапавм вк ренр', '31.08.2000', '77777777777', 'fghjk', 'vergre@gfbfbf.grt',  '5555555555', 'fgbbth', 0)
-# post = Post.new('lala', 10, 20, 30, 0.3, 'lala2')
-# post.emp = emp1
-#
-# puts post.emp

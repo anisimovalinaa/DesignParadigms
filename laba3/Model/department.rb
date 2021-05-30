@@ -22,7 +22,12 @@ class Department
     @post_list.add(post)
   end
 
-  def posts
-    @post_list
+  def choose(num)
+    @post_list.choose(num)
   end
+
+  def delete(post)
+    @post_list.delete(post)
+  end
+
 end

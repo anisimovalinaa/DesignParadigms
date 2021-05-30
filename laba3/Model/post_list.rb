@@ -32,7 +32,9 @@ class Post_list
   end
 
   def choose(num)
-    @post_list[num]
+    @post_list.each do |post|
+      return post if post.id == num
+    end
   end
 
   def to_s
@@ -43,7 +45,3 @@ class Post_list
     result
   end
 end
-
-# dep = Department.new('Лала')
-# post_list = Post_list.new(dep)
-# post_list.read_DB
