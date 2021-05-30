@@ -15,7 +15,7 @@ class Department
   end
 
   def to_s
-    id.to_s + " " + name
+    id.to_s + ". " + name
   end
 
   def add_post(post)
