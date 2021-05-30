@@ -14,7 +14,7 @@ class Controller_department_list < Controller_list
   end
 
   def show_list
-    puts @list
+    @list
   end
 
   def add(dep_name)
