@@ -42,9 +42,34 @@ class DB_work
     res.each { |row| return row['departmentID']}
   end
 
+  def find_emp_id(emp)
+    lara = "SELECT EmployeeID FROM employees WHERE phone_number = '#{emp.phone_number}'"
+    res = @connection.query("SELECT EmployeeID FROM employees WHERE phone_number = '#{emp.phone_number}'")
+    res.each do |row|
+      return row['EmployeeID'].to_i
+    end
+  end
+
   def find_employee(id)
     emp = Object.new()
     res = @connection.query("SELECT * FROM employees WHERE EmployeeID = #{id}")
+    res.each do |row|
+      data = row['datebirth'].to_s.split('-').reverse.join('.')
+      if row['work_experience'] > 0
+        emp = Employee.new(row['FIO'], data, row['phone_number'], row['address'],
+                           row['e_mail'], row['passport'], row['speciality'], row['work_experience'],
+                           row['last_workplace'], row['last_post'], row['last_salary'])
+      else
+        emp = Employee.new(row['FIO'], data, row['phone_number'], row['address'],
+                           row['e_mail'], row['passport'], row['speciality'], row['work_experience'])
+      end
+    end
+    emp
+  end
+
+  def find_emp_phone(phone_number)
+    emp = Object.new()
+    res = @connection.query("SELECT * FROM employees WHERE phone_number = '#{phone_number}'")
     res.each do |row|
       data = row['datebirth'].to_s.split('-').reverse.join('.')
       if row['work_experience'] > 0
@@ -120,6 +145,15 @@ class DB_work
     post_list
   end
 
+  def read_vacant_emp
+    emp_list = []
+    res = @connection.query("SELECT FIO, phone_number FROM employees WHERE got_bool = 0")
+    res.each do |row|
+      emp_list.append("#{row['FIO']}, #{row['phone_number']}")
+    end
+    emp_list
+  end
+
   def read_dep_names
     dep_names = []
     res = @connection.query("SELECT DISTINCT departmentName FROM departments")
@@ -158,5 +192,15 @@ class DB_work
     @connection.query("UPDATE departments
                SET departmentName = '#{department.name}'
                WHERE departmentID = #{department.id}")
+  end
+
+  def set_emp(post)
+    emp_id = find_emp_id(post.emp)
+    @connection.query("UPDATE post
+                           SET EmployeeID = #{emp_id}
+                            WHERE PostID = #{post.id}")
+    @connection.query("UPDATE employees
+                      SET got_bool = 1
+                      WHERE EmployeeID = #{emp_id}")
   end
 end

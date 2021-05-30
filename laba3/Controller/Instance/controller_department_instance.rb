@@ -33,4 +33,19 @@ class Controller_department_instance < Controller_instance
       @instance.change(@instance_post)
     end
   end
+
+  def get_vacant_emp
+    DB_work.db_work.read_vacant_emp
+  end
+
+  def set_emp(phone_number)
+    if @instance_post == nil
+      raise ArgumentError
+    else
+      emp = DB_work.db_work.find_emp_phone(phone_number)
+      @instance_post.emp = emp
+      DB_work.db_work.set_emp(@instance_post)
+    end
+  end
+
 end

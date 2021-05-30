@@ -26,7 +26,7 @@ class Window_department_instance < FXMainWindow
     @button_add = FXButton.new(@frame2,
                                "Добавить должность",
                                :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
-                               :width => 130, :height => 30)
+                               :width => 140, :height => 30)
     @button_add.connect(SEL_COMMAND) do
       info = @controller_instance.show_posts.to_s
       # info = info.split("\n")
@@ -41,18 +41,30 @@ class Window_department_instance < FXMainWindow
     @button_delete = FXButton.new(@frame2,
                                   "Удалить должность",
                                   :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
-                                  :width => 130, :height => 30)
-    @button_delete.connect(SEL_COMMAND) do |sender, sel, data|
-      delete_instance
+                                  :width => 140, :height => 30)
+    @button_delete.connect(SEL_COMMAND) { delete_instance }
+
+    @combo_list_emp = FXComboBox.new(@frame2, 30)
+    fill_list_emp
+
+    @button_set_emp = FXButton.new(@frame2,
+                      "Назначить на должность",
+                      :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
+                      :width => 140, :height => 30)
+    @button_set_emp.connect(SEL_COMMAND) do
+      set_emp
     end
 
-    # @button_detailed = FXButton.new(@frame2,
-    #                                 "Подробнее об должности",
-    #                                 :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
-    #                                 :width => 130, :height => 30)
-    # @button_detailed.connect(SEL_COMMAND) do
-    #
-    # end
+  end
+
+  def set_emp
+    @controller_instance.set_emp(@combo_list_emp.text.split(',')[1].lstrip)
+    @table.setItemText(@table.anchorRow, 5, @combo_list_emp.text.split(',')[0])
+  end
+
+  def fill_list_emp
+    list_emp = @controller_instance.get_vacant_emp
+    list_emp.each { |emp| @combo_list_emp.appendItem(emp)}
   end
 
   def create
@@ -68,7 +80,6 @@ class Window_department_instance < FXMainWindow
 
     @table.rowHeaderMode = LAYOUT_FIX_WIDTH
     @table.rowHeaderWidth = 5
-
 
     @table.visibleRows = info.size
     @table.visibleColumns = 5
@@ -94,7 +105,6 @@ class Window_department_instance < FXMainWindow
     @table.connect(SEL_REPLACED) do
       change_instance
     end
-
   end
 
   def change_instance
