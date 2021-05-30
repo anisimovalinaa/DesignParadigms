@@ -1,7 +1,5 @@
-require_relative '../Model/department_list'
-require_relative '../Model/db_work'
-require_relative '../Model/department'
-require_relative '../Model/post'
+require_relative '../Controller/Factory_instance/controller_department_instance_factory'
+require_relative 'terminal_view_department_instance'
 require_relative 'terminal_view_list'
 
 class Terminal_view_department_list < Terminal_view_list
@@ -20,32 +18,14 @@ class Terminal_view_department_list < Terminal_view_list
     @controller_list.delete_instance
   end
 
-  # def add_post
-  #   print 'Наименование должности:'
-  #   name_post = gets.chomp
-  #   print 'Фиксированная зарплата:'
-  #   fixed_salary = gets.chomp.to_i
-  #   print 'Ежемесячные надбавки:'
-  #   premium = gets.chomp.to_i
-  #   print 'Ежеквартальные выплаты:'
-  #   quarterly = gets.chomp.to_i
-  #   print 'Бонус:'
-  #   bonus = gets.chomp.to_i
-  #   post = Post.new(1, name_post, fixed_salary, premium, quarterly, bonus, dep)
-  #   DB_work.db_work.add_post(post)
-  #   @instance.add_post(post)
-  # end
-  #
-  # def show_instance
-  #   puts @instance
-  # end
-  #
   def choose_instance(num)
     @controller_list.choose_instance(num)
   end
 
   def show_instance
-    @controller_list.show_instance
+    controller_instance = Controller_department_instance_factory.new
+    controller_instance = controller_instance.create_controller_instance(@controller_list.instance)
+    Terminal_view_department_instance.new(controller_instance).show
   end
 
   def close

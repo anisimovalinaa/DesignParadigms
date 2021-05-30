@@ -1,5 +1,6 @@
 require 'fox16'
-require_relative '../Controller/Factory_list/controller_department_list_factory'
+require_relative '../Controller/Factory_instance/controller_department_instance_factory'
+require_relative 'window_department_instance'
 include Fox
 
 class Window_department_list < FXMainWindow
@@ -60,7 +61,22 @@ class Window_department_list < FXMainWindow
                :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
                :width => 130, :height => 30)
     @button_detailed.connect(SEL_COMMAND) do
-
+      if @table.anchorRow == -1
+        FXMessageBox.warning(
+          self,
+          MBOX_OK,
+          "Ошибка",
+          "Не выбрана ячейка"
+        )
+      else
+        controller_instance = Controller_department_instance_factory.new
+        controller_instance = controller_instance.create_controller_instance(@controller_list.instance)
+        app_instance = FXApp.instance
+        app_instance.create
+        w = Window_department_instance.new(app_instance, @controller_list.instance, controller_instance)
+        w.create
+        app_instance.run
+      end
     end
   end
 

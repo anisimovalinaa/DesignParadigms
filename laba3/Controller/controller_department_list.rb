@@ -28,12 +28,6 @@ class Controller_department_list < Controller_list
     @instance = @list.choose(num)
   end
 
-  def show_instance
-    controller_instance = Controller_department_instance_factory.new
-    controller_instance = controller_instance.create_controller_instance(@instance)
-    Terminal_view_department_instance.new(controller_instance).show
-  end
-
   def delete_instance
     if @instance == nil
       raise ArgumentError
