@@ -6,6 +6,7 @@ require_relative '../Controller/Factory_instance/controller_department_instance_
 
 class Controller_department_list < Controller_list
   public_class_method :new
+  attr_reader :instance
 
   def initialize
     @list = Department_list.new
@@ -39,6 +40,15 @@ class Controller_department_list < Controller_list
     else
       @list.delete(@instance)
       @instance = nil
+    end
+  end
+
+  def change_instance(name)
+    if @instance == nil
+      raise ArgumentError
+    else
+      @instance.name = name
+      @list.change(@instance)
     end
   end
 

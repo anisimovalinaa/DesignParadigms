@@ -81,6 +81,15 @@ class Window_department_list < FXMainWindow
     @table.connect(SEL_CLICKED) do
       choose_instance
     end
+
+    @table.connect(SEL_REPLACED) do
+      change_instance(@table.getItemText(@table.anchorRow, 1))
+    end
+
+  end
+
+  def change_instance(name)
+    @controller_list.change_instance(name)
   end
 
   def choose_instance

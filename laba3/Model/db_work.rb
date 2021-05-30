@@ -155,7 +155,7 @@ class DB_work
 
   def change_department(department)
     @connection.query("UPDATE departments
-                           SET departmentName = #{department.name}
-                           WHERE departmentID = #{department.id}")
+               SET departmentName = '#{department.name}'
+               WHERE departmentID = #{department.id}")
   end
 end
