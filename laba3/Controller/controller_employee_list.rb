@@ -12,7 +12,7 @@ class Controller_employee_list < Controller_list
   end
 
   def show_list
-    puts @list
+    @list
   end
 
   def close

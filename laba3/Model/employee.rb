@@ -2,12 +2,13 @@ require 'date'
 require 'openssl'
 
 class Employee
-	attr_accessor :address, :speciality, :work_experience, :post
+	attr_accessor :address, :speciality, :work_experience, :post, :id
 	attr_reader :fio, :datebirth, :phone_number, :e_mail, :passport
 	attr_writer :last_workplace, :last_post, :last_salary
-	def initialize(fio, datebirth, phone_number, address, e_mail, passport,
+	def initialize(id, fio, datebirth, phone_number, address, e_mail, passport,
 		speciality, work_experience, last_workplace = nil, last_post = nil,
 		last_salary = nil)
+		self.id = id
 		self.fio = fio
 		self.datebirth = datebirth
 		self.phone_number = phone_number
@@ -206,9 +207,9 @@ class Employee
 
 	def to_s
 		if work_experience != 0
-			return "#{fio}, #{datebirth}, #{phone_number}, #{address}, #{e_mail}, #{passport}, #{speciality}, #{work_experience}, #{last_workplace}, #{last_post}, #{last_salary}"
+			return "#{id}, #{fio}, #{datebirth}, #{phone_number}, #{address}, #{e_mail}, #{passport}, #{speciality}, #{work_experience}, #{last_workplace}, #{last_post}, #{last_salary}"
 		else
-			return "#{fio}, #{datebirth}, #{phone_number}, #{address}, #{e_mail}, #{passport}, #{speciality}, #{work_experience}"
+			return "#{id}, #{fio}, #{datebirth}, #{phone_number}, #{address}, #{e_mail}, #{passport}, #{speciality}, #{work_experience}"
 		end
 	end
 end

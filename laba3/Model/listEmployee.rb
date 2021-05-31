@@ -75,7 +75,7 @@ class ListEmployee
 
 	def to_s
 		str = ""
-		@list_employee.each { |user| str += "\n\n" + user.to_s }
+		@list_employee.each { |user| str += user.to_s + "\n" }
 		str
 	end
 

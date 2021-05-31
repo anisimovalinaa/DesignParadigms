@@ -1,4 +1,6 @@
 require 'fox16'
+require_relative '../Controller/Factory_list/controller_employee_list_factory'
+require_relative 'window_employee_list'
 include Fox
 
 class Window_department_instance < FXMainWindow
@@ -24,9 +26,9 @@ class Window_department_instance < FXMainWindow
     show_posts
 
     @button_add = FXButton.new(@frame2,
-                               "Добавить должность",
-                               :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
-                               :width => 140, :height => 30)
+                 "Добавить должность",
+                 :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
+                 :width => 150, :height => 30)
     @button_add.connect(SEL_COMMAND) do
       info = @controller_instance.show_posts.to_s
       # info = info.split("\n")
@@ -39,9 +41,9 @@ class Window_department_instance < FXMainWindow
     end
 
     @button_delete = FXButton.new(@frame2,
-                                  "Удалить должность",
-                                  :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
-                                  :width => 140, :height => 30)
+              "Удалить должность",
+              :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
+              :width => 150, :height => 30)
     @button_delete.connect(SEL_COMMAND) { delete_instance }
 
     @combo_list_emp = FXComboBox.new(@frame2, 30)
@@ -50,9 +52,23 @@ class Window_department_instance < FXMainWindow
     @button_set_emp = FXButton.new(@frame2,
                       "Назначить на должность",
                       :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
-                      :width => 140, :height => 30)
+                      :width => 150, :height => 30)
     @button_set_emp.connect(SEL_COMMAND) do
       set_emp
+    end
+
+    @button_detailed_emp = FXButton.new(@frame2,
+                    "Подробнее о сотрудниках",
+                    :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
+                    :width => 150, :height => 30)
+    @button_detailed_emp.connect(SEL_COMMAND) do
+      controller_emp = Controller_Employee_List_Factory.new
+      controller_emp = controller_emp.create_controller_list
+      app_emp = FXApp.instance
+      app_emp.create
+      w = Window_employee_list.new(app_emp, controller_emp)
+      w.create
+      app_emp.run
     end
 
   end
@@ -64,6 +80,7 @@ class Window_department_instance < FXMainWindow
 
   def fill_list_emp
     list_emp = @controller_instance.get_vacant_emp
+    @combo_list_emp.appendItem('Показать всех сотрудников')
     list_emp.each { |emp| @combo_list_emp.appendItem(emp)}
   end
 
