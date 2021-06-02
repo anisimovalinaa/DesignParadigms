@@ -172,12 +172,15 @@ class DB_work
   end
 
   def delete_post(post)
-    id = post.id
-    @connection.query("DELETE FROM post WHERE PostID = #{id}")
+    @connection.query("DELETE FROM post WHERE PostID = #{post.id}")
   end
 
   def delete_department(department)
     @connection.query("DELETE FROM departments WHERE departmentName = '#{department.name}'")
+  end
+
+  def delete_emp(emp)
+    @connection.query("DELETE FROM employees WHERE EmployeeID = '#{emp.id}'")
   end
 
   def change_post(post)

@@ -109,9 +109,10 @@ class Window_department_instance < FXMainWindow
     # Initialize the scrollable part of the table
     (0..info.size-1).each do |r|
       row = info[r].to_s.split(',')
-      (0..5).each do |c|
+      (0..4).each do |c|
         @table.setItemText(r, c, row[c+1])
       end
+      @table.setItemText(r, 5, row[7])
       @table.setItemText(r, 6, row[0])
     end
 

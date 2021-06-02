@@ -51,4 +51,14 @@ class Controller_employee_list < Controller_list
       @list.change(@instance)
     end
   end
+
+  def delete_instance
+    if @instance == nil
+      raise ArgumentError
+    else
+      @list.delete(@instance)
+      @instance = nil
+    end
+  end
+
 end

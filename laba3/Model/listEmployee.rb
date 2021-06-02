@@ -105,7 +105,9 @@ class ListEmployee
 	end
 
 	def delete(emp)
-		list_employee.delete(emp)
+		DB_work.db_work.delete_emp(emp)
+		@list_employee = []
+		read_DB
 	end
 
 	def sort field

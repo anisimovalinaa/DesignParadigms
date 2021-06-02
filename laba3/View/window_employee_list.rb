@@ -22,7 +22,11 @@ class Window_employee_list < FXMainWindow
     @table = FXTable.new(@frame1, :padding => 10, :opts => LAYOUT_FIX_WIDTH, :width => 910)
     show_emp
 
-
+    @button_delete = FXButton.new(@frame2,
+                                  "Удалить должность",
+                                  :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
+                                  :width => 150, :height => 30)
+    @button_delete.connect(SEL_COMMAND) { delete_instance }
   end
 
   def create
@@ -82,5 +86,19 @@ class Window_employee_list < FXMainWindow
                                     @table.getItemText(@table.anchorRow, 8),
                                     @table.getItemText(@table.anchorRow, 9),
                                     @table.getItemText(@table.anchorRow, 10))
+  end
+
+  def delete_instance
+    if @table.anchorRow == -1
+      FXMessageBox.warning(
+        self,
+        MBOX_OK,
+        "Ошибка",
+        "Не выбрана ячейка"
+      )
+    else
+      @controller_emp.delete_instance
+      @table.removeRows(@table.anchorRow)
+    end
   end
 end
