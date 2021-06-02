@@ -68,11 +68,19 @@ class Window_employee_list < FXMainWindow
 
   def choose_instance
     @controller_emp.choose_instance(@table.getItemText(@table.anchorRow, 11).to_i)
-    FXMessageBox.warning(
-      self,
-      MBOX_OK,
-      "Ошибка",
-      @controller_emp.instance.to_s
-    )
+  end
+
+  def change_instance
+    @controller_emp.change_instance(@table.getItemText(@table.anchorRow, 0),
+                                    @table.getItemText(@table.anchorRow, 1).lstrip,
+                                    @table.getItemText(@table.anchorRow, 2),
+                                    @table.getItemText(@table.anchorRow, 3),
+                                    @table.getItemText(@table.anchorRow, 4),
+                                    @table.getItemText(@table.anchorRow, 5),
+                                    @table.getItemText(@table.anchorRow, 6),
+                                    @table.getItemText(@table.anchorRow, 7).to_i,
+                                    @table.getItemText(@table.anchorRow, 8),
+                                    @table.getItemText(@table.anchorRow, 9),
+                                    @table.getItemText(@table.anchorRow, 10))
   end
 end

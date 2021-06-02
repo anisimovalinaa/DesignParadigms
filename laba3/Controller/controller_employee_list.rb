@@ -28,4 +28,27 @@ class Controller_employee_list < Controller_list
   def choose_instance(num)
     @instance = @list.choose(num)
   end
+
+  def change_instance(fio, datebirth, phone_number, address, e_mail, passport,
+                      speciality, work_experience, last_workplace, last_post,
+                      last_salary)
+    if @instance == nil
+      raise ArgumentError
+    else
+      @instance.fio = fio
+      @instance.datebirth = datebirth
+      @instance.phone_number = phone_number
+      @instance.address = address
+      @instance.e_mail = e_mail
+      @instance.passport = passport
+      @instance.speciality = speciality
+      @instance.work_experience = work_experience
+      if work_experience > 0
+        @instance.last_workplace = last_workplace
+        @instance.last_post = last_post
+        @instance.last_salary = last_salary
+      end
+      @list.change(@instance)
+    end
+  end
 end

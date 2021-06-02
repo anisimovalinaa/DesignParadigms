@@ -202,6 +202,25 @@ class DB_work
                WHERE departmentID = #{department.id}")
   end
 
+
+  def change_emp(emp)
+    date = emp.datebirth.to_s.split('.').reverse.join('-')
+    query_str = "UPDATE employees
+                           SET FIO = '#{emp.fio}',
+                               datebirth = '#{date}',
+                               phone_number = '#{emp.phone_number}',
+                               address = '#{emp.address}',
+                               e_mail = '#{emp.e_mail}',
+                               passport =' #{emp.passport}',
+                               speciality = '#{emp.speciality}',
+                               work_experience = #{emp.work_experience},
+                                last_workplace = '#{emp.last_workplace}',
+                                last_post = '#{emp.last_post}',
+                                last_salary = '#{emp.last_salary}'
+                           WHERE EmployeeID = #{emp.id}"
+    @connection.query(query_str)
+  end
+
   def set_emp(post)
     # emp_id = find_emp_id(post.emp)
     @connection.query("UPDATE post
