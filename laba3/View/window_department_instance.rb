@@ -1,6 +1,7 @@
 require 'fox16'
 require_relative '../Controller/Factory_list/controller_employee_list_factory'
 require_relative 'window_employee_list'
+require_relative 'window_add_post'
 include Fox
 
 class Window_department_instance < FXMainWindow
@@ -30,14 +31,13 @@ class Window_department_instance < FXMainWindow
                  :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
                  :width => 150, :height => 30)
     @button_add.connect(SEL_COMMAND) do
-      info = @controller_instance.show_posts.to_s
-      # info = info.split("\n")
-      FXMessageBox.warning(
-        self,
-        MBOX_OK,
-        "Ошибка",
-      @controller_instance.instance_post.to_s
-      )
+      # @table.setTableSize(0, 0)
+      app_add = FXApp.instance
+      app_add.create
+      w = Window_add_post.new(app_add, @controller_instance, @table)
+      w.create
+      app_add.run
+      app_add.stop
     end
 
     @button_delete = FXButton.new(@frame2,
@@ -126,7 +126,7 @@ class Window_department_instance < FXMainWindow
   end
 
   def change_instance
-    @controller_instance.change(@table.getItemText(@table.anchorRow, 0),
+    @controller_instance.change(@table.getItemText(@table.anchorRow, 0).lstrip,
                                 @table.getItemText(@table.anchorRow, 1).to_i,
                                 @table.getItemText(@table.anchorRow, 2).to_i,
                                 @table.getItemText(@table.anchorRow, 3).to_i,

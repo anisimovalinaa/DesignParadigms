@@ -25,16 +25,23 @@ class DB_work
     @connection.query("INSERT INTO `staff`.`departments` (`departmentName`) VALUES ('#{department_name}')")
   end
 
-  def add_post(post)
-    bool_premium = post.fixed_salary > 0 ? 1 : 0
-    bool_quarterly = post.fixed_salary > 0 ? 1 : 0
-    bool_bonus = post.fixed_salary > 0 ? 1 : 0
+  def add_post(post_name, fixed_salary, fixed_premium, quarterly_award, possible_bonus, dep_id)
+    bool_premium = fixed_premium > 0 ? 1 : 0
+    bool_quarterly = quarterly_award > 0 ? 1 : 0
+    bool_bonus = possible_bonus > 0 ? 1 : 0
     @connection.query("INSERT INTO `staff`.`post` (`PostName`, `FixedSalary`, `FixedPremiumBool`,
                       `FixedPremiumSize`, `QuarterlyAwardBool`, `QuarterlyAwardSize`, `PossibleBonusBool`,
                       `PossibleBonusPercent`, `DepartmentID` )
-                      VALUES ('#{post.post_name}', #{post.fixed_salary}, #{bool_premium}, #{post.fixed_premium},
-                      #{bool_quarterly}, #{post.quarterly_award}, #{bool_bonus}, #{post.possible_bonus},
-                      #{post.department.id})")
+                      VALUES ('#{post_name}', #{fixed_salary}, #{bool_premium}, #{fixed_premium},
+                      #{bool_quarterly}, #{quarterly_award}, #{bool_bonus}, #{possible_bonus},
+                      #{dep_id})")
+    results = @connection.query("SELECT `PostID` FROM `post` WHERE `PostID` = (SELECT MAX(`PostID`)
+                        FROM `post`)")
+    id = 0
+    results.each do |row|
+      id = row['PostID']
+    end
+    Post.new(id, post_name, fixed_salary, fixed_premium, quarterly_award, possible_bonus, dep_id)
   end
 
   def add_emp(user)

@@ -39,6 +39,11 @@ class Controller_department_instance < Controller_instance
     end
   end
 
+  def add(post_name, fixed_salary, fixed_premium, quarterly_award, possible_bonus)
+    post = DB_work.db_work.add_post(post_name, fixed_salary, fixed_premium, quarterly_award, possible_bonus, @instance.id)
+    @instance.add_post(post)
+  end
+
   def get_vacant_emp
     DB_work.db_work.read_vacant_emp
   end
