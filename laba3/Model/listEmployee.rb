@@ -20,6 +20,12 @@ class ListEmployee
 		return true
 	end
 
+	def choose(num)
+		@list_employee.each do |emp|
+			return emp if emp.id == num
+		end
+	end
+
 	def read_list_YAML file_name
 		@list_employee = YAML::load(File.open(file_name))
 	end
@@ -35,11 +41,11 @@ class ListEmployee
 			data = JSON.parse(file.read)
 			data.each do |key, value|
 				if value["work_experience"] > 0
-					emp = Employee.new(value["fio"], value["datebirth"], value["phone_number"], value["address"],
+					emp = Employee.new(value["id"], value["fio"], value["datebirth"], value["phone_number"], value["address"],
 														 value["e_mail"], value["passport"], value["speciality"], value["work_experience"],
 														 value["last_workplace"], value["last_post"], value["last_salary"])
 				else
-					emp = Employee.new(value["fio"], value["datebirth"], value["phone_number"], value["address"],
+					emp = Employee.new(value["id"], value["fio"], value["datebirth"], value["phone_number"], value["address"],
 														 value["e_mail"], value["passport"], value["speciality"], value["work_experience"])
 				end
 			add_user(emp)

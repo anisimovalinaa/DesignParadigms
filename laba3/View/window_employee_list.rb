@@ -21,6 +21,8 @@ class Window_employee_list < FXMainWindow
     table_head.font = FXFont.new(app, "Geneva", 10)
     @table = FXTable.new(@frame1, :padding => 10, :opts => LAYOUT_FIX_WIDTH, :width => 910)
     show_emp
+
+
   end
 
   def create
@@ -62,5 +64,15 @@ class Window_employee_list < FXMainWindow
     @table.connect(SEL_REPLACED) do
       change_instance
     end
+  end
+
+  def choose_instance
+    @controller_emp.choose_instance(@table.getItemText(@table.anchorRow, 11).to_i)
+    FXMessageBox.warning(
+      self,
+      MBOX_OK,
+      "Ошибка",
+      @controller_emp.instance.to_s
+    )
   end
 end

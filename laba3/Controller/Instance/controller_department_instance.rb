@@ -26,10 +26,15 @@ class Controller_department_instance < Controller_instance
     end
   end
 
-  def change
+  def change(post_name, fixed_salary, fixed_premium, quarterly_award, possible_bonus)
     if @instance_post == nil
       raise ArgumentError
     else
+      @instance_post.post_name = post_name
+      @instance_post.fixed_salary = fixed_salary
+      @instance_post.fixed_premium = fixed_premium
+      @instance_post.quarterly_award = quarterly_award
+      @instance_post.possible_bonus = possible_bonus
       @instance.change(@instance_post)
     end
   end

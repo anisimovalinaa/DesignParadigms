@@ -125,12 +125,11 @@ class Window_department_instance < FXMainWindow
   end
 
   def change_instance
-    @controller_instance.instance_post.post_name = @table.getItemText(@table.anchorRow, 0)
-    @controller_instance.instance_post.fixed_salary = @table.getItemText(@table.anchorRow, 1).to_i
-    @controller_instance.instance_post.fixed_premium = @table.getItemText(@table.anchorRow, 2).to_i
-    @controller_instance.instance_post.quarterly_award = @table.getItemText(@table.anchorRow, 3).to_i
-    @controller_instance.instance_post.possible_bonus = @table.getItemText(@table.anchorRow, 4).to_i
-    @controller_instance.change
+    @controller_instance.change(@table.getItemText(@table.anchorRow, 0),
+                                @table.getItemText(@table.anchorRow, 1).to_i,
+                                @table.getItemText(@table.anchorRow, 2).to_i,
+                                @table.getItemText(@table.anchorRow, 3).to_i,
+                                @table.getItemText(@table.anchorRow, 4).to_i)
   end
 
   def choose_instance

@@ -4,6 +4,7 @@ require_relative 'controller_list'
 
 class Controller_employee_list < Controller_list
   public_class_method :new
+  attr_accessor :instance
 
   def initialize
     @list = ListEmployee.new
@@ -22,10 +23,9 @@ class Controller_employee_list < Controller_list
     emp = Employee(nil, fio, datebirth, phone_number, address, e_mail, passport,
                    speciality, work_experience, last_workplace = nil, last_post = nil,
                    last_salary = nil)
-
   end
 
-  def close
-  	exit
+  def choose_instance(num)
+    @instance = @list.choose(num)
   end
 end
