@@ -44,19 +44,34 @@ class DB_work
     Post.new(id, post_name, fixed_salary, fixed_premium, quarterly_award, possible_bonus, dep_id)
   end
 
-  def add_emp(user)
-    date = user.datebirth.to_s.split('.').reverse.join('-')
-    begin
+  def add_emp(fio, datebirth, phone_number, address, e_mail, passport,
+              speciality, work_experience, last_workplace = nil, last_post = nil,
+              last_salary = nil)
+    date = datebirth.to_s.split('.').reverse.join('-')
+    if work_experience > 0
       @connection.query("INSERT INTO `staff`.`employees` (`FIO` ,`datebirth` ,`phone_number` ,`address` ,`e_mail` ,
                               `passport` ,`speciality` ,`work_experience`, `last_workplace` ,`last_post` ,`last_salary`)
-                            VALUES ('#{user.fio}', '#{date}', '#{user.phone_number}', '#{user.address}', '#{user.e_mail}',
-                              '#{user.passport}', '#{user.speciality}', #{user.work_experience.to_i},
-                              '#{user.last_workplace}', '#{user.last_post}', #{user.last_salary.to_i})")
-    rescue NameError
+                            VALUES ('#{fio}', '#{date}', '#{phone_number}', '#{address}', '#{e_mail}',
+                              '#{passport}', '#{speciality}', #{work_experience},
+                              '#{last_workplace}', '#{last_post}', '#{last_salary}')")
+      else
       @connection.query("INSERT INTO `staff`.`employees` (`FIO` ,`datebirth` ,`phone_number` ,`address` ,`e_mail` ,
                               `passport` ,`speciality` ,`work_experience`)
-                            VALUES ('#{user.fio}', '#{date}', '#{user.phone_number}', '#{user.address}', '#{user.e_mail}',
-                              '#{user.passport}', '#{user.speciality}', #{user.work_experience.to_i})")
+                            VALUES ('#{fio}', '#{date}', '#{phone_number}', '#{address}', '#{e_mail}',
+                              '#{passport}', '#{speciality}', #{work_experience})")
+    end
+    results = @connection.query("SELECT `EmployeeID` FROM `employees` WHERE `EmployeeID` = (SELECT MAX(`EmployeeID`)
+                        FROM `employees`)")
+    id = 0
+    results.each do |row|
+      id = row['EmployeeID']
+    end
+    if work_experience > 0
+    Employee.new(id, fio, datebirth, phone_number, address, e_mail, passport,
+                 speciality, work_experience, last_workplace, last_post, last_salary)
+    else
+      Employee.new(id, fio, datebirth, phone_number, address, e_mail, passport,
+                   speciality, work_experience, last_workplace, last_post, last_salary)
     end
   end
 
@@ -101,7 +116,7 @@ class DB_work
 
   def read_employee_list
     results = @connection.query("SELECT * FROM employees")
-    list_emp = ListEmployee.new
+    list_emp = []
     results.each do |row|
       data = row['datebirth'].to_s.split('-').reverse.join('.')
       if row['work_experience'] > 0
@@ -112,7 +127,7 @@ class DB_work
         emp = Employee.new(row['EmployeeID'], row['FIO'], data, row['phone_number'], row['address'],
                            row['e_mail'], row['passport'], row['speciality'], row['work_experience'])
       end
-      list_emp.add_user(emp)
+      list_emp << emp
     end
     list_emp
   end

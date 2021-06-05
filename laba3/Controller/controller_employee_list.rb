@@ -19,10 +19,15 @@ class Controller_employee_list < Controller_list
   def add(fio, datebirth, phone_number, address, e_mail, passport,
           speciality, work_experience, last_workplace = nil, last_post = nil,
           last_salary = nil)
-
-    emp = Employee(nil, fio, datebirth, phone_number, address, e_mail, passport,
-                   speciality, work_experience, last_workplace = nil, last_post = nil,
-                   last_salary = nil)
+    if work_experience > 0
+      emp = DB_work.db_work.add_emp( fio, datebirth, phone_number, address, e_mail, passport,
+                   speciality, work_experience)
+    else
+      emp = DB_work.db_work.add_emp( fio, datebirth, phone_number, address, e_mail, passport,
+                                     speciality, work_experience, last_workplace = nil, last_post = nil,
+                                     last_salary = nil)
+    end
+    @list.add(emp)
   end
 
   def choose_instance(num)

@@ -27,7 +27,7 @@ class Window_add_post < FXMainWindow
     FXLabel.new(@frame_names, "Бонусы(в процентах):", :padding => 4)
     @bonus = FXTextField.new(@frame_input, 17)
 
-    @fixed_salary.connect(SEL_KEYRELEASE) do
+    @fixed_salary.connect(SEL_COMMAND) do
       unless @fixed_salary.text =~ /^\d+$/ || @fixed_salary.text == ''
         FXMessageBox.warning(
           self,
@@ -38,7 +38,7 @@ class Window_add_post < FXMainWindow
       end
     end
 
-    @premium_salary.connect(SEL_KEYRELEASE) do
+    @premium_salary.connect(SEL_COMMAND) do
       unless @premium_salary.text =~ /^\d+$/ || @premium_salary.text == ''
         FXMessageBox.warning(
           self,
@@ -49,7 +49,7 @@ class Window_add_post < FXMainWindow
       end
     end
 
-    @quarterly_award.connect(SEL_KEYRELEASE) do
+    @quarterly_award.connect(SEL_COMMAND) do
       unless @quarterly_award.text =~ /^\d+$/ || @quarterly_award.text == ''
         FXMessageBox.warning(
           self,
@@ -60,7 +60,7 @@ class Window_add_post < FXMainWindow
       end
     end
 
-    @bonus.connect(SEL_KEYRELEASE) do
+    @bonus.connect(SEL_COMMAND) do
       unless @bonus.text =~ /^\d+\.\d+$/ || @bonus.text == ''
         FXMessageBox.warning(
           self,

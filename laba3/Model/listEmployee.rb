@@ -81,7 +81,7 @@ class ListEmployee
 		end
 	end
 
-	def add_user(user)
+	def add(user)
 		@list_employee << user
 	end
 

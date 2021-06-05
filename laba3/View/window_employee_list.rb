@@ -1,4 +1,5 @@
 require 'fox16'
+require_relative 'window_add_emp'
 include Fox
 
 class Window_employee_list < FXMainWindow
@@ -27,6 +28,19 @@ class Window_employee_list < FXMainWindow
                                   :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
                                   :width => 150, :height => 30)
     @button_delete.connect(SEL_COMMAND) { delete_instance }
+
+    @button_add = FXButton.new(@frame2,
+                  "Добавить сотрудника",
+                  :opts => FRAME_RAISED|FRAME_THICK|LAYOUT_CENTER_Y|LAYOUT_FIX_WIDTH|LAYOUT_FIX_HEIGHT,
+                  :width => 150, :height => 30)
+    @button_add.connect(SEL_COMMAND) do
+      app_add = FXApp.instance
+      app_add.create
+      w = Window_add_emp.new(app_add, @controller_emp, @table)
+      w.create
+      app_add.run
+      app_add.stop
+    end
   end
 
   def create
