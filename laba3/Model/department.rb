@@ -2,11 +2,10 @@ require_relative 'post_list'
 require_relative 'db_work'
 
 class Department
-  attr_accessor :name, :post_list
-  attr_reader :id
-  def initialize(name)
+  attr_accessor :name, :post_list, :id
+  def initialize(id, name)
     self.name = name
-    @id = DB_work.db_work.find_departmentID(name)
+    self.id = id
   end
 
   def read_DB

@@ -1,3 +1,8 @@
+require 'rdoc'
+
+RDoc::Page('abstract.rb')
+
+
 class Past_of_class
   attr_accessor :field1
   def initialize(field1)
